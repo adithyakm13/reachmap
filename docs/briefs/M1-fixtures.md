@@ -89,8 +89,8 @@ repos = build_all(dest: Path) -> dict[str, Path]   # workspace name -> repo path
 - Generic names: `mapStateToProps` (or a similar boilerplate name) defined in several
   files.
 - Tests: `src/components/__tests__/StatusBadge.test.tsx`, `src/lib/dates.spec.ts`, and a
-  non-test folder `src/backtest/` with `engine.ts` (marker trap: `test/` must not match
-  `backtest/`).
+  non-test folder `src/contest/` with `engine.ts` (marker trap: `test/` must not match
+  `contest/`).
 - Branches: `main`, `release/2.0`, `release/2.1` (slashes on purpose), diverging after
   their cut.
 
@@ -167,7 +167,7 @@ Each is a change in one repo. For each, the hand trace goes in `expected.json`
 | s11-contract-field | contracts | `settlement_reference` changes from optional to required | reaches api `services/settlement.py` (code line, not the comment), its route, the web screen through http; worker listed as consumer pinning 1.9.0, exposure "on adoption"; evidence at every hop |
 | s12-generic-field | contracts | change to `interval` in one model | dropped as not distinctive (not_established `not_distinctive`, non-blocking); no consumer line claimed |
 | s13-branch-matrix | api | a fix that exists on `release/1.x` and `release/1.2` (cherry-picked) but not on `main` | branch states: present on the two release branches, pre_change on main |
-| s14-test-marker | web | `src/backtest/engine.ts` change | file is not a test file; `src/components/__tests__/...` is |
+| s14-test-marker | web | `src/contest/engine.ts` change | file is not a test file; `src/components/__tests__/...` is |
 | s15-python-callers | api | `libs/common/` function changed | callers via multi-line and aliased imports confirmed; unit tests listed as tests, not callers |
 | s16-no-merge-base | web | head on an orphan branch with unrelated history | not_established `pre_change_unavailable`, blocking; removed routes / narrowing not computed |
 | s17-version-order | contracts | change between `v1.9.0` and `v1.10.0` (range scenario) | api on main pins 1.10.0 (contains it), api `release/1.x` pins 1.9.0 (does not); order by parsed version, never strings |

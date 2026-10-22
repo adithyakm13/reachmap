@@ -15,12 +15,12 @@ class Directory(unittest.TestCase):
         self.assertTrue(is_test_path("tests/test_money.py", ["tests/"]))
         self.assertTrue(is_test_path("a/b/test/c.ts", ["test/"]))
 
-    def test_backtest_is_not_a_test_directory(self):
-        self.assertFalse(is_test_path("src/backtest/engine.ts", ["test/"]))
-        self.assertFalse(is_test_path("src/backtest/engine.ts", ["test/", "tests/", "__tests__/", ".test.", ".spec."]))
+    def test_contest_is_not_a_test_directory(self):
+        self.assertFalse(is_test_path("src/contest/engine.ts", ["test/"]))
+        self.assertFalse(is_test_path("src/contest/engine.ts", ["test/", "tests/", "__tests__/", ".test.", ".spec."]))
 
-    def test_backtests_is_not_tests(self):
-        self.assertFalse(is_test_path("services/billing/backtests/engine.py", ["tests/"]))
+    def test_contests_is_not_tests(self):
+        self.assertFalse(is_test_path("services/billing/contests/engine.py", ["tests/"]))
 
     def test_the_file_name_is_not_a_directory_segment(self):
         self.assertFalse(is_test_path("src/tests", ["tests/"]))  # a file called tests, not a folder
@@ -68,8 +68,8 @@ class FileName(unittest.TestCase):
 
 class Agreement(unittest.TestCase):
     PATHS = [
-        "src/backtest/engine.ts", "src/components/__tests__/StatusBadge.test.tsx", "src/lib/dates.spec.ts",
-        "src/lib/format.ts", "tests/test_money.py", "services/billing/backtests/engine.py", "pkg/latest_rates.py",
+        "src/contest/engine.ts", "src/components/__tests__/StatusBadge.test.tsx", "src/lib/dates.spec.ts",
+        "src/lib/format.ts", "tests/test_money.py", "services/billing/contests/engine.py", "pkg/latest_rates.py",
         "pkg/test_x.py", "a/b/tests/c.py",
     ]
 

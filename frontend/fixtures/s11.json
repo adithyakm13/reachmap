@@ -107,21 +107,21 @@
      "repo": "acme/api",
      "path": "services/billing/app/services/settlement.py",
      "line": 5,
-     "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+     "ref": "2cb847500414990435ef96e01567864a21125741",
      "detail": "from acme_contracts.models.invoice import Invoice"
     },
     {
      "repo": "acme/api",
      "path": "services/billing/app/services/settlement.py",
      "line": 9,
-     "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+     "ref": "2cb847500414990435ef96e01567864a21125741",
      "detail": "    if invoice.settlement_reference is None:"
     },
     {
      "repo": "acme/api",
      "path": "services/billing/app/routers/settlements.py",
      "line": 1,
-     "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+     "ref": "2cb847500414990435ef96e01567864a21125741",
      "detail": "import app.services.settlement as settlement_svc",
      "claim": "import:services/billing/app/services/settlement.py:*"
     },
@@ -129,7 +129,7 @@
      "repo": "acme/api",
      "path": "services/billing/app/routers/settlements.py",
      "line": 9,
-     "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+     "ref": "2cb847500414990435ef96e01567864a21125741",
      "detail": "@router.get(\"/summary\")",
      "claim": "route:GET /api/billing/settlements/summary:services/billing/app/routers/settlements.py"
     },
@@ -137,21 +137,21 @@
      "repo": "acme/api",
      "path": "services/billing/app/routers/billing.py",
      "line": 8,
-     "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+     "ref": "2cb847500414990435ef96e01567864a21125741",
      "detail": "billing_router.include_router(settlements_router, prefix=\"/settlements\")"
     },
     {
      "repo": "acme/api",
      "path": "services/billing/app/api.py",
      "line": 6,
-     "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+     "ref": "2cb847500414990435ef96e01567864a21125741",
      "detail": "api_router.include_router(billing_router, prefix=\"/billing\")"
     },
     {
      "repo": "acme/api",
      "path": "services/billing/app/main.py",
      "line": 6,
-     "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+     "ref": "2cb847500414990435ef96e01567864a21125741",
      "detail": "app.include_router(api_router, prefix=\"/api\")"
     }
    ],
@@ -185,28 +185,28 @@
      "repo": "acme/api",
      "path": "services/billing/app/services/settlement.py",
      "line": 5,
-     "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+     "ref": "2cb847500414990435ef96e01567864a21125741",
      "detail": "from acme_contracts.models.invoice import Invoice"
     },
     {
      "repo": "acme/api",
      "path": "services/billing/app/services/settlement.py",
      "line": 9,
-     "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+     "ref": "2cb847500414990435ef96e01567864a21125741",
      "detail": "    if invoice.settlement_reference is None:"
     },
     {
      "repo": "acme/api",
      "path": "services/billing/app/services/settlement.py",
      "line": 21,
-     "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+     "ref": "2cb847500414990435ef96e01567864a21125741",
      "detail": "        \"references\": [reference_for(invoice) for invoice in invoices],"
     },
     {
      "repo": "acme/api",
      "path": "services/billing/app/routers/settlements.py",
      "line": 1,
-     "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+     "ref": "2cb847500414990435ef96e01567864a21125741",
      "detail": "import app.services.settlement as settlement_svc",
      "claim": "import:services/billing/app/services/settlement.py:*"
     },
@@ -214,21 +214,21 @@
      "repo": "acme/api",
      "path": "services/billing/app/routers/settlements.py",
      "line": 14,
-     "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+     "ref": "2cb847500414990435ef96e01567864a21125741",
      "detail": "    return settlement_svc.summarise(invoices)"
     },
     {
      "repo": "acme/web",
      "path": "src/modules/billing/api.ts",
      "line": 37,
-     "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+     "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
      "detail": "  return apiGet<SettlementSummary>(SETTLEMENT_SUMMARY_URL);"
     },
     {
      "repo": "acme/web",
      "path": "src/modules/billing/pages/SettlementsPage.tsx",
      "line": 4,
-     "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+     "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
      "detail": "import { fetchSettlementSummary } from \"../api\";",
      "claim": "import:src/modules/billing/api.ts:fetchSettlementSummary"
     },
@@ -236,7 +236,7 @@
      "repo": "acme/web",
      "path": "src/modules/billing/routes.tsx",
      "line": 5,
-     "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+     "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
      "detail": "import SettlementsPage from \"./pages/SettlementsPage\";",
      "claim": "import:src/modules/billing/pages/SettlementsPage.tsx:*"
     },
@@ -244,7 +244,7 @@
      "repo": "acme/web",
      "path": "src/modules/billing/routes.tsx",
      "line": 11,
-     "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+     "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
      "detail": "    <Route path=\"/billing/settlements\" element={<SettlementsPage />} />",
      "claim": "route:/billing/settlements:src/modules/billing/pages/SettlementsPage.tsx"
     }
@@ -271,7 +271,7 @@
      "repo": "acme/web",
      "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
      "line": 6,
-     "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+     "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
      "detail": "import { fetchAuditLog, fetchInvoice } from \"../api\";",
      "claim": "import:src/modules/billing/api.ts:fetchAuditLog,fetchInvoice"
     },
@@ -279,7 +279,7 @@
      "repo": "acme/web",
      "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
      "line": 7,
-     "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+     "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
      "detail": "import type { AuditEntry, Invoice } from \"../api\";",
      "claim": "import:src/modules/billing/api.ts:AuditEntry,Invoice"
     },
@@ -287,7 +287,7 @@
      "repo": "acme/web",
      "path": "src/modules/billing/api.ts",
      "line": 36,
-     "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+     "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
      "detail": "export function fetchSettlementSummary(): Promise<SettlementSummary> {"
     }
    ],
@@ -314,7 +314,7 @@
      "repo": "acme/web",
      "path": "src/modules/billing/pages/InvoiceListPage.tsx",
      "line": 7,
-     "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+     "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
      "detail": "import { fetchInvoices } from \"../api\";",
      "claim": "import:src/modules/billing/api.ts:fetchInvoices"
     },
@@ -322,7 +322,7 @@
      "repo": "acme/web",
      "path": "src/modules/billing/pages/InvoiceListPage.tsx",
      "line": 8,
-     "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+     "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
      "detail": "import type { Invoice } from \"../api\";",
      "claim": "import:src/modules/billing/api.ts:Invoice"
     },
@@ -330,7 +330,7 @@
      "repo": "acme/web",
      "path": "src/modules/billing/api.ts",
      "line": 36,
-     "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+     "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
      "detail": "export function fetchSettlementSummary(): Promise<SettlementSummary> {"
     }
    ],
@@ -371,21 +371,21 @@
      "repo": "acme/api",
      "path": "services/billing/app/services/settlement.py",
      "line": 5,
-     "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+     "ref": "2cb847500414990435ef96e01567864a21125741",
      "detail": "from acme_contracts.models.invoice import Invoice"
     },
     {
      "repo": "acme/api",
      "path": "services/billing/app/services/settlement.py",
      "line": 9,
-     "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+     "ref": "2cb847500414990435ef96e01567864a21125741",
      "detail": "    if invoice.settlement_reference is None:"
     },
     {
      "repo": "acme/api",
      "path": "services/billing/app/services/settlement.py",
      "line": 11,
-     "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+     "ref": "2cb847500414990435ef96e01567864a21125741",
      "detail": "    return invoice.settlement_reference"
     }
    ],
@@ -460,7 +460,7 @@
      "repo": "acme/api",
      "path": "requirements.txt",
      "line": 1,
-     "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+     "ref": "2cb847500414990435ef96e01567864a21125741",
      "detail": "acme-contracts==1.10.0"
     }
    ],
@@ -511,7 +511,7 @@
     "repo": "acme/api",
     "path": "services/billing/app/routers/settlements.py",
     "line": 9,
-    "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+    "ref": "2cb847500414990435ef96e01567864a21125741",
     "detail": "@router.get(\"/summary\")",
     "claim": "route:GET /api/billing/settlements/summary:services/billing/app/routers/settlements.py"
    },
@@ -521,21 +521,21 @@
       "repo": "acme/api",
       "path": "services/billing/app/services/settlement.py",
       "line": 5,
-      "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+      "ref": "2cb847500414990435ef96e01567864a21125741",
       "detail": "from acme_contracts.models.invoice import Invoice"
      },
      {
       "repo": "acme/api",
       "path": "services/billing/app/services/settlement.py",
       "line": 9,
-      "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+      "ref": "2cb847500414990435ef96e01567864a21125741",
       "detail": "    if invoice.settlement_reference is None:"
      },
      {
       "repo": "acme/api",
       "path": "services/billing/app/routers/settlements.py",
       "line": 1,
-      "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+      "ref": "2cb847500414990435ef96e01567864a21125741",
       "detail": "import app.services.settlement as settlement_svc",
       "claim": "import:services/billing/app/services/settlement.py:*"
      },
@@ -543,7 +543,7 @@
       "repo": "acme/api",
       "path": "services/billing/app/routers/settlements.py",
       "line": 9,
-      "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+      "ref": "2cb847500414990435ef96e01567864a21125741",
       "detail": "@router.get(\"/summary\")",
       "claim": "route:GET /api/billing/settlements/summary:services/billing/app/routers/settlements.py"
      },
@@ -551,21 +551,21 @@
       "repo": "acme/api",
       "path": "services/billing/app/routers/billing.py",
       "line": 8,
-      "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+      "ref": "2cb847500414990435ef96e01567864a21125741",
       "detail": "billing_router.include_router(settlements_router, prefix=\"/settlements\")"
      },
      {
       "repo": "acme/api",
       "path": "services/billing/app/api.py",
       "line": 6,
-      "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+      "ref": "2cb847500414990435ef96e01567864a21125741",
       "detail": "api_router.include_router(billing_router, prefix=\"/billing\")"
      },
      {
       "repo": "acme/api",
       "path": "services/billing/app/main.py",
       "line": 6,
-      "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+      "ref": "2cb847500414990435ef96e01567864a21125741",
       "detail": "app.include_router(api_router, prefix=\"/api\")"
      }
     ]
@@ -585,7 +585,7 @@
     "repo": "acme/web",
     "path": "src/modules/billing/routes.tsx",
     "line": 11,
-    "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+    "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
     "detail": "    <Route path=\"/billing/settlements\" element={<SettlementsPage />} />",
     "claim": "route:/billing/settlements:src/modules/billing/pages/SettlementsPage.tsx"
    },
@@ -595,28 +595,28 @@
       "repo": "acme/api",
       "path": "services/billing/app/services/settlement.py",
       "line": 5,
-      "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+      "ref": "2cb847500414990435ef96e01567864a21125741",
       "detail": "from acme_contracts.models.invoice import Invoice"
      },
      {
       "repo": "acme/api",
       "path": "services/billing/app/services/settlement.py",
       "line": 9,
-      "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+      "ref": "2cb847500414990435ef96e01567864a21125741",
       "detail": "    if invoice.settlement_reference is None:"
      },
      {
       "repo": "acme/api",
       "path": "services/billing/app/services/settlement.py",
       "line": 21,
-      "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+      "ref": "2cb847500414990435ef96e01567864a21125741",
       "detail": "        \"references\": [reference_for(invoice) for invoice in invoices],"
      },
      {
       "repo": "acme/api",
       "path": "services/billing/app/routers/settlements.py",
       "line": 1,
-      "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+      "ref": "2cb847500414990435ef96e01567864a21125741",
       "detail": "import app.services.settlement as settlement_svc",
       "claim": "import:services/billing/app/services/settlement.py:*"
      },
@@ -624,21 +624,21 @@
       "repo": "acme/api",
       "path": "services/billing/app/routers/settlements.py",
       "line": 14,
-      "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+      "ref": "2cb847500414990435ef96e01567864a21125741",
       "detail": "    return settlement_svc.summarise(invoices)"
      },
      {
       "repo": "acme/web",
       "path": "src/modules/billing/api.ts",
       "line": 37,
-      "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+      "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
       "detail": "  return apiGet<SettlementSummary>(SETTLEMENT_SUMMARY_URL);"
      },
      {
       "repo": "acme/web",
       "path": "src/modules/billing/pages/SettlementsPage.tsx",
       "line": 4,
-      "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+      "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
       "detail": "import { fetchSettlementSummary } from \"../api\";",
       "claim": "import:src/modules/billing/api.ts:fetchSettlementSummary"
      },
@@ -646,7 +646,7 @@
       "repo": "acme/web",
       "path": "src/modules/billing/routes.tsx",
       "line": 5,
-      "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+      "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
       "detail": "import SettlementsPage from \"./pages/SettlementsPage\";",
       "claim": "import:src/modules/billing/pages/SettlementsPage.tsx:*"
      },
@@ -654,7 +654,7 @@
       "repo": "acme/web",
       "path": "src/modules/billing/routes.tsx",
       "line": 11,
-      "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+      "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
       "detail": "    <Route path=\"/billing/settlements\" element={<SettlementsPage />} />",
       "claim": "route:/billing/settlements:src/modules/billing/pages/SettlementsPage.tsx"
      }
@@ -681,7 +681,7 @@
        "detail": "acme-contracts==1.10.0",
        "line": 1,
        "path": "requirements.txt",
-       "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+       "ref": "2cb847500414990435ef96e01567864a21125741",
        "repo": "acme/api"
       }
      ],
@@ -691,7 +691,7 @@
      "producer": "acme/contracts",
      "released": false,
      "repo": "acme/api",
-     "sha": "558daf4a8324a61dd995a0306e4df353788b703c",
+     "sha": "2cb847500414990435ef96e01567864a21125741",
      "state": "pinned",
      "tag": null
     },
@@ -780,14 +780,14 @@
        "detail": "from acme_contracts.models.invoice import Invoice",
        "line": 5,
        "path": "services/billing/app/services/settlement.py",
-       "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+       "ref": "2cb847500414990435ef96e01567864a21125741",
        "repo": "acme/api"
       },
       {
        "detail": "    if invoice.settlement_reference is None:",
        "line": 9,
        "path": "services/billing/app/services/settlement.py",
-       "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+       "ref": "2cb847500414990435ef96e01567864a21125741",
        "repo": "acme/api"
       }
      ],
@@ -799,7 +799,7 @@
      "pin": "1.10.0",
      "producer": "acme/contracts",
      "repo": "acme/api",
-     "sha": "558daf4a8324a61dd995a0306e4df353788b703c",
+     "sha": "2cb847500414990435ef96e01567864a21125741",
      "symbol": "reference_for"
     },
     {
@@ -812,14 +812,14 @@
        "detail": "from acme_contracts.models.invoice import Invoice",
        "line": 5,
        "path": "services/billing/app/services/settlement.py",
-       "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+       "ref": "2cb847500414990435ef96e01567864a21125741",
        "repo": "acme/api"
       },
       {
        "detail": "    return invoice.settlement_reference",
        "line": 11,
        "path": "services/billing/app/services/settlement.py",
-       "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+       "ref": "2cb847500414990435ef96e01567864a21125741",
        "repo": "acme/api"
       }
      ],
@@ -831,7 +831,7 @@
      "pin": "1.10.0",
      "producer": "acme/contracts",
      "repo": "acme/api",
-     "sha": "558daf4a8324a61dd995a0306e4df353788b703c",
+     "sha": "2cb847500414990435ef96e01567864a21125741",
      "symbol": "reference_for"
     },
     {
@@ -875,7 +875,7 @@
        "detail": "acme-contracts==1.10.0",
        "line": 1,
        "path": "requirements.txt",
-       "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+       "ref": "2cb847500414990435ef96e01567864a21125741",
        "repo": "acme/api"
       }
      ],
@@ -895,7 +895,7 @@
        "ref": "main",
        "repo": "acme/api",
        "role": "primary",
-       "sha": "558daf4a8324a61dd995a0306e4df353788b703c"
+       "sha": "2cb847500414990435ef96e01567864a21125741"
       }
      ],
      "reasons": [],
@@ -906,7 +906,7 @@
        "detail": "acme-contracts==1.10.0",
        "line": 1,
        "path": "requirements.txt",
-       "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+       "ref": "2cb847500414990435ef96e01567864a21125741",
        "repo": "acme/api"
       }
      ],
@@ -963,14 +963,14 @@
        "detail": "from acme_contracts.models.invoice import Invoice",
        "line": 5,
        "path": "services/billing/app/services/settlement.py",
-       "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+       "ref": "2cb847500414990435ef96e01567864a21125741",
        "repo": "acme/api"
       },
       {
        "detail": "    if invoice.settlement_reference is None:",
        "line": 9,
        "path": "services/billing/app/services/settlement.py",
-       "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+       "ref": "2cb847500414990435ef96e01567864a21125741",
        "repo": "acme/api"
       }
      ],
@@ -990,7 +990,7 @@
        "ref": "main",
        "repo": "acme/api",
        "role": "primary",
-       "sha": "558daf4a8324a61dd995a0306e4df353788b703c"
+       "sha": "2cb847500414990435ef96e01567864a21125741"
       }
      ],
      "reasons": [],
@@ -1001,14 +1001,14 @@
          "detail": "    if invoice.settlement_reference is None:",
          "line": 9,
          "path": "services/billing/app/services/settlement.py",
-         "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+         "ref": "2cb847500414990435ef96e01567864a21125741",
          "repo": "acme/api"
         },
         {
          "detail": "    return invoice.settlement_reference",
          "line": 11,
          "path": "services/billing/app/services/settlement.py",
-         "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+         "ref": "2cb847500414990435ef96e01567864a21125741",
          "repo": "acme/api"
         }
        ],
@@ -1018,7 +1018,7 @@
        ],
        "path": "services/billing/app/services/settlement.py",
        "repo": "acme/api",
-       "sha": "558daf4a8324a61dd995a0306e4df353788b703c"
+       "sha": "2cb847500414990435ef96e01567864a21125741"
       }
      ],
      "source_evidence": [
@@ -1042,14 +1042,14 @@
        "detail": "from acme_contracts.models.invoice import Invoice",
        "line": 5,
        "path": "services/billing/app/services/settlement.py",
-       "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+       "ref": "2cb847500414990435ef96e01567864a21125741",
        "repo": "acme/api"
       },
       {
        "detail": "    if invoice.settlement_reference is None:",
        "line": 9,
        "path": "services/billing/app/services/settlement.py",
-       "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+       "ref": "2cb847500414990435ef96e01567864a21125741",
        "repo": "acme/api"
       }
      ],
@@ -1153,21 +1153,21 @@
        "detail": "from acme_contracts.models.invoice import Invoice",
        "line": 5,
        "path": "services/billing/app/services/settlement.py",
-       "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+       "ref": "2cb847500414990435ef96e01567864a21125741",
        "repo": "acme/api"
       },
       {
        "detail": "    if invoice.settlement_reference is None:",
        "line": 9,
        "path": "services/billing/app/services/settlement.py",
-       "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+       "ref": "2cb847500414990435ef96e01567864a21125741",
        "repo": "acme/api"
       },
       {
        "detail": "        \"references\": [reference_for(invoice) for invoice in invoices],",
        "line": 21,
        "path": "services/billing/app/services/settlement.py",
-       "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+       "ref": "2cb847500414990435ef96e01567864a21125741",
        "repo": "acme/api"
       },
       {
@@ -1175,21 +1175,21 @@
        "detail": "import app.services.settlement as settlement_svc",
        "line": 1,
        "path": "services/billing/app/routers/settlements.py",
-       "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+       "ref": "2cb847500414990435ef96e01567864a21125741",
        "repo": "acme/api"
       },
       {
        "detail": "    return settlement_svc.summarise(invoices)",
        "line": 14,
        "path": "services/billing/app/routers/settlements.py",
-       "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+       "ref": "2cb847500414990435ef96e01567864a21125741",
        "repo": "acme/api"
       },
       {
        "detail": "  return apiGet<SettlementSummary>(SETTLEMENT_SUMMARY_URL);",
        "line": 37,
        "path": "src/modules/billing/api.ts",
-       "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+       "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
        "repo": "acme/web"
       }
      ],
@@ -1209,7 +1209,7 @@
        "ref": "main",
        "repo": "acme/web",
        "role": "primary",
-       "sha": "353a7494acd0a6cf22ad375e590e3b232027d427"
+       "sha": "fb5ab8298949614101b045b889e50a39d31edbaa"
       }
      ],
      "reasons": [],
@@ -1220,7 +1220,7 @@
          "detail": "  return apiGet<SettlementSummary>(SETTLEMENT_SUMMARY_URL);",
          "line": 37,
          "path": "src/modules/billing/api.ts",
-         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
          "repo": "acme/web"
         }
        ],
@@ -1229,7 +1229,7 @@
        ],
        "path": "src/modules/billing/api.ts",
        "repo": "acme/web",
-       "sha": "353a7494acd0a6cf22ad375e590e3b232027d427"
+       "sha": "fb5ab8298949614101b045b889e50a39d31edbaa"
       }
      ],
      "source_evidence": [
@@ -1238,28 +1238,28 @@
        "detail": "@router.get(\"/summary\")",
        "line": 9,
        "path": "services/billing/app/routers/settlements.py",
-       "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+       "ref": "2cb847500414990435ef96e01567864a21125741",
        "repo": "acme/api"
       },
       {
        "detail": "billing_router.include_router(settlements_router, prefix=\"/settlements\")",
        "line": 8,
        "path": "services/billing/app/routers/billing.py",
-       "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+       "ref": "2cb847500414990435ef96e01567864a21125741",
        "repo": "acme/api"
       },
       {
        "detail": "api_router.include_router(billing_router, prefix=\"/billing\")",
        "line": 6,
        "path": "services/billing/app/api.py",
-       "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+       "ref": "2cb847500414990435ef96e01567864a21125741",
        "repo": "acme/api"
       },
       {
        "detail": "app.include_router(api_router, prefix=\"/api\")",
        "line": 6,
        "path": "services/billing/app/main.py",
-       "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+       "ref": "2cb847500414990435ef96e01567864a21125741",
        "repo": "acme/api"
       }
      ],
@@ -1268,21 +1268,21 @@
        "detail": "  return apiGet<SettlementSummary>(SETTLEMENT_SUMMARY_URL);",
        "line": 37,
        "path": "src/modules/billing/api.ts",
-       "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+       "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
        "repo": "acme/web"
       },
       {
        "detail": "export const SETTLEMENT_SUMMARY_URL =",
        "line": 6,
        "path": "src/api/endpoints.ts",
-       "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+       "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
        "repo": "acme/web"
       },
       {
        "detail": "  \"/api/billing/settlements/summary\";",
        "line": 7,
        "path": "src/api/endpoints.ts",
-       "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+       "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
        "repo": "acme/web"
       }
      ],
@@ -1297,7 +1297,7 @@
       "detail": "  return apiGet<SettlementSummary>(SETTLEMENT_SUMMARY_URL);",
       "line": 37,
       "path": "src/modules/billing/api.ts",
-      "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+      "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
       "repo": "acme/web"
      },
      "client_repo": "acme/web",
@@ -1315,28 +1315,28 @@
         "detail": "@router.get(\"/summary\")",
         "line": 9,
         "path": "services/billing/app/routers/settlements.py",
-        "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+        "ref": "2cb847500414990435ef96e01567864a21125741",
         "repo": "acme/api"
        },
        {
         "detail": "billing_router.include_router(settlements_router, prefix=\"/settlements\")",
         "line": 8,
         "path": "services/billing/app/routers/billing.py",
-        "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+        "ref": "2cb847500414990435ef96e01567864a21125741",
         "repo": "acme/api"
        },
        {
         "detail": "api_router.include_router(billing_router, prefix=\"/billing\")",
         "line": 6,
         "path": "services/billing/app/api.py",
-        "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+        "ref": "2cb847500414990435ef96e01567864a21125741",
         "repo": "acme/api"
        },
        {
         "detail": "app.include_router(api_router, prefix=\"/api\")",
         "line": 6,
         "path": "services/billing/app/main.py",
-        "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+        "ref": "2cb847500414990435ef96e01567864a21125741",
         "repo": "acme/api"
        }
       ],
@@ -1357,14 +1357,14 @@
        "detail": "export const SETTLEMENT_SUMMARY_URL =",
        "line": 6,
        "path": "src/api/endpoints.ts",
-       "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+       "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
        "repo": "acme/web"
       },
       {
        "detail": "  \"/api/billing/settlements/summary\";",
        "line": 7,
        "path": "src/api/endpoints.ts",
-       "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+       "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
        "repo": "acme/web"
       }
      ]
@@ -1478,7 +1478,7 @@
              "detail": "    return settlement_svc.summarise(invoices)",
              "line": 14,
              "path": "services/billing/app/routers/settlements.py",
-             "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+             "ref": "2cb847500414990435ef96e01567864a21125741",
              "repo": "acme/api"
             },
             "form": "call",
@@ -1487,7 +1487,7 @@
              "detail": "import app.services.settlement as settlement_svc",
              "line": 1,
              "path": "services/billing/app/routers/settlements.py",
-             "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+             "ref": "2cb847500414990435ef96e01567864a21125741",
              "repo": "acme/api"
             },
             "line": 14,
@@ -1502,14 +1502,14 @@
             "detail": "import app.services.settlement as settlement_svc",
             "line": 1,
             "path": "services/billing/app/routers/settlements.py",
-            "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+            "ref": "2cb847500414990435ef96e01567864a21125741",
             "repo": "acme/api"
            },
            {
             "detail": "    return settlement_svc.summarise(invoices)",
             "line": 14,
             "path": "services/billing/app/routers/settlements.py",
-            "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+            "ref": "2cb847500414990435ef96e01567864a21125741",
             "repo": "acme/api"
            }
           ],
@@ -1538,7 +1538,7 @@
            "detail": "import app.services.settlement as settlement_svc",
            "line": 1,
            "path": "services/billing/app/routers/settlements.py",
-           "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+           "ref": "2cb847500414990435ef96e01567864a21125741",
            "repo": "acme/api"
           },
           "importer_path": "services/billing/app/routers/settlements.py",
@@ -1562,7 +1562,7 @@
            "detail": "import app.services.settlement as settlement_svc",
            "line": 1,
            "path": "services/billing/tests/test_settlement.py",
-           "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+           "ref": "2cb847500414990435ef96e01567864a21125741",
            "repo": "acme/api"
           },
           "importer_path": "services/billing/tests/test_settlement.py",
@@ -1598,14 +1598,14 @@
             "detail": "    if invoice.settlement_reference is None:",
             "line": 9,
             "path": "services/billing/app/services/settlement.py",
-            "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+            "ref": "2cb847500414990435ef96e01567864a21125741",
             "repo": "acme/api"
            },
            {
             "detail": "    return invoice.settlement_reference",
             "line": 11,
             "path": "services/billing/app/services/settlement.py",
-            "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+            "ref": "2cb847500414990435ef96e01567864a21125741",
             "repo": "acme/api"
            }
           ],
@@ -1632,7 +1632,7 @@
             "detail": "import app.services.settlement as settlement_svc",
             "line": 1,
             "path": "services/billing/tests/test_settlement.py",
-            "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+            "ref": "2cb847500414990435ef96e01567864a21125741",
             "repo": "acme/api"
            }
           ],
@@ -1653,14 +1653,14 @@
        "detail": "from acme_contracts.models.invoice import Invoice",
        "line": 5,
        "path": "services/billing/app/services/settlement.py",
-       "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+       "ref": "2cb847500414990435ef96e01567864a21125741",
        "repo": "acme/api"
       },
       {
        "detail": "    if invoice.settlement_reference is None:",
        "line": 9,
        "path": "services/billing/app/services/settlement.py",
-       "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+       "ref": "2cb847500414990435ef96e01567864a21125741",
        "repo": "acme/api"
       }
      ],
@@ -1678,7 +1678,7 @@
             "detail": "import app.services.settlement as settlement_svc",
             "line": 1,
             "path": "services/billing/app/routers/settlements.py",
-            "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+            "ref": "2cb847500414990435ef96e01567864a21125741",
             "repo": "acme/api"
            },
            {
@@ -1686,28 +1686,28 @@
             "detail": "@router.get(\"/summary\")",
             "line": 9,
             "path": "services/billing/app/routers/settlements.py",
-            "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+            "ref": "2cb847500414990435ef96e01567864a21125741",
             "repo": "acme/api"
            },
            {
             "detail": "billing_router.include_router(settlements_router, prefix=\"/settlements\")",
             "line": 8,
             "path": "services/billing/app/routers/billing.py",
-            "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+            "ref": "2cb847500414990435ef96e01567864a21125741",
             "repo": "acme/api"
            },
            {
             "detail": "api_router.include_router(billing_router, prefix=\"/billing\")",
             "line": 6,
             "path": "services/billing/app/api.py",
-            "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+            "ref": "2cb847500414990435ef96e01567864a21125741",
             "repo": "acme/api"
            },
            {
             "detail": "app.include_router(api_router, prefix=\"/api\")",
             "line": 6,
             "path": "services/billing/app/main.py",
-            "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+            "ref": "2cb847500414990435ef96e01567864a21125741",
             "repo": "acme/api"
            }
           ]
@@ -1722,7 +1722,7 @@
           "detail": "@router.get(\"/summary\")",
           "line": 9,
           "path": "services/billing/app/routers/settlements.py",
-          "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+          "ref": "2cb847500414990435ef96e01567864a21125741",
           "repo": "acme/api"
          }
         },
@@ -1736,28 +1736,28 @@
             "detail": "@router.get(\"/summary\")",
             "line": 9,
             "path": "services/billing/app/routers/settlements.py",
-            "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+            "ref": "2cb847500414990435ef96e01567864a21125741",
             "repo": "acme/api"
            },
            {
             "detail": "billing_router.include_router(settlements_router, prefix=\"/settlements\")",
             "line": 8,
             "path": "services/billing/app/routers/billing.py",
-            "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+            "ref": "2cb847500414990435ef96e01567864a21125741",
             "repo": "acme/api"
            },
            {
             "detail": "api_router.include_router(billing_router, prefix=\"/billing\")",
             "line": 6,
             "path": "services/billing/app/api.py",
-            "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+            "ref": "2cb847500414990435ef96e01567864a21125741",
             "repo": "acme/api"
            },
            {
             "detail": "app.include_router(api_router, prefix=\"/api\")",
             "line": 6,
             "path": "services/billing/app/main.py",
-            "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+            "ref": "2cb847500414990435ef96e01567864a21125741",
             "repo": "acme/api"
            }
           ],
@@ -1783,14 +1783,14 @@
         "detail": "    if invoice.settlement_reference is None:",
         "line": 9,
         "path": "services/billing/app/services/settlement.py",
-        "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+        "ref": "2cb847500414990435ef96e01567864a21125741",
         "repo": "acme/api"
        },
        {
         "detail": "    return invoice.settlement_reference",
         "line": 11,
         "path": "services/billing/app/services/settlement.py",
-        "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+        "ref": "2cb847500414990435ef96e01567864a21125741",
         "repo": "acme/api"
        }
       ],
@@ -1800,9 +1800,9 @@
       ],
       "path": "services/billing/app/services/settlement.py",
       "repo": "acme/api",
-      "sha": "558daf4a8324a61dd995a0306e4df353788b703c"
+      "sha": "2cb847500414990435ef96e01567864a21125741"
      },
-     "sha": "558daf4a8324a61dd995a0306e4df353788b703c"
+     "sha": "2cb847500414990435ef96e01567864a21125741"
     },
     {
      "analysis": {
@@ -1931,7 +1931,7 @@
              "detail": "    fetchSettlementSummary().then(setSummary);",
              "line": 11,
              "path": "src/modules/billing/pages/SettlementsPage.tsx",
-             "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+             "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
              "repo": "acme/web"
             },
             "form": "call",
@@ -1940,7 +1940,7 @@
              "detail": "import { fetchSettlementSummary } from \"../api\";",
              "line": 4,
              "path": "src/modules/billing/pages/SettlementsPage.tsx",
-             "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+             "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
              "repo": "acme/web"
             },
             "line": 11,
@@ -1955,7 +1955,7 @@
             "detail": "import { fetchSettlementSummary } from \"../api\";",
             "line": 4,
             "path": "src/modules/billing/pages/SettlementsPage.tsx",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            },
            {
@@ -1963,14 +1963,14 @@
             "detail": "import type { SettlementSummary } from \"../api\";",
             "line": 5,
             "path": "src/modules/billing/pages/SettlementsPage.tsx",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            },
            {
             "detail": "    fetchSettlementSummary().then(setSummary);",
             "line": 11,
             "path": "src/modules/billing/pages/SettlementsPage.tsx",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            }
           ],
@@ -1988,7 +1988,7 @@
             "detail": "import { fetchAuditLog, fetchInvoice } from \"../api\";",
             "line": 6,
             "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            },
            {
@@ -1996,14 +1996,14 @@
             "detail": "import type { AuditEntry, Invoice } from \"../api\";",
             "line": 7,
             "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            },
            {
             "detail": "export function fetchSettlementSummary(): Promise<SettlementSummary> {",
             "line": 36,
             "path": "src/modules/billing/api.ts",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            }
           ],
@@ -2017,7 +2017,7 @@
             "detail": "import { fetchInvoices } from \"../api\";",
             "line": 7,
             "path": "src/modules/billing/pages/InvoiceListPage.tsx",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            },
            {
@@ -2025,14 +2025,14 @@
             "detail": "import type { Invoice } from \"../api\";",
             "line": 8,
             "path": "src/modules/billing/pages/InvoiceListPage.tsx",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            },
            {
             "detail": "export function fetchSettlementSummary(): Promise<SettlementSummary> {",
             "line": 36,
             "path": "src/modules/billing/api.ts",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            }
           ],
@@ -2064,7 +2064,7 @@
            "detail": "import { fetchAuditLog, fetchInvoice } from \"../api\";",
            "line": 6,
            "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
-           "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+           "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
            "repo": "acme/web"
           },
           "importer_path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
@@ -2097,7 +2097,7 @@
            "detail": "import type { AuditEntry, Invoice } from \"../api\";",
            "line": 7,
            "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
-           "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+           "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
            "repo": "acme/web"
           },
           "importer_path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
@@ -2124,7 +2124,7 @@
            "detail": "import { fetchInvoices } from \"../api\";",
            "line": 7,
            "path": "src/modules/billing/pages/InvoiceListPage.tsx",
-           "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+           "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
            "repo": "acme/web"
           },
           "importer_path": "src/modules/billing/pages/InvoiceListPage.tsx",
@@ -2150,7 +2150,7 @@
            "detail": "import type { Invoice } from \"../api\";",
            "line": 8,
            "path": "src/modules/billing/pages/InvoiceListPage.tsx",
-           "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+           "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
            "repo": "acme/web"
           },
           "importer_path": "src/modules/billing/pages/InvoiceListPage.tsx",
@@ -2176,7 +2176,7 @@
            "detail": "import { fetchSettlementSummary } from \"../api\";",
            "line": 4,
            "path": "src/modules/billing/pages/SettlementsPage.tsx",
-           "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+           "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
            "repo": "acme/web"
           },
           "importer_path": "src/modules/billing/pages/SettlementsPage.tsx",
@@ -2202,7 +2202,7 @@
            "detail": "import type { SettlementSummary } from \"../api\";",
            "line": 5,
            "path": "src/modules/billing/pages/SettlementsPage.tsx",
-           "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+           "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
            "repo": "acme/web"
           },
           "importer_path": "src/modules/billing/pages/SettlementsPage.tsx",
@@ -2238,7 +2238,7 @@
             "detail": "  return apiGet<SettlementSummary>(SETTLEMENT_SUMMARY_URL);",
             "line": 37,
             "path": "src/modules/billing/api.ts",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            }
           ],
@@ -2270,21 +2270,21 @@
        "detail": "from acme_contracts.models.invoice import Invoice",
        "line": 5,
        "path": "services/billing/app/services/settlement.py",
-       "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+       "ref": "2cb847500414990435ef96e01567864a21125741",
        "repo": "acme/api"
       },
       {
        "detail": "    if invoice.settlement_reference is None:",
        "line": 9,
        "path": "services/billing/app/services/settlement.py",
-       "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+       "ref": "2cb847500414990435ef96e01567864a21125741",
        "repo": "acme/api"
       },
       {
        "detail": "        \"references\": [reference_for(invoice) for invoice in invoices],",
        "line": 21,
        "path": "services/billing/app/services/settlement.py",
-       "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+       "ref": "2cb847500414990435ef96e01567864a21125741",
        "repo": "acme/api"
       },
       {
@@ -2292,21 +2292,21 @@
        "detail": "import app.services.settlement as settlement_svc",
        "line": 1,
        "path": "services/billing/app/routers/settlements.py",
-       "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+       "ref": "2cb847500414990435ef96e01567864a21125741",
        "repo": "acme/api"
       },
       {
        "detail": "    return settlement_svc.summarise(invoices)",
        "line": 14,
        "path": "services/billing/app/routers/settlements.py",
-       "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+       "ref": "2cb847500414990435ef96e01567864a21125741",
        "repo": "acme/api"
       },
       {
        "detail": "  return apiGet<SettlementSummary>(SETTLEMENT_SUMMARY_URL);",
        "line": 37,
        "path": "src/modules/billing/api.ts",
-       "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+       "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
        "repo": "acme/web"
       }
      ],
@@ -2324,7 +2324,7 @@
             "detail": "import { fetchSettlementSummary } from \"../api\";",
             "line": 4,
             "path": "src/modules/billing/pages/SettlementsPage.tsx",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            },
            {
@@ -2332,7 +2332,7 @@
             "detail": "import SettlementsPage from \"./pages/SettlementsPage\";",
             "line": 5,
             "path": "src/modules/billing/routes.tsx",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            },
            {
@@ -2340,7 +2340,7 @@
             "detail": "    <Route path=\"/billing/settlements\" element={<SettlementsPage />} />",
             "line": 11,
             "path": "src/modules/billing/routes.tsx",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            }
           ]
@@ -2355,7 +2355,7 @@
           "detail": "    <Route path=\"/billing/settlements\" element={<SettlementsPage />} />",
           "line": 11,
           "path": "src/modules/billing/routes.tsx",
-          "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+          "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
           "repo": "acme/web"
          }
         },
@@ -2369,7 +2369,7 @@
             "detail": "import SettlementsPage from \"./pages/SettlementsPage\";",
             "line": 5,
             "path": "src/modules/billing/routes.tsx",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            },
            {
@@ -2377,7 +2377,7 @@
             "detail": "    <Route path=\"/billing/settlements\" element={<SettlementsPage />} />",
             "line": 11,
             "path": "src/modules/billing/routes.tsx",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            }
           ],
@@ -2403,7 +2403,7 @@
         "detail": "  return apiGet<SettlementSummary>(SETTLEMENT_SUMMARY_URL);",
         "line": 37,
         "path": "src/modules/billing/api.ts",
-        "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+        "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
         "repo": "acme/web"
        }
       ],
@@ -2412,9 +2412,9 @@
       ],
       "path": "src/modules/billing/api.ts",
       "repo": "acme/web",
-      "sha": "353a7494acd0a6cf22ad375e590e3b232027d427"
+      "sha": "fb5ab8298949614101b045b889e50a39d31edbaa"
      },
-     "sha": "353a7494acd0a6cf22ad375e590e3b232027d427"
+     "sha": "fb5ab8298949614101b045b889e50a39d31edbaa"
     }
    ],
    "reached": [
@@ -2428,14 +2428,14 @@
          "detail": "from acme_contracts.models.invoice import Invoice",
          "line": 5,
          "path": "services/billing/app/services/settlement.py",
-         "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+         "ref": "2cb847500414990435ef96e01567864a21125741",
          "repo": "acme/api"
         },
         {
          "detail": "    if invoice.settlement_reference is None:",
          "line": 9,
          "path": "services/billing/app/services/settlement.py",
-         "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+         "ref": "2cb847500414990435ef96e01567864a21125741",
          "repo": "acme/api"
         },
         {
@@ -2443,7 +2443,7 @@
          "detail": "import app.services.settlement as settlement_svc",
          "line": 1,
          "path": "services/billing/app/routers/settlements.py",
-         "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+         "ref": "2cb847500414990435ef96e01567864a21125741",
          "repo": "acme/api"
         },
         {
@@ -2451,28 +2451,28 @@
          "detail": "@router.get(\"/summary\")",
          "line": 9,
          "path": "services/billing/app/routers/settlements.py",
-         "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+         "ref": "2cb847500414990435ef96e01567864a21125741",
          "repo": "acme/api"
         },
         {
          "detail": "billing_router.include_router(settlements_router, prefix=\"/settlements\")",
          "line": 8,
          "path": "services/billing/app/routers/billing.py",
-         "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+         "ref": "2cb847500414990435ef96e01567864a21125741",
          "repo": "acme/api"
         },
         {
          "detail": "api_router.include_router(billing_router, prefix=\"/billing\")",
          "line": 6,
          "path": "services/billing/app/api.py",
-         "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+         "ref": "2cb847500414990435ef96e01567864a21125741",
          "repo": "acme/api"
         },
         {
          "detail": "app.include_router(api_router, prefix=\"/api\")",
          "line": 6,
          "path": "services/billing/app/main.py",
-         "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+         "ref": "2cb847500414990435ef96e01567864a21125741",
          "repo": "acme/api"
         }
        ]
@@ -2487,7 +2487,7 @@
        "detail": "@router.get(\"/summary\")",
        "line": 9,
        "path": "services/billing/app/routers/settlements.py",
-       "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+       "ref": "2cb847500414990435ef96e01567864a21125741",
        "repo": "acme/api"
       }
      },
@@ -2501,28 +2501,28 @@
          "detail": "@router.get(\"/summary\")",
          "line": 9,
          "path": "services/billing/app/routers/settlements.py",
-         "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+         "ref": "2cb847500414990435ef96e01567864a21125741",
          "repo": "acme/api"
         },
         {
          "detail": "billing_router.include_router(settlements_router, prefix=\"/settlements\")",
          "line": 8,
          "path": "services/billing/app/routers/billing.py",
-         "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+         "ref": "2cb847500414990435ef96e01567864a21125741",
          "repo": "acme/api"
         },
         {
          "detail": "api_router.include_router(billing_router, prefix=\"/billing\")",
          "line": 6,
          "path": "services/billing/app/api.py",
-         "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+         "ref": "2cb847500414990435ef96e01567864a21125741",
          "repo": "acme/api"
         },
         {
          "detail": "app.include_router(api_router, prefix=\"/api\")",
          "line": 6,
          "path": "services/billing/app/main.py",
-         "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+         "ref": "2cb847500414990435ef96e01567864a21125741",
          "repo": "acme/api"
         }
        ],
@@ -2548,21 +2548,21 @@
          "detail": "from acme_contracts.models.invoice import Invoice",
          "line": 5,
          "path": "services/billing/app/services/settlement.py",
-         "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+         "ref": "2cb847500414990435ef96e01567864a21125741",
          "repo": "acme/api"
         },
         {
          "detail": "    if invoice.settlement_reference is None:",
          "line": 9,
          "path": "services/billing/app/services/settlement.py",
-         "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+         "ref": "2cb847500414990435ef96e01567864a21125741",
          "repo": "acme/api"
         },
         {
          "detail": "        \"references\": [reference_for(invoice) for invoice in invoices],",
          "line": 21,
          "path": "services/billing/app/services/settlement.py",
-         "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+         "ref": "2cb847500414990435ef96e01567864a21125741",
          "repo": "acme/api"
         },
         {
@@ -2570,21 +2570,21 @@
          "detail": "import app.services.settlement as settlement_svc",
          "line": 1,
          "path": "services/billing/app/routers/settlements.py",
-         "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+         "ref": "2cb847500414990435ef96e01567864a21125741",
          "repo": "acme/api"
         },
         {
          "detail": "    return settlement_svc.summarise(invoices)",
          "line": 14,
          "path": "services/billing/app/routers/settlements.py",
-         "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+         "ref": "2cb847500414990435ef96e01567864a21125741",
          "repo": "acme/api"
         },
         {
          "detail": "  return apiGet<SettlementSummary>(SETTLEMENT_SUMMARY_URL);",
          "line": 37,
          "path": "src/modules/billing/api.ts",
-         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
          "repo": "acme/web"
         },
         {
@@ -2592,7 +2592,7 @@
          "detail": "import { fetchSettlementSummary } from \"../api\";",
          "line": 4,
          "path": "src/modules/billing/pages/SettlementsPage.tsx",
-         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
          "repo": "acme/web"
         },
         {
@@ -2600,7 +2600,7 @@
          "detail": "import SettlementsPage from \"./pages/SettlementsPage\";",
          "line": 5,
          "path": "src/modules/billing/routes.tsx",
-         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
          "repo": "acme/web"
         },
         {
@@ -2608,7 +2608,7 @@
          "detail": "    <Route path=\"/billing/settlements\" element={<SettlementsPage />} />",
          "line": 11,
          "path": "src/modules/billing/routes.tsx",
-         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
          "repo": "acme/web"
         }
        ]
@@ -2623,7 +2623,7 @@
        "detail": "    <Route path=\"/billing/settlements\" element={<SettlementsPage />} />",
        "line": 11,
        "path": "src/modules/billing/routes.tsx",
-       "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+       "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
        "repo": "acme/web"
       }
      },
@@ -2637,7 +2637,7 @@
          "detail": "import SettlementsPage from \"./pages/SettlementsPage\";",
          "line": 5,
          "path": "src/modules/billing/routes.tsx",
-         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
          "repo": "acme/web"
         },
         {
@@ -2645,7 +2645,7 @@
          "detail": "    <Route path=\"/billing/settlements\" element={<SettlementsPage />} />",
          "line": 11,
          "path": "src/modules/billing/routes.tsx",
-         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
          "repo": "acme/web"
         }
        ],
@@ -2687,7 +2687,7 @@
        "detail": "import app.services.settlement as settlement_svc",
        "line": 1,
        "path": "services/billing/tests/test_settlement.py",
-       "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+       "ref": "2cb847500414990435ef96e01567864a21125741",
        "repo": "acme/api"
       }
      ],

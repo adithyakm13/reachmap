@@ -51,7 +51,7 @@ describe("the model notes of a report", () => {
     expect(by("current").every((n) => n.revision === 2)).toBe(true);
     expect(by("stale").every((n) => n.revision === 1 && n.head !== null && n.head.length === 12)).toBe(true);
     const text = flatSectionText(m);
-    expect(text).toContain("Made on: revision 1 at commit 8869159a6391");
+    expect(text).toContain("Made on: revision 1 at commit 5aacfebab390");
     expect(text).toContain("Made on: revision 2 at commit eeeeeeeeeeee");
   });
 

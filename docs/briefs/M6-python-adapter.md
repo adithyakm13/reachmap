@@ -76,7 +76,7 @@ tests/test_scenarios_py.py             the api, contracts and worker scenarios a
    settlement_svc`, multi-line import). Test files are never callers; they are unit tests
    (one hop: tests importing a changed module or a caller), each with import evidence.
 7. Test paths via `reachmap/testpaths.py` with the repo's markers (s23:
-   `services/billing/app/backtests/replay.py` and `latest_rates.py` are not tests;
+   `services/billing/app/contests/replay.py` and `latest_rates.py` are not tests;
    `services/billing/tests/test_money.py` is). Files under a test directory that are
    helpers (`conftest.py`) are tests too.
 8. Definitions: `definitions(name, sha)` counts `def`, `async def`, `class`, module-level

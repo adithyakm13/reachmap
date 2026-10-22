@@ -671,15 +671,15 @@ class ScenarioTest(unittest.TestCase):
     def test_markers_match_by_segment_not_by_substring(self):
         web = build.load_workspace()["repos"]["acme/web"]["tests"]["markers"]
         api = build.load_workspace()["repos"]["acme/api"]["tests"]["markers"]
-        self.assertFalse(is_test_path("src/backtest/engine.ts", web))
+        self.assertFalse(is_test_path("src/contest/engine.ts", web))
         self.assertTrue(is_test_path("src/components/__tests__/StatusBadge.test.tsx", web))
         self.assertTrue(is_test_path("src/lib/dates.spec.ts", web))
-        self.assertFalse(is_test_path("services/billing/app/backtests/replay.py", api))
+        self.assertFalse(is_test_path("services/billing/app/contests/replay.py", api))
         self.assertFalse(is_test_path("services/billing/app/latest_rates.py", api))
         self.assertTrue(is_test_path("services/billing/tests/test_money.py", api))
         self.assertTrue(is_test_path("tests/anything.py", api))
         # The traps are real substring collisions.
-        self.assertIn("tests/", "services/billing/app/backtests/replay.py")
+        self.assertIn("tests/", "services/billing/app/contests/replay.py")
         self.assertIn("test_", "services/billing/app/latest_rates.py")
 
     def test_not_established_subjects_have_the_documented_format(self):

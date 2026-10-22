@@ -114,7 +114,7 @@ tests/test_scenarios_js.py         the web scenarios at the language-adapter lev
 11. Test paths (`reachmap/testpaths.py`): markers match by path segment, never by
     substring. `foo/` matches a directory segment equal to `foo`; `.test.` and `.spec.`
     match a file-name infix; `test_` matches a file-name prefix; `_test` a suffix before
-    the extension. `src/backtest/engine.ts` is not a test for marker `test/`; `latest_rates.py`
+    the extension. `src/contest/engine.ts` is not a test for marker `test/`; `latest_rates.py`
     is not a test for marker `test_`. Unit tests of the change are the test files that
     import a changed file or a caller (one hop), each with its import evidence.
 12. Definitions (distinctiveness cap): `definitions(name, sha)` counts declarations of

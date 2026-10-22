@@ -74,7 +74,7 @@ describe("the Model notes tab", () => {
     expect(all.filter((c) => c.dataset.note === "stale").length).toBe(4);
     expect(all.filter((c) => c.dataset.note === "orphaned").length).toBe(2);
     for (const c of all.filter((x) => x.dataset.note === "stale")) {
-      expect(field(c, "made-on").textContent).toMatch(/revision 1 at commit 8869159a6391/);
+      expect(field(c, "made-on").textContent).toMatch(/revision 1 at commit 5aacfebab390/);
       expect(field(c, "state").textContent).toContain("stale: made on an earlier revision");
     }
     for (const c of all.filter((x) => x.dataset.note === "orphaned")) {

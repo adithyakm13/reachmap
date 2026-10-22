@@ -721,9 +721,9 @@ class Callers(Base):
         a = self.adapter()
         self.assertTrue(a.is_test_path("src/components/__tests__/StatusBadge.test.tsx"))
         self.assertTrue(a.is_test_path("src/lib/dates.spec.ts"))
-        self.assertFalse(a.is_test_path("src/backtest/engine.ts"))
+        self.assertFalse(a.is_test_path("src/contest/engine.ts"))
         only_test = self.adapter(test_markers=["test/"])
-        self.assertFalse(only_test.is_test_path("src/backtest/engine.ts"))
+        self.assertFalse(only_test.is_test_path("src/contest/engine.ts"))
         self.assertTrue(only_test.is_test_path("src/test/engine.ts"))
 
 

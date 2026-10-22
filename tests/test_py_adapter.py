@@ -1155,14 +1155,14 @@ class TestPaths(Base):
         a = PyAdapter("acme/api", "x", None, test_markers=["tests/", "test_"])  # type: ignore[arg-type]
         for path in ("services/billing/tests/test_money.py", "tests/conftest.py", "pkg/test_x.py", "services/billing/tests/helpers.py"):
             self.assertTrue(a.is_test_path(path), path)
-        for path in ("services/billing/app/backtests/replay.py", "services/billing/app/latest_rates.py", "pkg/contest.py", "test_data/a.py", "pkg/attest_x.py"):
+        for path in ("services/billing/app/contests/replay.py", "services/billing/app/latest_rates.py", "pkg/contest.py", "test_data/a.py", "pkg/attest_x.py"):
             self.assertFalse(a.is_test_path(path), path)
 
     def test_the_defaults_for_python_when_the_config_names_none(self):
         a = PyAdapter("acme/api", "x", None)  # type: ignore[arg-type]
         for path in ("tests/a.py", "test/a.py", "pkg/test_a.py", "pkg/a_test.py", "conftest.py", "pkg/conftest.py", "pkg/tests/conftest.py"):
             self.assertTrue(a.is_test_path(path), path)
-        for path in ("pkg/backtests/a.py", "pkg/latest.py", "pkg/contest.py", "pkg/a.py"):
+        for path in ("pkg/contests/a.py", "pkg/latest.py", "pkg/contest.py", "pkg/a.py"):
             self.assertFalse(a.is_test_path(path), path)
 
     def test_a_conftest_under_a_test_folder_is_a_test(self):
@@ -1174,10 +1174,10 @@ class TestPaths(Base):
             PyAdapter("acme/api", "x", None, test_markers=["a/b"])  # type: ignore[arg-type]
 
     def test_a_changed_file_gets_its_role_from_the_markers(self):
-        self.repo({"files": {"pkg/backtests/a.py": "x = 1\n", "pkg/latest_rates.py": "y = 1\n", "tests/test_a.py": "z = 1\n"}},
-                  {"files": {"pkg/backtests/a.py": "x = 2\n", "pkg/latest_rates.py": "y = 2\n", "tests/test_a.py": "z = 2\n"}})
+        self.repo({"files": {"pkg/contests/a.py": "x = 1\n", "pkg/latest_rates.py": "y = 1\n", "tests/test_a.py": "z = 1\n"}},
+                  {"files": {"pkg/contests/a.py": "x = 2\n", "pkg/latest_rates.py": "y = 2\n", "tests/test_a.py": "z = 2\n"}})
         analysis = self.analyze()
-        self.assertEqual({(f.path, f.role) for f in analysis.files}, {("pkg/backtests/a.py", "source"), ("pkg/latest_rates.py", "source"), ("tests/test_a.py", "test")})
+        self.assertEqual({(f.path, f.role) for f in analysis.files}, {("pkg/contests/a.py", "source"), ("pkg/latest_rates.py", "source"), ("tests/test_a.py", "test")})
 
 
 # ------------------------------------------------------------------------------ definitions

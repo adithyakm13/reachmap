@@ -153,7 +153,7 @@ class Completed(unittest.TestCase):
     def test_the_changes_files_carry_the_role_the_adapter_gave(self):
         a = analyse("s14")
         self.assertEqual({(f["path"], f["role"]) for f in a.change["files"]}, {(f.path, f.role) for f in propagation_files(a)})
-        self.assertIn(("src/backtest/engine.ts", "source"), {(f["path"], f["role"]) for f in a.change["files"]})
+        self.assertIn(("src/contest/engine.ts", "source"), {(f["path"], f["role"]) for f in a.change["files"]})
 
     def test_pre_change_unavailable_is_one_blocking_record_and_the_run_still_completes(self):
         a = analyse("s16")

@@ -42,7 +42,7 @@ def analysis(findings=(), areas=(), status="completed", blocking=False):
 class Paths(unittest.TestCase):
     def test_a_path_matches_only_itself_never_a_suffix_or_a_substring(self):
         yes = [("a/b/c.ts", "a/b/c.ts"), ("index.ts", "index.ts")]
-        no = [("ab/c.ts", "b/c.ts"), ("test/x.ts", "backtest/x.ts"), ("a/b/c.ts", "b/c.ts"), ("a/b/c.ts", "c.ts"), ("web/src/a.ts", "src/a.ts"), ("src/a.ts", "web/src/a.ts"),
+        no = [("ab/c.ts", "b/c.ts"), ("test/x.ts", "contest/x.ts"), ("a/b/c.ts", "b/c.ts"), ("a/b/c.ts", "c.ts"), ("web/src/a.ts", "src/a.ts"), ("src/a.ts", "web/src/a.ts"),
               ("src/a.ts", "src/b.ts"), ("src/a.ts", "src/a.tsx"), ("src/a.ts", "xsrc/a.ts"), ("a/bc.ts", "b/c.ts")]
         for a, b in yes:
             with self.subTest(f"{a} {b}"):
