@@ -35,7 +35,7 @@
  },
  "change": {
   "as_of": null,
-  "base_sha": "558daf4a8324a61dd995a0306e4df353788b703c",
+  "base_sha": "2cb847500414990435ef96e01567864a21125741",
   "change_request": null,
   "file_count": 1,
   "files": [
@@ -51,14 +51,14 @@
     "status": "modified"
    }
   ],
-  "head_sha": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+  "head_sha": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
   "how": {
    "base": "ref main",
    "head": "ref scenario/s13-branch-matrix",
    "pre_change": "merge base of main and scenario/s13-branch-matrix"
   },
   "kind": "compare",
-  "pre_change_sha": "558daf4a8324a61dd995a0306e4df353788b703c",
+  "pre_change_sha": "2cb847500414990435ef96e01567864a21125741",
   "remote": "acme/api",
   "rename_detection_skipped": false,
   "repo": "acme/api",
@@ -67,11 +67,11 @@
    "compare": "main...scenario/s13-branch-matrix"
   }
  },
- "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+ "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
  "branches": [
   {
    "branch": "main",
-   "commit": "558daf4a8324a61dd995a0306e4df353788b703c",
+   "commit": "2cb847500414990435ef96e01567864a21125741",
    "state": "pre_change",
    "added_lines_found": 0,
    "evidence": [
@@ -79,14 +79,14 @@
      "repo": "acme/api",
      "path": "services/billing/app/services/totals.py",
      "line": 1,
-     "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+     "ref": "2cb847500414990435ef96e01567864a21125741",
      "detail": "from decimal import Decimal"
     },
     {
      "repo": "acme/api",
      "path": "services/billing/app/services/totals.py",
      "line": 6,
-     "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+     "ref": "2cb847500414990435ef96e01567864a21125741",
      "detail": "    return round(amount, 2)"
     }
    ],
@@ -94,7 +94,7 @@
   },
   {
    "branch": "release/1.2",
-   "commit": "dc4de41ba3ee5623f63484fefa6d1da38bab5049",
+   "commit": "e08a4d4990d90421a932ed47e35f848fa5aef0eb",
    "state": "present",
    "added_lines_found": 2,
    "evidence": [
@@ -102,14 +102,14 @@
      "repo": "acme/api",
      "path": "services/billing/app/services/totals.py",
      "line": 1,
-     "ref": "dc4de41ba3ee5623f63484fefa6d1da38bab5049",
+     "ref": "e08a4d4990d90421a932ed47e35f848fa5aef0eb",
      "detail": "from decimal import ROUND_HALF_UP, Decimal"
     },
     {
      "repo": "acme/api",
      "path": "services/billing/app/services/totals.py",
      "line": 6,
-     "ref": "dc4de41ba3ee5623f63484fefa6d1da38bab5049",
+     "ref": "e08a4d4990d90421a932ed47e35f848fa5aef0eb",
      "detail": "    return amount.quantize(Decimal(\"0.01\"), rounding=ROUND_HALF_UP)"
     }
    ],
@@ -117,7 +117,7 @@
   },
   {
    "branch": "release/1.x",
-   "commit": "49ed920ecfd3f00bf9dfe0af283a363e592e4905",
+   "commit": "5b8d3c1f23b34d1dad91788ce3700cfcff76a135",
    "state": "present",
    "added_lines_found": 2,
    "evidence": [
@@ -125,14 +125,14 @@
      "repo": "acme/api",
      "path": "services/billing/app/services/totals.py",
      "line": 1,
-     "ref": "49ed920ecfd3f00bf9dfe0af283a363e592e4905",
+     "ref": "5b8d3c1f23b34d1dad91788ce3700cfcff76a135",
      "detail": "from decimal import ROUND_HALF_UP, Decimal"
     },
     {
      "repo": "acme/api",
      "path": "services/billing/app/services/totals.py",
      "line": 6,
-     "ref": "49ed920ecfd3f00bf9dfe0af283a363e592e4905",
+     "ref": "5b8d3c1f23b34d1dad91788ce3700cfcff76a135",
      "detail": "    return amount.quantize(Decimal(\"0.01\"), rounding=ROUND_HALF_UP)"
     }
    ],
@@ -152,7 +152,7 @@
      "repo": "acme/api",
      "path": "services/billing/app/services/totals.py",
      "line": 4,
-     "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+     "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
      "detail": "def round_total(amount: Decimal) -> Decimal:",
      "claim": "def:round_total"
     },
@@ -160,7 +160,7 @@
      "repo": "acme/api",
      "path": "services/billing/app/routers/invoices.py",
      "line": 6,
-     "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+     "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
      "detail": "from app.services.totals import round_total",
      "claim": "import:services/billing/app/services/totals.py:round_total"
     },
@@ -168,7 +168,7 @@
      "repo": "acme/api",
      "path": "services/billing/app/routers/invoices.py",
      "line": 29,
-     "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+     "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
      "detail": "@router.get(\"/{invoice_id}\")",
      "claim": "route:GET /api/billing/invoices/{invoice_id}:services/billing/app/routers/invoices.py"
     },
@@ -176,21 +176,21 @@
      "repo": "acme/api",
      "path": "services/billing/app/routers/billing.py",
      "line": 7,
-     "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+     "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
      "detail": "billing_router.include_router(invoices_router, prefix=\"/invoices\")"
     },
     {
      "repo": "acme/api",
      "path": "services/billing/app/api.py",
      "line": 6,
-     "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+     "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
      "detail": "api_router.include_router(billing_router, prefix=\"/billing\")"
     },
     {
      "repo": "acme/api",
      "path": "services/billing/app/main.py",
      "line": 6,
-     "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+     "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
      "detail": "app.include_router(api_router, prefix=\"/api\")"
     }
    ],
@@ -216,7 +216,7 @@
      "repo": "acme/api",
      "path": "services/billing/app/services/totals.py",
      "line": 4,
-     "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+     "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
      "detail": "def round_total(amount: Decimal) -> Decimal:",
      "claim": "def:round_total"
     },
@@ -224,7 +224,7 @@
      "repo": "acme/api",
      "path": "services/billing/app/routers/invoices.py",
      "line": 6,
-     "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+     "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
      "detail": "from app.services.totals import round_total",
      "claim": "import:services/billing/app/services/totals.py:round_total"
     },
@@ -232,21 +232,21 @@
      "repo": "acme/api",
      "path": "services/billing/app/routers/invoices.py",
      "line": 40,
-     "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+     "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
      "detail": "    total = round_total(Decimal(invoice.amount_cents) / 100)"
     },
     {
      "repo": "acme/web",
      "path": "src/modules/billing/api.ts",
      "line": 33,
-     "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+     "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
      "detail": "  return apiGet<Invoice>(invoiceUrl(invoiceId));"
     },
     {
      "repo": "acme/web",
      "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
      "line": 6,
-     "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+     "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
      "detail": "import { fetchAuditLog, fetchInvoice } from \"../api\";",
      "claim": "import:src/modules/billing/api.ts:fetchAuditLog,fetchInvoice"
     },
@@ -254,7 +254,7 @@
      "repo": "acme/web",
      "path": "src/modules/billing/routes.tsx",
      "line": 3,
-     "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+     "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
      "detail": "import InvoiceDetailPage from \"./pages/InvoiceDetailPage\";",
      "claim": "import:src/modules/billing/pages/InvoiceDetailPage.tsx:*"
     },
@@ -262,7 +262,7 @@
      "repo": "acme/web",
      "path": "src/modules/billing/routes.tsx",
      "line": 10,
-     "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+     "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
      "detail": "    <Route path=\"/billing/invoices/:invoiceId\" element={<InvoiceDetailPage />} />",
      "claim": "route:/billing/invoices/:invoiceId:src/modules/billing/pages/InvoiceDetailPage.tsx"
     }
@@ -289,7 +289,7 @@
      "repo": "acme/web",
      "path": "src/modules/billing/pages/InvoiceListPage.tsx",
      "line": 7,
-     "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+     "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
      "detail": "import { fetchInvoices } from \"../api\";",
      "claim": "import:src/modules/billing/api.ts:fetchInvoices"
     },
@@ -297,7 +297,7 @@
      "repo": "acme/web",
      "path": "src/modules/billing/pages/InvoiceListPage.tsx",
      "line": 8,
-     "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+     "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
      "detail": "import type { Invoice } from \"../api\";",
      "claim": "import:src/modules/billing/api.ts:Invoice"
     },
@@ -305,7 +305,7 @@
      "repo": "acme/web",
      "path": "src/modules/billing/api.ts",
      "line": 32,
-     "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+     "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
      "detail": "export function fetchInvoice(invoiceId: string): Promise<Invoice> {"
     }
    ],
@@ -332,7 +332,7 @@
      "repo": "acme/web",
      "path": "src/modules/billing/pages/SettlementsPage.tsx",
      "line": 4,
-     "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+     "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
      "detail": "import { fetchSettlementSummary } from \"../api\";",
      "claim": "import:src/modules/billing/api.ts:fetchSettlementSummary"
     },
@@ -340,7 +340,7 @@
      "repo": "acme/web",
      "path": "src/modules/billing/pages/SettlementsPage.tsx",
      "line": 5,
-     "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+     "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
      "detail": "import type { SettlementSummary } from \"../api\";",
      "claim": "import:src/modules/billing/api.ts:SettlementSummary"
     },
@@ -348,7 +348,7 @@
      "repo": "acme/web",
      "path": "src/modules/billing/api.ts",
      "line": 32,
-     "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+     "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
      "detail": "export function fetchInvoice(invoiceId: string): Promise<Invoice> {"
     }
    ],
@@ -375,42 +375,42 @@
      "repo": "acme/api",
      "path": "services/billing/app/services/totals.py",
      "line": 1,
-     "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+     "ref": "2cb847500414990435ef96e01567864a21125741",
      "detail": "from decimal import Decimal"
     },
     {
      "repo": "acme/api",
      "path": "services/billing/app/services/totals.py",
      "line": 6,
-     "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+     "ref": "2cb847500414990435ef96e01567864a21125741",
      "detail": "    return round(amount, 2)"
     },
     {
      "repo": "acme/api",
      "path": "services/billing/app/services/totals.py",
      "line": 1,
-     "ref": "dc4de41ba3ee5623f63484fefa6d1da38bab5049",
+     "ref": "e08a4d4990d90421a932ed47e35f848fa5aef0eb",
      "detail": "from decimal import ROUND_HALF_UP, Decimal"
     },
     {
      "repo": "acme/api",
      "path": "services/billing/app/services/totals.py",
      "line": 6,
-     "ref": "dc4de41ba3ee5623f63484fefa6d1da38bab5049",
+     "ref": "e08a4d4990d90421a932ed47e35f848fa5aef0eb",
      "detail": "    return amount.quantize(Decimal(\"0.01\"), rounding=ROUND_HALF_UP)"
     },
     {
      "repo": "acme/api",
      "path": "services/billing/app/services/totals.py",
      "line": 1,
-     "ref": "49ed920ecfd3f00bf9dfe0af283a363e592e4905",
+     "ref": "5b8d3c1f23b34d1dad91788ce3700cfcff76a135",
      "detail": "from decimal import ROUND_HALF_UP, Decimal"
     },
     {
      "repo": "acme/api",
      "path": "services/billing/app/services/totals.py",
      "line": 6,
-     "ref": "49ed920ecfd3f00bf9dfe0af283a363e592e4905",
+     "ref": "5b8d3c1f23b34d1dad91788ce3700cfcff76a135",
      "detail": "    return amount.quantize(Decimal(\"0.01\"), rounding=ROUND_HALF_UP)"
     }
    ],
@@ -435,7 +435,7 @@
     "repo": "acme/api",
     "path": "services/billing/app/routers/invoices.py",
     "line": 29,
-    "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+    "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
     "detail": "@router.get(\"/{invoice_id}\")",
     "claim": "route:GET /api/billing/invoices/{invoice_id}:services/billing/app/routers/invoices.py"
    },
@@ -445,7 +445,7 @@
       "repo": "acme/api",
       "path": "services/billing/app/routers/invoices.py",
       "line": 6,
-      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
       "detail": "from app.services.totals import round_total",
       "claim": "import:services/billing/app/services/totals.py:round_total"
      },
@@ -453,7 +453,7 @@
       "repo": "acme/api",
       "path": "services/billing/app/routers/invoices.py",
       "line": 29,
-      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
       "detail": "@router.get(\"/{invoice_id}\")",
       "claim": "route:GET /api/billing/invoices/{invoice_id}:services/billing/app/routers/invoices.py"
      },
@@ -461,21 +461,21 @@
       "repo": "acme/api",
       "path": "services/billing/app/routers/billing.py",
       "line": 7,
-      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
       "detail": "billing_router.include_router(invoices_router, prefix=\"/invoices\")"
      },
      {
       "repo": "acme/api",
       "path": "services/billing/app/api.py",
       "line": 6,
-      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
       "detail": "api_router.include_router(billing_router, prefix=\"/billing\")"
      },
      {
       "repo": "acme/api",
       "path": "services/billing/app/main.py",
       "line": 6,
-      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
       "detail": "app.include_router(api_router, prefix=\"/api\")"
      }
     ]
@@ -495,7 +495,7 @@
     "repo": "acme/web",
     "path": "src/modules/billing/routes.tsx",
     "line": 10,
-    "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+    "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
     "detail": "    <Route path=\"/billing/invoices/:invoiceId\" element={<InvoiceDetailPage />} />",
     "claim": "route:/billing/invoices/:invoiceId:src/modules/billing/pages/InvoiceDetailPage.tsx"
    },
@@ -505,7 +505,7 @@
       "repo": "acme/api",
       "path": "services/billing/app/routers/invoices.py",
       "line": 6,
-      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
       "detail": "from app.services.totals import round_total",
       "claim": "import:services/billing/app/services/totals.py:round_total"
      },
@@ -513,21 +513,21 @@
       "repo": "acme/api",
       "path": "services/billing/app/routers/invoices.py",
       "line": 40,
-      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
       "detail": "    total = round_total(Decimal(invoice.amount_cents) / 100)"
      },
      {
       "repo": "acme/web",
       "path": "src/modules/billing/api.ts",
       "line": 33,
-      "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+      "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
       "detail": "  return apiGet<Invoice>(invoiceUrl(invoiceId));"
      },
      {
       "repo": "acme/web",
       "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
       "line": 6,
-      "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+      "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
       "detail": "import { fetchAuditLog, fetchInvoice } from \"../api\";",
       "claim": "import:src/modules/billing/api.ts:fetchAuditLog,fetchInvoice"
      },
@@ -535,7 +535,7 @@
       "repo": "acme/web",
       "path": "src/modules/billing/routes.tsx",
       "line": 3,
-      "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+      "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
       "detail": "import InvoiceDetailPage from \"./pages/InvoiceDetailPage\";",
       "claim": "import:src/modules/billing/pages/InvoiceDetailPage.tsx:*"
      },
@@ -543,7 +543,7 @@
       "repo": "acme/web",
       "path": "src/modules/billing/routes.tsx",
       "line": 10,
-      "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+      "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
       "detail": "    <Route path=\"/billing/invoices/:invoiceId\" element={<InvoiceDetailPage />} />",
       "claim": "route:/billing/invoices/:invoiceId:src/modules/billing/pages/InvoiceDetailPage.tsx"
      }
@@ -553,7 +553,7 @@
       "repo": "acme/api",
       "path": "services/billing/app/routers/invoices.py",
       "line": 6,
-      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
       "detail": "from app.services.totals import round_total",
       "claim": "import:services/billing/app/services/totals.py:round_total"
      },
@@ -561,21 +561,21 @@
       "repo": "acme/api",
       "path": "services/billing/app/routers/invoices.py",
       "line": 40,
-      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
       "detail": "    total = round_total(Decimal(invoice.amount_cents) / 100)"
      },
      {
       "repo": "acme/web",
       "path": "src/modules/billing/api.ts",
       "line": 33,
-      "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+      "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
       "detail": "  return apiGet<Invoice>(invoiceUrl(invoiceId));"
      },
      {
       "repo": "acme/web",
       "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
       "line": 6,
-      "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+      "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
       "detail": "import { fetchAuditLog, fetchInvoice } from \"../api\";",
       "claim": "import:src/modules/billing/api.ts:fetchAuditLog,fetchInvoice"
      },
@@ -583,7 +583,7 @@
       "repo": "acme/web",
       "path": "src/modules/cases/routes.tsx",
       "line": 3,
-      "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+      "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
       "detail": "import InvoiceDetailPage from \"@/modules/billing/pages/InvoiceDetailPage\";",
       "claim": "import:src/modules/billing/pages/InvoiceDetailPage.tsx:*"
      },
@@ -591,7 +591,7 @@
       "repo": "acme/web",
       "path": "src/modules/cases/routes.tsx",
       "line": 11,
-      "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+      "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
       "detail": "    <Route path=\"/cases/:caseId/invoices/:invoiceId\" element={<InvoiceDetailPage />} />",
       "claim": "route:/cases/:caseId/invoices/:invoiceId:src/modules/billing/pages/InvoiceDetailPage.tsx"
      }
@@ -622,21 +622,21 @@
        "detail": "from app.services.totals import round_total",
        "line": 6,
        "path": "services/billing/app/routers/invoices.py",
-       "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+       "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
        "repo": "acme/api"
       },
       {
        "detail": "    total = round_total(Decimal(invoice.amount_cents) / 100)",
        "line": 40,
        "path": "services/billing/app/routers/invoices.py",
-       "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+       "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
        "repo": "acme/api"
       },
       {
        "detail": "  return apiGet<Invoice>(invoiceUrl(invoiceId));",
        "line": 33,
        "path": "src/modules/billing/api.ts",
-       "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+       "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
        "repo": "acme/web"
       }
      ],
@@ -656,7 +656,7 @@
        "ref": "main",
        "repo": "acme/web",
        "role": "primary",
-       "sha": "353a7494acd0a6cf22ad375e590e3b232027d427"
+       "sha": "fb5ab8298949614101b045b889e50a39d31edbaa"
       }
      ],
      "reasons": [],
@@ -667,7 +667,7 @@
          "detail": "  return apiGet<Invoice>(invoiceUrl(invoiceId));",
          "line": 33,
          "path": "src/modules/billing/api.ts",
-         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
          "repo": "acme/web"
         }
        ],
@@ -676,7 +676,7 @@
        ],
        "path": "src/modules/billing/api.ts",
        "repo": "acme/web",
-       "sha": "353a7494acd0a6cf22ad375e590e3b232027d427"
+       "sha": "fb5ab8298949614101b045b889e50a39d31edbaa"
       }
      ],
      "source_evidence": [
@@ -685,28 +685,28 @@
        "detail": "@router.get(\"/{invoice_id}\")",
        "line": 29,
        "path": "services/billing/app/routers/invoices.py",
-       "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+       "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
        "repo": "acme/api"
       },
       {
        "detail": "billing_router.include_router(invoices_router, prefix=\"/invoices\")",
        "line": 7,
        "path": "services/billing/app/routers/billing.py",
-       "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+       "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
        "repo": "acme/api"
       },
       {
        "detail": "api_router.include_router(billing_router, prefix=\"/billing\")",
        "line": 6,
        "path": "services/billing/app/api.py",
-       "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+       "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
        "repo": "acme/api"
       },
       {
        "detail": "app.include_router(api_router, prefix=\"/api\")",
        "line": 6,
        "path": "services/billing/app/main.py",
-       "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+       "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
        "repo": "acme/api"
       }
      ],
@@ -715,14 +715,14 @@
        "detail": "  return apiGet<Invoice>(invoiceUrl(invoiceId));",
        "line": 33,
        "path": "src/modules/billing/api.ts",
-       "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+       "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
        "repo": "acme/web"
       },
       {
        "detail": "export const invoiceUrl = (invoiceId: string) => `/api/billing/invoices/${invoiceId}`;",
        "line": 4,
        "path": "src/api/endpoints.ts",
-       "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+       "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
        "repo": "acme/web"
       }
      ],
@@ -737,7 +737,7 @@
       "detail": "  return apiGet<Invoice>(invoiceUrl(invoiceId));",
       "line": 33,
       "path": "src/modules/billing/api.ts",
-      "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+      "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
       "repo": "acme/web"
      },
      "client_repo": "acme/web",
@@ -755,28 +755,28 @@
         "detail": "@router.get(\"/{invoice_id}\")",
         "line": 29,
         "path": "services/billing/app/routers/invoices.py",
-        "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+        "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
         "repo": "acme/api"
        },
        {
         "detail": "billing_router.include_router(invoices_router, prefix=\"/invoices\")",
         "line": 7,
         "path": "services/billing/app/routers/billing.py",
-        "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+        "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
         "repo": "acme/api"
        },
        {
         "detail": "api_router.include_router(billing_router, prefix=\"/billing\")",
         "line": 6,
         "path": "services/billing/app/api.py",
-        "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+        "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
         "repo": "acme/api"
        },
        {
         "detail": "app.include_router(api_router, prefix=\"/api\")",
         "line": 6,
         "path": "services/billing/app/main.py",
-        "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+        "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
         "repo": "acme/api"
        }
       ],
@@ -797,7 +797,7 @@
        "detail": "export const invoiceUrl = (invoiceId: string) => `/api/billing/invoices/${invoiceId}`;",
        "line": 4,
        "path": "src/api/endpoints.ts",
-       "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+       "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
        "repo": "acme/web"
       }
      ]
@@ -828,7 +828,7 @@
              "detail": "    total = round_total(Decimal(invoice.amount_cents) / 100)",
              "line": 40,
              "path": "services/billing/app/routers/invoices.py",
-             "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+             "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
              "repo": "acme/api"
             },
             "form": "call",
@@ -837,7 +837,7 @@
              "detail": "from app.services.totals import round_total",
              "line": 6,
              "path": "services/billing/app/routers/invoices.py",
-             "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+             "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
              "repo": "acme/api"
             },
             "line": 40,
@@ -852,14 +852,14 @@
             "detail": "from app.services.totals import round_total",
             "line": 6,
             "path": "services/billing/app/routers/invoices.py",
-            "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+            "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
             "repo": "acme/api"
            },
            {
             "detail": "    total = round_total(Decimal(invoice.amount_cents) / 100)",
             "line": 40,
             "path": "services/billing/app/routers/invoices.py",
-            "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+            "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
             "repo": "acme/api"
            }
           ],
@@ -888,7 +888,7 @@
            "detail": "from app.services.totals import round_total",
            "line": 6,
            "path": "services/billing/app/routers/invoices.py",
-           "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+           "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
            "repo": "acme/api"
           },
           "importer_path": "services/billing/app/routers/invoices.py",
@@ -922,14 +922,14 @@
             "detail": "    return amount.quantize(Decimal(\"0.01\"), rounding=ROUND_HALF_UP)",
             "line": 6,
             "path": "services/billing/app/services/totals.py",
-            "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+            "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
             "repo": "acme/api"
            },
            {
             "detail": "    return round(amount, 2)",
             "line": 6,
             "path": "services/billing/app/services/totals.py",
-            "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+            "ref": "2cb847500414990435ef96e01567864a21125741",
             "repo": "acme/api"
            }
           ],
@@ -960,14 +960,14 @@
             "detail": "from decimal import ROUND_HALF_UP, Decimal",
             "line": 1,
             "path": "services/billing/app/services/totals.py",
-            "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+            "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
             "repo": "acme/api"
            },
            {
             "detail": "from decimal import Decimal",
             "line": 1,
             "path": "services/billing/app/services/totals.py",
-            "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+            "ref": "2cb847500414990435ef96e01567864a21125741",
             "repo": "acme/api"
            }
           ],
@@ -1009,7 +1009,7 @@
             "detail": "from app.services.totals import round_total",
             "line": 6,
             "path": "services/billing/app/routers/invoices.py",
-            "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+            "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
             "repo": "acme/api"
            },
            {
@@ -1017,28 +1017,28 @@
             "detail": "@router.get(\"/{invoice_id}\")",
             "line": 29,
             "path": "services/billing/app/routers/invoices.py",
-            "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+            "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
             "repo": "acme/api"
            },
            {
             "detail": "billing_router.include_router(invoices_router, prefix=\"/invoices\")",
             "line": 7,
             "path": "services/billing/app/routers/billing.py",
-            "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+            "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
             "repo": "acme/api"
            },
            {
             "detail": "api_router.include_router(billing_router, prefix=\"/billing\")",
             "line": 6,
             "path": "services/billing/app/api.py",
-            "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+            "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
             "repo": "acme/api"
            },
            {
             "detail": "app.include_router(api_router, prefix=\"/api\")",
             "line": 6,
             "path": "services/billing/app/main.py",
-            "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+            "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
             "repo": "acme/api"
            }
           ]
@@ -1053,7 +1053,7 @@
           "detail": "@router.get(\"/{invoice_id}\")",
           "line": 29,
           "path": "services/billing/app/routers/invoices.py",
-          "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+          "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
           "repo": "acme/api"
          }
         },
@@ -1067,28 +1067,28 @@
             "detail": "@router.get(\"/{invoice_id}\")",
             "line": 29,
             "path": "services/billing/app/routers/invoices.py",
-            "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+            "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
             "repo": "acme/api"
            },
            {
             "detail": "billing_router.include_router(invoices_router, prefix=\"/invoices\")",
             "line": 7,
             "path": "services/billing/app/routers/billing.py",
-            "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+            "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
             "repo": "acme/api"
            },
            {
             "detail": "api_router.include_router(billing_router, prefix=\"/billing\")",
             "line": 6,
             "path": "services/billing/app/api.py",
-            "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+            "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
             "repo": "acme/api"
            },
            {
             "detail": "app.include_router(api_router, prefix=\"/api\")",
             "line": 6,
             "path": "services/billing/app/main.py",
-            "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+            "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
             "repo": "acme/api"
            }
           ],
@@ -1109,7 +1109,7 @@
      },
      "repo": "acme/api",
      "seed": null,
-     "sha": "8869159a63913fd8dbd220ee27e9bcac2d03cc33"
+     "sha": "5aacfebab3906aac73ef614d31e5ff70e5d12e90"
     },
     {
      "analysis": {
@@ -1135,7 +1135,7 @@
              "detail": "    fetchInvoice(invoiceId).then(setInvoice);",
              "line": 15,
              "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
-             "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+             "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
              "repo": "acme/web"
             },
             "form": "call",
@@ -1144,7 +1144,7 @@
              "detail": "import { fetchAuditLog, fetchInvoice } from \"../api\";",
              "line": 6,
              "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
-             "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+             "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
              "repo": "acme/web"
             },
             "line": 15,
@@ -1159,7 +1159,7 @@
             "detail": "import { fetchAuditLog, fetchInvoice } from \"../api\";",
             "line": 6,
             "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            },
            {
@@ -1167,14 +1167,14 @@
             "detail": "import type { AuditEntry, Invoice } from \"../api\";",
             "line": 7,
             "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            },
            {
             "detail": "    fetchInvoice(invoiceId).then(setInvoice);",
             "line": 15,
             "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            }
           ],
@@ -1192,7 +1192,7 @@
             "detail": "import { fetchInvoices } from \"../api\";",
             "line": 7,
             "path": "src/modules/billing/pages/InvoiceListPage.tsx",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            },
            {
@@ -1200,14 +1200,14 @@
             "detail": "import type { Invoice } from \"../api\";",
             "line": 8,
             "path": "src/modules/billing/pages/InvoiceListPage.tsx",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            },
            {
             "detail": "export function fetchInvoice(invoiceId: string): Promise<Invoice> {",
             "line": 32,
             "path": "src/modules/billing/api.ts",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            }
           ],
@@ -1221,7 +1221,7 @@
             "detail": "import { fetchSettlementSummary } from \"../api\";",
             "line": 4,
             "path": "src/modules/billing/pages/SettlementsPage.tsx",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            },
            {
@@ -1229,14 +1229,14 @@
             "detail": "import type { SettlementSummary } from \"../api\";",
             "line": 5,
             "path": "src/modules/billing/pages/SettlementsPage.tsx",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            },
            {
             "detail": "export function fetchInvoice(invoiceId: string): Promise<Invoice> {",
             "line": 32,
             "path": "src/modules/billing/api.ts",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            }
           ],
@@ -1268,7 +1268,7 @@
            "detail": "import { fetchAuditLog, fetchInvoice } from \"../api\";",
            "line": 6,
            "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
-           "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+           "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
            "repo": "acme/web"
           },
           "importer_path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
@@ -1301,7 +1301,7 @@
            "detail": "import type { AuditEntry, Invoice } from \"../api\";",
            "line": 7,
            "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
-           "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+           "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
            "repo": "acme/web"
           },
           "importer_path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
@@ -1328,7 +1328,7 @@
            "detail": "import { fetchInvoices } from \"../api\";",
            "line": 7,
            "path": "src/modules/billing/pages/InvoiceListPage.tsx",
-           "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+           "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
            "repo": "acme/web"
           },
           "importer_path": "src/modules/billing/pages/InvoiceListPage.tsx",
@@ -1354,7 +1354,7 @@
            "detail": "import type { Invoice } from \"../api\";",
            "line": 8,
            "path": "src/modules/billing/pages/InvoiceListPage.tsx",
-           "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+           "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
            "repo": "acme/web"
           },
           "importer_path": "src/modules/billing/pages/InvoiceListPage.tsx",
@@ -1380,7 +1380,7 @@
            "detail": "import { fetchSettlementSummary } from \"../api\";",
            "line": 4,
            "path": "src/modules/billing/pages/SettlementsPage.tsx",
-           "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+           "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
            "repo": "acme/web"
           },
           "importer_path": "src/modules/billing/pages/SettlementsPage.tsx",
@@ -1406,7 +1406,7 @@
            "detail": "import type { SettlementSummary } from \"../api\";",
            "line": 5,
            "path": "src/modules/billing/pages/SettlementsPage.tsx",
-           "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+           "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
            "repo": "acme/web"
           },
           "importer_path": "src/modules/billing/pages/SettlementsPage.tsx",
@@ -1442,7 +1442,7 @@
             "detail": "  return apiGet<Invoice>(invoiceUrl(invoiceId));",
             "line": 33,
             "path": "src/modules/billing/api.ts",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            }
           ],
@@ -1475,21 +1475,21 @@
        "detail": "from app.services.totals import round_total",
        "line": 6,
        "path": "services/billing/app/routers/invoices.py",
-       "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+       "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
        "repo": "acme/api"
       },
       {
        "detail": "    total = round_total(Decimal(invoice.amount_cents) / 100)",
        "line": 40,
        "path": "services/billing/app/routers/invoices.py",
-       "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+       "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
        "repo": "acme/api"
       },
       {
        "detail": "  return apiGet<Invoice>(invoiceUrl(invoiceId));",
        "line": 33,
        "path": "src/modules/billing/api.ts",
-       "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+       "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
        "repo": "acme/web"
       }
      ],
@@ -1509,7 +1509,7 @@
             "detail": "import { fetchAuditLog, fetchInvoice } from \"../api\";",
             "line": 6,
             "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            },
            {
@@ -1517,7 +1517,7 @@
             "detail": "import InvoiceDetailPage from \"./pages/InvoiceDetailPage\";",
             "line": 3,
             "path": "src/modules/billing/routes.tsx",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            },
            {
@@ -1525,7 +1525,7 @@
             "detail": "    <Route path=\"/billing/invoices/:invoiceId\" element={<InvoiceDetailPage />} />",
             "line": 10,
             "path": "src/modules/billing/routes.tsx",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            }
           ],
@@ -1535,7 +1535,7 @@
             "detail": "import { fetchAuditLog, fetchInvoice } from \"../api\";",
             "line": 6,
             "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            },
            {
@@ -1543,7 +1543,7 @@
             "detail": "import InvoiceDetailPage from \"@/modules/billing/pages/InvoiceDetailPage\";",
             "line": 3,
             "path": "src/modules/cases/routes.tsx",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            },
            {
@@ -1551,7 +1551,7 @@
             "detail": "    <Route path=\"/cases/:caseId/invoices/:invoiceId\" element={<InvoiceDetailPage />} />",
             "line": 11,
             "path": "src/modules/cases/routes.tsx",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            }
           ]
@@ -1566,7 +1566,7 @@
           "detail": "    <Route path=\"/billing/invoices/:invoiceId\" element={<InvoiceDetailPage />} />",
           "line": 10,
           "path": "src/modules/billing/routes.tsx",
-          "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+          "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
           "repo": "acme/web"
          }
         },
@@ -1580,7 +1580,7 @@
             "detail": "import InvoiceDetailPage from \"./pages/InvoiceDetailPage\";",
             "line": 3,
             "path": "src/modules/billing/routes.tsx",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            },
            {
@@ -1588,7 +1588,7 @@
             "detail": "    <Route path=\"/billing/invoices/:invoiceId\" element={<InvoiceDetailPage />} />",
             "line": 10,
             "path": "src/modules/billing/routes.tsx",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            }
           ],
@@ -1609,7 +1609,7 @@
             "detail": "import InvoiceDetailPage from \"@/modules/billing/pages/InvoiceDetailPage\";",
             "line": 3,
             "path": "src/modules/cases/routes.tsx",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            },
            {
@@ -1617,7 +1617,7 @@
             "detail": "    <Route path=\"/cases/:caseId/invoices/:invoiceId\" element={<InvoiceDetailPage />} />",
             "line": 11,
             "path": "src/modules/cases/routes.tsx",
-            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
             "repo": "acme/web"
            }
           ],
@@ -1643,7 +1643,7 @@
         "detail": "  return apiGet<Invoice>(invoiceUrl(invoiceId));",
         "line": 33,
         "path": "src/modules/billing/api.ts",
-        "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+        "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
         "repo": "acme/web"
        }
       ],
@@ -1652,9 +1652,9 @@
       ],
       "path": "src/modules/billing/api.ts",
       "repo": "acme/web",
-      "sha": "353a7494acd0a6cf22ad375e590e3b232027d427"
+      "sha": "fb5ab8298949614101b045b889e50a39d31edbaa"
      },
-     "sha": "353a7494acd0a6cf22ad375e590e3b232027d427"
+     "sha": "fb5ab8298949614101b045b889e50a39d31edbaa"
     }
    ],
    "reached": [
@@ -1669,7 +1669,7 @@
          "detail": "from app.services.totals import round_total",
          "line": 6,
          "path": "services/billing/app/routers/invoices.py",
-         "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+         "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
          "repo": "acme/api"
         },
         {
@@ -1677,28 +1677,28 @@
          "detail": "@router.get(\"/{invoice_id}\")",
          "line": 29,
          "path": "services/billing/app/routers/invoices.py",
-         "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+         "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
          "repo": "acme/api"
         },
         {
          "detail": "billing_router.include_router(invoices_router, prefix=\"/invoices\")",
          "line": 7,
          "path": "services/billing/app/routers/billing.py",
-         "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+         "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
          "repo": "acme/api"
         },
         {
          "detail": "api_router.include_router(billing_router, prefix=\"/billing\")",
          "line": 6,
          "path": "services/billing/app/api.py",
-         "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+         "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
          "repo": "acme/api"
         },
         {
          "detail": "app.include_router(api_router, prefix=\"/api\")",
          "line": 6,
          "path": "services/billing/app/main.py",
-         "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+         "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
          "repo": "acme/api"
         }
        ]
@@ -1713,7 +1713,7 @@
        "detail": "@router.get(\"/{invoice_id}\")",
        "line": 29,
        "path": "services/billing/app/routers/invoices.py",
-       "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+       "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
        "repo": "acme/api"
       }
      },
@@ -1727,28 +1727,28 @@
          "detail": "@router.get(\"/{invoice_id}\")",
          "line": 29,
          "path": "services/billing/app/routers/invoices.py",
-         "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+         "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
          "repo": "acme/api"
         },
         {
          "detail": "billing_router.include_router(invoices_router, prefix=\"/invoices\")",
          "line": 7,
          "path": "services/billing/app/routers/billing.py",
-         "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+         "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
          "repo": "acme/api"
         },
         {
          "detail": "api_router.include_router(billing_router, prefix=\"/billing\")",
          "line": 6,
          "path": "services/billing/app/api.py",
-         "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+         "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
          "repo": "acme/api"
         },
         {
          "detail": "app.include_router(api_router, prefix=\"/api\")",
          "line": 6,
          "path": "services/billing/app/main.py",
-         "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+         "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
          "repo": "acme/api"
         }
        ],
@@ -1777,21 +1777,21 @@
          "detail": "from app.services.totals import round_total",
          "line": 6,
          "path": "services/billing/app/routers/invoices.py",
-         "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+         "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
          "repo": "acme/api"
         },
         {
          "detail": "    total = round_total(Decimal(invoice.amount_cents) / 100)",
          "line": 40,
          "path": "services/billing/app/routers/invoices.py",
-         "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+         "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
          "repo": "acme/api"
         },
         {
          "detail": "  return apiGet<Invoice>(invoiceUrl(invoiceId));",
          "line": 33,
          "path": "src/modules/billing/api.ts",
-         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
          "repo": "acme/web"
         },
         {
@@ -1799,7 +1799,7 @@
          "detail": "import { fetchAuditLog, fetchInvoice } from \"../api\";",
          "line": 6,
          "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
-         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
          "repo": "acme/web"
         },
         {
@@ -1807,7 +1807,7 @@
          "detail": "import InvoiceDetailPage from \"./pages/InvoiceDetailPage\";",
          "line": 3,
          "path": "src/modules/billing/routes.tsx",
-         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
          "repo": "acme/web"
         },
         {
@@ -1815,7 +1815,7 @@
          "detail": "    <Route path=\"/billing/invoices/:invoiceId\" element={<InvoiceDetailPage />} />",
          "line": 10,
          "path": "src/modules/billing/routes.tsx",
-         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
          "repo": "acme/web"
         }
        ],
@@ -1825,21 +1825,21 @@
          "detail": "from app.services.totals import round_total",
          "line": 6,
          "path": "services/billing/app/routers/invoices.py",
-         "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+         "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
          "repo": "acme/api"
         },
         {
          "detail": "    total = round_total(Decimal(invoice.amount_cents) / 100)",
          "line": 40,
          "path": "services/billing/app/routers/invoices.py",
-         "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+         "ref": "5aacfebab3906aac73ef614d31e5ff70e5d12e90",
          "repo": "acme/api"
         },
         {
          "detail": "  return apiGet<Invoice>(invoiceUrl(invoiceId));",
          "line": 33,
          "path": "src/modules/billing/api.ts",
-         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
          "repo": "acme/web"
         },
         {
@@ -1847,7 +1847,7 @@
          "detail": "import { fetchAuditLog, fetchInvoice } from \"../api\";",
          "line": 6,
          "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
-         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
          "repo": "acme/web"
         },
         {
@@ -1855,7 +1855,7 @@
          "detail": "import InvoiceDetailPage from \"@/modules/billing/pages/InvoiceDetailPage\";",
          "line": 3,
          "path": "src/modules/cases/routes.tsx",
-         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
          "repo": "acme/web"
         },
         {
@@ -1863,7 +1863,7 @@
          "detail": "    <Route path=\"/cases/:caseId/invoices/:invoiceId\" element={<InvoiceDetailPage />} />",
          "line": 11,
          "path": "src/modules/cases/routes.tsx",
-         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
          "repo": "acme/web"
         }
        ]
@@ -1878,7 +1878,7 @@
        "detail": "    <Route path=\"/billing/invoices/:invoiceId\" element={<InvoiceDetailPage />} />",
        "line": 10,
        "path": "src/modules/billing/routes.tsx",
-       "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+       "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
        "repo": "acme/web"
       }
      },
@@ -1892,7 +1892,7 @@
          "detail": "import InvoiceDetailPage from \"./pages/InvoiceDetailPage\";",
          "line": 3,
          "path": "src/modules/billing/routes.tsx",
-         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
          "repo": "acme/web"
         },
         {
@@ -1900,7 +1900,7 @@
          "detail": "    <Route path=\"/billing/invoices/:invoiceId\" element={<InvoiceDetailPage />} />",
          "line": 10,
          "path": "src/modules/billing/routes.tsx",
-         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
          "repo": "acme/web"
         }
        ],
@@ -1921,7 +1921,7 @@
          "detail": "import InvoiceDetailPage from \"@/modules/billing/pages/InvoiceDetailPage\";",
          "line": 3,
          "path": "src/modules/cases/routes.tsx",
-         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
          "repo": "acme/web"
         },
         {
@@ -1929,7 +1929,7 @@
          "detail": "    <Route path=\"/cases/:caseId/invoices/:invoiceId\" element={<InvoiceDetailPage />} />",
          "line": 11,
          "path": "src/modules/cases/routes.tsx",
-         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "ref": "fb5ab8298949614101b045b889e50a39d31edbaa",
          "repo": "acme/web"
         }
        ],
