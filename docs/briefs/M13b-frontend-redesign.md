@@ -386,3 +386,33 @@ The runner serves `model_notes` in `GET /api/reports/<name>` (`notes.attach`, M1
   Contrast of the 409 text nodes of the tab: 5.19 at the least in light, 6.59 in dark.
 - **Screenshots** (`docs/screenshots/`): `light-model-notes`, `dark-model-notes`, `dark-model-notes-area-drawer`, `dark-model-notes-hostile`.
 - **Not done.** Notes are not in the command palette beyond the tab, in the areas table or in the overview; nothing records a note from the workspace (a note is only written over MCP).
+
+## Follow-up: bundle split
+
+The known limit "the `index` chunk is over Vite's 500 kB warning" is closed. No dependency was added or changed, the lock is untouched, the warning limit (`chunkSizeWarningLimit`) is at its default and nothing is loaded from another host.
+
+**What made `index` big** (bytes of generated code per package, from a throw-away build with source maps, not kept): React DOM 205 kB, Mantine core 99 kB, React Router 91 kB, the report model in `src/report` 25 kB, floating-ui 40 kB, the frame and the rest under 30 kB. Tabler icons were already imported one by one (4 kB in `index`), the pages were already lazy, and prism is in `ReportPage` only (85 kB there), so none of those was the cause: the two libraries that dominate `index` are React DOM and the router.
+
+**The change** (`frontend/vite.config.ts`): Vite 8 builds with rolldown, where `output.manualChunks` is deprecated in favour of `output.codeSplitting`, so the vendor groups are written as `build.rolldownOptions.output.codeSplitting.groups`: `react` (react, react-dom, scheduler) and `router` (react-router, react-router-dom and the two small packages it uses). Mantine is not a group: a group would pull the parts of Mantine that only the report page uses (tabs, table, drawer) into the first load. A `chunkFileNames` function keeps only letters, digits, `_` and `-` of a chunk's name, because rolldown names a shared chunk after a module (`Mantine.context`) and `src/dist.test.ts`, `tests/test_frontend_static.py` and the runner expect `assets/<name>-<8 characters>.js`.
+
+**Sizes** (`npm run build`, Vite's numbers; kB):
+
+| File | before raw | before gzip | after raw | after gzip |
+| --- | --- | --- | --- | --- |
+| `index-*.js` | 510.66 | 160.24 | 136.06 | 42.05 |
+| `react-*.js` (new) | | | 218.84 | 68.25 |
+| `router-*.js` (new) | | | 92.85 | 30.75 |
+| `createReactComponent-*.js` (new; Mantine pieces, floating-ui, the Tabler base, shared by the first load) | | | 73.57 | 24.20 |
+| `rolldown-runtime`, `Mantine_context`, `Content` (new, small) | | | 0.71, 1.21, 1.62 | 0.42, 0.60, 0.78 |
+| `jsx-runtime-*.js` (gone, now in `react`) | 13.81 | 4.88 | | |
+| `CloseButton-*.js` | 34.23 | 11.57 | 34.32 | 11.60 |
+| `ReportPage-*.js` | 227.73 | 66.25 | 228.11 | 66.31 |
+| `Graphs-*.js` | 229.87 | 74.98 | 229.94 | 75.01 |
+| `esm`, `time`, `PaletteView`, `Input`, `toast`, `Reports`, `Jobs`, `CopyButton`, `store` | unchanged within 0.5 kB | | | |
+| `index-*.css`, `Graphs-*.css` | 146.27, 15.41 | 22.71, 2.56 | same | same |
+
+The largest chunk is now `Graphs` at 229.94 kB, and the warning does not appear. The first load of the entry (the entry and the scripts the page preloads) is 176.7 kB gzip before and 178.7 kB after: two kB more (the runtime and the module headers of five more files), and in return `react` and `router` change only with their versions, so a new build of the frontend code leaves them in the browser's cache. The graph libraries are in `Graphs` only (checked in the build with a source map and in the browser: `/assets/Graphs-*` is requested after a report page with a graph opens, and not by the list), and `src/dist.test.ts` still holds that no other chunk holds a `react-flow__` class.
+
+**CSP.** `index.html` now has seven `modulepreload` links instead of two, all `/assets/<name>.js` of the same origin: the runner's policy is `script-src 'self'` and a preload is a script fetch of the same origin, so it is allowed, and `src/dist.test.ts` and `tests/test_frontend_static.py` (which allow only `/assets/` addresses in the page) pass. Checked in the browser pane against a real `reachmap serve` on the fixture reports (`complete`, `hostile`, `failed`, `timed_out`, `s11`, `s13`, `sources`): the list, the overview of `s11` (graph loaded), every tab of `s11` and of the hostile report, an area drawer and the command palette. Every asset answered 200, a `securitypolicyviolation` listener saw no event, and the console held no message from the page (one error came from a synthetic `Escape` event this check dispatched on `document`, the known Mantine hotkey case in the CSP notes above).
+
+**Tests**: `npm test` 385 pass (including `src/dist.test.ts` against the new build), `npx tsc --noEmit -p tsconfig.app.json` and `-p tsconfig.node.json` are clean, `tests.test_frontend_static`, `tests.test_bundle_frontend`, `tests.test_packaging` and `tests.test_runner_reports` pass with the build copied into `reachmap/runner/static/` by `python -m reachmap.tools.bundle_frontend`, and `THIRD_PARTY_LICENSES.txt` is still written by the postbuild step (67 packages).

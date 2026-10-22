@@ -15,6 +15,23 @@ export default defineConfig({
     cssCodeSplit: true,
     assetsInlineLimit: 0,
     modulePreload: { polyfill: false },
+    rolldownOptions: {
+      output: {
+        // A chunk takes its name from a module (`Mantine.context`): only letters, digits, `_` and `-` stay in the file name, which the
+        // static tests and the runner's asset names expect (`assets/<name>-<8 characters>.js`).
+        chunkFileNames: (chunk) => `assets/${chunk.name.replace(/[^A-Za-z0-9_-]/g, "_")}-[hash].js`,
+        // The entry held React DOM and the router with Mantine and the frame (510.7 kB, over Vite's 500 kB warning). The two libraries that
+        // are largest and change least are chunks of their own, so the entry is the frame and Mantine; the limit of the warning stays at its
+        // default. Only `node_modules/` paths are matched (the project's own folders are never captured by a vendor group), and the chunks of
+        // the pages and of the graph libraries are made by their `import()` as before: nothing here pulls a graph library into a first load.
+        codeSplitting: {
+          groups: [
+            { name: "react", test: /node_modules[\\/](?:react|react-dom|scheduler)[\\/]/, priority: 20 },
+            { name: "router", test: /node_modules[\\/](?:react-router|react-router-dom|cookie|set-cookie-parser)[\\/]/, priority: 10 },
+          ],
+        },
+      },
+    },
   },
   test: {
     environment: "jsdom",
