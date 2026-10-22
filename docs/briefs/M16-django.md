@@ -283,3 +283,27 @@ Mutation check of the rules (each change made, the Django modules run, the chang
 `ANY` not fitting a call, a partial route fitting as exact, a regex route not partial, unmounted claimed beside an unresolved include, an unresolved view not blocking,
 a non-literal root accepted, other settings silent, a commented include counted, namespaces ignored, an addition claimed against a base that is not whole, the
 direct hop always the changed line, decorator methods ignored, an external include blocking, the include cycle guard off.
+
+## Follow-up: shared Python route-table logic
+
+The Django and FastAPI route tables now share `reachmap/adapters/python_routes.py` (unit tests in `tests/test_python_routes.py`). It holds the syntax helpers
+(`statements`, `callee`, `kw`, `names_in`, `literal_strings`, `nearest_folder`), `FileFacts` (path, parse, import bindings, constants), `TableBase` (the search,
+the facts per file with the `parse_degraded` rule, module resolution, constants evaluated to a path string), `route_evidence`, and `Gathered` and `Shared` (the
+table per commit, `routes`, `routes_changed` through `guard_route_changes`, `routes_complete`, the areas of a change and the unmounted claim). No record kind,
+message, evidence, ordering or report output changed. Both adapters were checked with the 37 fixture scenarios (23 of the M1 workspace, which includes the FastAPI
+service `acme/api`, and the 14 Django ones): the reports before and after are identical except run timestamps, durations and the temporary directory.
+
+What each adapter keeps, and why:
+
+- FastAPI: routers, decorators (`api_route` methods), `include_router` and `mount`, `_Str` (a plain string with unknown parts), the way up through mounts and how
+  a route is composed, the strays (mounts outside module level), the reach rules of a chain. Its words (`route table`, `routes and mounts in it were not read`) are
+  the table's class attributes.
+- Django: the URLconf and `include()` chains, regex routes, DRF routers and viewsets, namespaces, `ROOT_URLCONF` and settings, the `Str` with marker stand-ins for
+  unknown parts and regex parts, star imports (`Facts.stars`, from `bind_imports`), `denote` (names to declarations and modules), the holes of the table (`incomplete`
+  takes a scope, and `hole_covers` answers by path prefix, where the shared default says everywhere when the table is not whole), the `read_unreadable` record for a
+  symlink (the `not_searched` hook), the files that did not read (the `unread` hook), and the chain evidence (`hops` not already in the route's evidence, where
+  FastAPI uses `dedupe`).
+- Equivalences checked rather than assumed: the helpers in `django/facts.py` and `fastapi/__init__.py` were the same as `python_routes`' (Django's `facts.py` still
+  re-exports them in `__all__`); Django's constant check "not assigned in the file" (`name in facts.assigns`) is `name in facts.consts` because every assigned name has a
+  `consts` entry; FastAPI's `routes_changed` (`base_ok=old.complete`, `head_ok=new.complete`) is the shared rule with `hole_covers` meaning "not complete"; the
+  reasons in a withheld change are the head table's first for Django (`HEAD_REASONS_FIRST`) and the base's first for FastAPI, as each always said them.
