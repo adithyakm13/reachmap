@@ -1,9 +1,9 @@
 # Releasing Reachmap
 
 This is the checklist for a release: the order of the build, the checks, the clean install test, the tag, and the two decisions that
-only the owner of the repository can make. Nothing here publishes anything by itself. The release workflow
-(`.github/workflows/release.yml`) builds and checks, keeps the files as workflow artifacts and stops. It has no step that uploads to a
-package index, creates a GitHub release or reads a secret, and none should be added without the owner's go-ahead.
+only the owner of the repository can make. A tag push publishes nothing: the release workflow (`.github/workflows/release.yml`) builds and
+checks, keeps the files as workflow artifacts and stops. It uploads to PyPI only when someone runs it by hand with `publish: pypi` for a
+tag, through trusted publishing (no token or secret anywhere; owner decision of 2026-10-22). It never creates a GitHub release.
 
 ## What needs the owner
 
@@ -140,8 +140,12 @@ cd /tmp && /tmp/clean/bin/reachmap --version
 4. keeps `dist/` as the workflow artifact `dist` (30 days);
 5. in a second job, on Python 3.11, 3.12 and 3.13, downloads that artifact and runs `tests/release/check_install.py` on it.
 
-It only reads the repository (`permissions: contents: read`) and uses no secret. Download the artifact from the run and publish those
-exact files, not a build made again later.
+It only reads the repository (`permissions: contents: read`) and uses no secret.
+
+Run by hand with `ref` set to a tag (for example `v0.1.0`), it checks out and builds that tag instead of the branch, and checks that the
+tag matches the version. With `publish: pypi` as well, a third job runs after the build and all three install checks pass: it downloads
+the same `dist` artifact and uploads it with `pypa/gh-action-pypi-publish` in the GitHub environment `pypi`, with `id-token: write` and no
+other permission. Only the files that were built and checked in that run are uploaded.
 
 ## Tagging
 
@@ -171,10 +175,15 @@ when it goes public.
   `python -m twine upload dist/*` on their own machine with the token in their own environment (`TWINE_USERNAME=__token__`, `TWINE_PASSWORD`
   from their password manager). The token is never put in the repository, a workflow file, a chat or a log. A first run against TestPyPI
   (`--repository testpypi`) shows what the project page will look like.
-- **Trusted publishing.** The owner registers the repository, a workflow file name and an environment as a trusted publisher in the
-  project's settings on PyPI (for a project that does not exist yet, as a pending publisher), and adds a separate publish workflow that
-  runs on a published release, has `id-token: write` and calls `pypa/gh-action-pypi-publish`, with no token anywhere. This repository does
-  not ship that workflow, because it belongs to a decision that is not made.
+- **Trusted publishing (the method chosen on 2026-10-22).** On PyPI the owner adds a trusted publisher (for a project that does not
+  exist yet, a pending publisher under the account's Publishing settings) with: project `reachmap`, owner `adithyakm13`, repository
+  `reachmap`, workflow `release.yml`, environment `pypi`. Then the release workflow is run by hand from `main`:
+
+  ```text
+  gh workflow run release.yml -R adithyakm13/reachmap -f ref=v0.1.0 -f publish=pypi
+  ```
+
+  It builds the tag, runs every check and uploads with no token anywhere. The GitHub environment `pypi` only accepts runs from `main`.
 
 A version on PyPI cannot be replaced. If a release is bad, yank it on PyPI (it stays installable when pinned, and is skipped otherwise) and
 release the next version.
