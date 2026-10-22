@@ -53,7 +53,7 @@ Because the overlay is written over the checked out branch, branches diverge nat
 ### Generated files
 
 One rule only: `hub_importers`, named in the `generate` list of acme/web step
-`05-hub-and-backtest` (parameters `dir`, `count`, `target`) and implemented in `build.py`.
+`05-hub-and-contest` (parameters `dir`, `count`, `target`) and implemented in `build.py`.
 It writes 55 components `src/widgets/Widget01.tsx` to `Widget55.tsx`, each importing
 `src/lib/format.ts` (odd numbers by `@/lib/format`, even numbers by `../lib/format`). With
 the two real pages that import it, the hub has 57 importers, above `hub_importers = 50`.
@@ -91,7 +91,7 @@ optional `limits` (overrides of workspace limits, used by s21).
 
 | Repo | What it is | Branches | Tags |
 |---|---|---|---|
-| acme/web | TypeScript, React Router v6, `tsconfig.json` aliases `@/*`, `@components/*`, `@api/*` (a stale `jsconfig.json` points at `app/`, which does not exist), modules billing, cases, reports, `src/api/endpoints.ts`, hub `src/lib/format.ts`, guarded `formatAmount` in `src/lib/money.ts`, `src/lib/dates.ts`, shared `StatusBadge`, four files defining `mapStateToProps`, `src/backtest/engine.ts` | main, release/2.0, release/2.1 | v2.0.0, v2.1.0 |
+| acme/web | TypeScript, React Router v6, `tsconfig.json` aliases `@/*`, `@components/*`, `@api/*` (a stale `jsconfig.json` points at `app/`, which does not exist), modules billing, cases, reports, `src/api/endpoints.ts`, hub `src/lib/format.ts`, guarded `formatAmount` in `src/lib/money.ts`, `src/lib/dates.ts`, shared `StatusBadge`, four files defining `mapStateToProps`, `src/contest/engine.ts` | main, release/2.0, release/2.1 | v2.0.0, v2.1.0 |
 | acme/api | FastAPI monorepo: `services/billing`, `services/cases` (each with its own `pyproject.toml` and a package called `app`), `libs/common` (`acme_common`), mount tree app > `/api` > `/billing` > `/invoices` and `/settlements`, an unmounted `legacy_exports.py`, `jobs.py` with a multi-line decorator at column 0 | main, release/1.x, release/1.2 | v1.2.0, v1.9.0 |
 | acme/contracts | Pydantic models `acme_contracts` (source folder `contracts/`, mapped by `package-dir` in `pyproject.toml`), manifest version `0.0.0` forever, real versions are tags | main | v1.2.0, v1.9.0, v1.10.0 (successive commits) |
 | acme/worker | Celery tasks reading the contracts, `worker/topics.py` for a later event edge | main | none |
@@ -298,7 +298,7 @@ Trap numbers refer to the lists in `docs/CONTEXT.md` section 5.
 | s11-contract-field | contracts | `settlement_reference` becomes required | api read (code line, not the comment), its route, the web screen through http, worker read; both consumers `on_adoption` | schema change matters before adoption; code not comments; distinctive by definition count |
 | s12-generic-field | contracts | `Settlement.interval` | `not_distinctive`; no consumer line claimed | the word `interval` read as a contract link |
 | s13-branch-matrix | api | `round_total` fix, already on release branches | main `pre_change`, release/1.x and release/1.2 `present` | version numbers do not imply containment |
-| s14-test-marker | web | `src/backtest/engine.ts` and a `__tests__` file | engine is a source file, the `__tests__` file is a test | marker `test/` matched `backtest/`: matching is by path segment, tested here on the web markers, none of which collides with `backtest/`; the real collisions are in s23 |
+| s14-test-marker | web | `src/contest/engine.ts` and a `__tests__` file | engine is a source file, the `__tests__` file is a test | marker `test/` matched `contest/`: matching is by path segment, tested here on the web markers, none of which collides with `contest/`; the real collisions are in s23 |
 | s15-python-callers | api | `format_cents` in `libs/common` | callers via multi-line, aliased-name and aliased-module imports; tests are tests; `jobs.py` imports only another name | multi-line and aliased imports; tests are not callers |
 | s16-no-merge-base | web | orphan branch | `pre_change_unavailable` (blocking); no removed-route or narrowing claim | open PR silently had no pre-change version |
 | s17-version-order | contracts | range v1.9.0..v1.10.0 | api main 1.10.0 contains the change, api release/1.x 1.9.0, api release/1.2 1.2.0 and worker 1.9.0 do not | versions compared as strings; placeholder manifest version; release lines diverge |
@@ -307,7 +307,7 @@ Trap numbers refer to the lists in `docs/CONTEXT.md` section 5.
 | s20-removed-import-line | web | removed `@/lib/format` import | page and its screen only; the 55 widgets and `CaseListPage` excluded | a removed import line's module path read as a defect fingerprint |
 | s21-hop-cap | contracts | s11 change with `limits.hops = 1` | reads in api and worker, api route; web screen not listed, `hop_cap` | hop cap recorded when hit |
 | s22-added-handler | api | new `get_invoice_pdf` handler | only the new handler and its route; `added_route_uncalled`; siblings with the same `request: Request,` line excluded | an added line placed in a function by its text instead of its diff line number; an added route nobody calls yet is said |
-| s23-api-test-marker | api | files in `backtests/` and `latest_rates.py`, plus a real test | the two source files are source (markers `tests/` and `test_` collide with their paths only as substrings), `tests/test_money.py` is a test | marker `tests/` matched `backtests/`, marker `test_` matched `latest_rates.py` |
+| s23-api-test-marker | api | files in `contests/` and `latest_rates.py`, plus a real test | the two source files are source (markers `tests/` and `test_` collide with their paths only as substrings), `tests/test_money.py` is a test | marker `tests/` matched `contests/`, marker `test_` matched `latest_rates.py` |
 
 ### Revisions (M11)
 

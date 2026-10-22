@@ -138,7 +138,7 @@ class PythonScenarios(unittest.TestCase):
         run = self.runs["s23"]
         roles = {(f.path, f.role) for f in run.analysis.files}
         self.assertEqual(roles, {
-            ("services/billing/app/backtests/replay.py", "source"), ("services/billing/app/latest_rates.py", "source"), ("services/billing/tests/test_money.py", "test"),
+            ("services/billing/app/contests/replay.py", "source"), ("services/billing/app/latest_rates.py", "source"), ("services/billing/tests/test_money.py", "test"),
         })
         self.assertTrue(all(i.callers == () for i in run.analysis.impacts))
 

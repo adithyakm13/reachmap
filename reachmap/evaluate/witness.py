@@ -11,7 +11,7 @@ The original is analysed **as of its merge time** (`--as-of`), like any run, and
 
 Which files count: the witness change's files that are outside the original diff (the original's changed paths and the paths they were
 renamed from). Paths are compared exactly, in one repository: a file is a hit when the report cites that very path of that very repository (never a
-substring, never a suffix: `a/b/c.ts` is not `b/c.ts` and `test/x.ts` is not `backtest/x.ts`).
+substring, never a suffix: `a/b/c.ts` is not `b/c.ts` and `test/x.ts` is not `contest/x.ts`).
 
 What the harness refuses, as a whole set and in words, before anything is counted (a refused set gives no count at all):
 

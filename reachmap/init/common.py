@@ -18,7 +18,7 @@ _TEST_MARKERS = ("__tests__/", "__test__/", "tests/", "test/", ".test.", ".spec.
 
 
 def is_test(path: str) -> bool:
-    """A test, fixture or story path by the usual markers (never a substring: `src/backtest/engine.ts` is not a test)."""
+    """A test, fixture or story path by the usual markers (never a substring: `src/contest/engine.ts` is not a test)."""
     return testpaths.is_test_path(path, _TEST_MARKERS)
 
 

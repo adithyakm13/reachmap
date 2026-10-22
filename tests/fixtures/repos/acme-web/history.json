@@ -7,9 +7,9 @@
     {"dir": "03-billing", "branch": "main", "message": "Add the billing module and the endpoints file"},
     {"dir": "04-cases-reports", "branch": "main", "message": "Add the cases and reports modules"},
     {
-      "dir": "05-hub-and-backtest",
+      "dir": "05-hub-and-contest",
       "branch": "main",
-      "message": "Add dashboard widgets and the backtest engine",
+      "message": "Add dashboard widgets and the contest engine",
       "generate": [{"rule": "hub_importers", "dir": "src/widgets", "count": 55, "target": "src/lib/format.ts"}]
     },
     {"dir": "06-release-2.0", "branch": "release/2.0", "from": "main", "message": "Release 2.0.0", "tags": ["v2.0.0"]},

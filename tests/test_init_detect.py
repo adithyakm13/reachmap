@@ -527,9 +527,9 @@ class Contract(unittest.TestCase):
 
 class Tests(unittest.TestCase):
     def test_markers_come_from_names_and_folders_never_substrings(self):
-        files = {"src/backtest/engine.ts": "", "src/components/__tests__/A.test.tsx": "", "src/lib/b.spec.ts": "", "src/latest.ts": ""}
+        files = {"src/contest/engine.ts": "", "src/components/__tests__/A.test.tsx": "", "src/lib/b.spec.ts": "", "src/latest.ts": ""}
         self.assertEqual(sections(si.guess(files))["tests"]["markers"], ["__tests__/", ".test.", ".spec."])
-        self.assertNotIn("tests", si.guess({"src/backtest/engine.ts": "", "src/a.ts": ""}).sections)
+        self.assertNotIn("tests", si.guess({"src/contest/engine.ts": "", "src/a.ts": ""}).sections)
 
     def test_python_markers_and_a_file_that_only_contains_test(self):
         files = {"svc/tests/test_a.py": "", "svc/latest_rates.py": "", "svc/money_test.py": ""}

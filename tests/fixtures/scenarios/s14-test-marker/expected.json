@@ -7,7 +7,7 @@
     "base": "main",
     "head": "scenario/s14-test-marker"
   },
-  "explains": "Two files change: src/backtest/engine.ts and src/components/__tests__/StatusBadge.test.tsx. The test markers are matched per path segment (the folder __tests__/ and the file name parts .test. and .spec.), never as a substring: the path src/backtest/engine.ts contains the characters test/ inside the segment backtest, but its segments are src, backtest and engine.ts, none of which is a test marker, so it is a source file. src/components/__tests__/StatusBadge.test.tsx has the segment __tests__ and the name part .test., so it is a test file. engine.ts is imported by no file, so no screen is reached. The test file imports StatusBadge but nothing imports the test.",
+  "explains": "Two files change: src/contest/engine.ts and src/components/__tests__/StatusBadge.test.tsx. The test markers are matched per path segment (the folder __tests__/ and the file name parts .test. and .spec.), never as a substring: the path src/contest/engine.ts contains the characters test/ inside the segment contest, but its segments are src, contest and engine.ts, none of which is a test marker, so it is a source file. src/components/__tests__/StatusBadge.test.tsx has the segment __tests__ and the name part .test., so it is a test file. engine.ts is imported by no file, so no screen is reached. The test file imports StatusBadge but nothing imports the test.",
   "complete_for": [
     "changed_file",
     "screen",
@@ -17,13 +17,13 @@
     {
       "type": "changed_symbol",
       "repo": "acme/web",
-      "path": "src/backtest/engine.ts",
-      "symbol": "runBacktest"
+      "path": "src/contest/engine.ts",
+      "symbol": "runContest"
     },
     {
       "type": "changed_file",
       "repo": "acme/web",
-      "path": "src/backtest/engine.ts",
+      "path": "src/contest/engine.ts",
       "role": "source"
     },
     {
@@ -37,8 +37,8 @@
     {
       "type": "unit_test",
       "repo": "acme/web",
-      "path": "src/backtest/engine.ts",
-      "why": "backtest/ is not a test folder: the marker test/ must match a whole path segment"
+      "path": "src/contest/engine.ts",
+      "why": "contest/ is not a test folder: the marker test/ must match a whole path segment"
     }
   ],
   "not_established": []

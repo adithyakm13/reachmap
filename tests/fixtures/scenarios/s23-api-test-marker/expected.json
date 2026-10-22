@@ -7,7 +7,7 @@
     "base": "main",
     "head": "scenario/s23-api-test-marker"
   },
-  "explains": "Three files change: services/billing/app/backtests/replay.py, services/billing/app/latest_rates.py and services/billing/tests/test_money.py. The api test markers are the folder tests/ and the file-name prefix test_. They are matched by path segment (a folder segment equal to tests) and by file-name prefix (a name that starts with test_), never as a substring of the path. backtests/ contains the characters tests/ at its end, but its segment is backtests, not tests, so replay.py is a source file. latest_rates.py contains the characters test_ inside latest_rates, but the name does not start with test_, so it is a source file. services/billing/tests/test_money.py has the segment tests and a name starting with test_, so it is a test file. Nothing imports replay.py or latest_rates.py, so no caller is claimed.",
+  "explains": "Three files change: services/billing/app/contests/replay.py, services/billing/app/latest_rates.py and services/billing/tests/test_money.py. The api test markers are the folder tests/ and the file-name prefix test_. They are matched by path segment (a folder segment equal to tests) and by file-name prefix (a name that starts with test_), never as a substring of the path. contests/ contains the characters tests/ at its end, but its segment is contests, not tests, so replay.py is a source file. latest_rates.py contains the characters test_ inside latest_rates, but the name does not start with test_, so it is a source file. services/billing/tests/test_money.py has the segment tests and a name starting with test_, so it is a test file. Nothing imports replay.py or latest_rates.py, so no caller is claimed.",
   "complete_for": [
     "changed_file",
     "caller"
@@ -16,7 +16,7 @@
     {
       "type": "changed_symbol",
       "repo": "acme/api",
-      "path": "services/billing/app/backtests/replay.py",
+      "path": "services/billing/app/contests/replay.py",
       "symbol": "replay"
     },
     {
@@ -28,7 +28,7 @@
     {
       "type": "changed_file",
       "repo": "acme/api",
-      "path": "services/billing/app/backtests/replay.py",
+      "path": "services/billing/app/contests/replay.py",
       "role": "source"
     },
     {
@@ -48,8 +48,8 @@
     {
       "type": "unit_test",
       "repo": "acme/api",
-      "path": "services/billing/app/backtests/replay.py",
-      "why": "backtests/ is not a test folder: the marker tests/ must match a whole path segment"
+      "path": "services/billing/app/contests/replay.py",
+      "why": "contests/ is not a test folder: the marker tests/ must match a whole path segment"
     },
     {
       "type": "unit_test",

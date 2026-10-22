@@ -11,7 +11,7 @@ A marker is a string from the repository's `tests.markers` list:
 - `test_` is a file-name prefix: the name starts with it.
 - `_test` (starting with an underscore) is a suffix before the last extension: `money_test.go`.
 
-`src/backtest/engine.ts` is not a test for `test/`, and `latest_rates.py` is not a test for
+`src/contest/engine.ts` is not a test for `test/`, and `latest_rates.py` is not a test for
 `test_`: the substring is inside a longer segment or name. Shared by the language adapters.
 """
 
