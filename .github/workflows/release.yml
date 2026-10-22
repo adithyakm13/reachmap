@@ -1,14 +1,28 @@
 name: Release build
 
 # Builds the frontend, the wheel and the sdist for a tag `v*` (or by hand), keeps them as workflow artifacts and installs the wheel into a
-# clean environment on each supported Python. It never publishes anything: no upload to PyPI or any index, no GitHub release, no secret.
-# The owner publishes from the artifacts, see docs/releasing.md.
+# clean environment on each supported Python. A tag push never publishes. Publishing to PyPI happens only when the workflow is run by hand
+# with `publish: pypi` and `ref` set to a tag: it then builds that tag, runs every check, and uploads those exact files through PyPI
+# trusted publishing (OpenID Connect, environment `pypi`): no token or secret anywhere. See docs/releasing.md.
 
 on:
   push:
     tags:
       - "v*"
   workflow_dispatch:
+    inputs:
+      ref:
+        description: "Tag to build, for example v0.1.0 (empty: the branch the run starts from)"
+        required: false
+        default: ""
+      publish:
+        description: "Publish the build of that tag to PyPI"
+        required: true
+        default: "none"
+        type: choice
+        options:
+          - none
+          - pypi
 
 permissions:
   contents: read
@@ -19,6 +33,8 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.ref || github.ref }}
       - uses: actions/setup-node@v5
         with:
           node-version: "22"
@@ -35,9 +51,9 @@ jobs:
       - name: Packaging tools (development tools only, never imported by the package)
         run: python -m pip install setuptools build
       - name: The tag names the version in the package
-        if: startsWith(github.ref, 'refs/tags/')
+        if: startsWith(github.ref, 'refs/tags/') || inputs.ref != ''
         env:
-          TAG: ${{ github.ref_name }}
+          TAG: ${{ inputs.ref || github.ref_name }}
         run: |
           version=$(python -c 'import re; print(re.search(r"__version__ = \"([^\"]+)\"", open("reachmap/__init__.py").read()).group(1))')
           test "$TAG" = "v$version" || { echo "tag $TAG does not match version $version"; exit 1; }
@@ -76,6 +92,8 @@ jobs:
         python-version: ["3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.ref || github.ref }}
       - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
@@ -90,3 +108,23 @@ jobs:
           git config --global init.defaultBranch main
       - name: Install the wheel into a clean environment and run the commands
         run: python tests/release/check_install.py --wheel dist/reachmap-*.whl --python python
+
+  publish:
+    # Only by hand, only for a tag, only after the build and every install check passed. Trusted publishing: PyPI trusts this repository,
+    # this workflow file and the environment `pypi`; the job gets a short-lived token from GitHub's OpenID Connect provider.
+    needs: [build, install]
+    if: github.event_name == 'workflow_dispatch' && inputs.publish == 'pypi' && startsWith(inputs.ref, 'v')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: pypi
+      url: https://pypi.org/project/reachmap/
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
