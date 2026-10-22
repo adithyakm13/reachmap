@@ -7,18 +7,18 @@ walk: given a chain that ends in a file the table calls an entry file, which rou
 from __future__ import annotations
 
 import ast
-import posixpath
 from dataclasses import dataclass
 from typing import Any, Iterable
 
 from reachmap import config
-from reachmap.adapters import Reached, Route, diff_routes, guard_route_changes
-from reachmap.adapters.base import api_area, import_lines, record_quoted
+from reachmap.adapters import Reached, Route
+from reachmap.adapters.base import import_lines, record_quoted
 from reachmap.adapters.django import known
 from reachmap.adapters.django.facts import Facts, extract, names_in, refs_in
 from reachmap.adapters.django.table import Comp, Table, WHOLE
+from reachmap.adapters.python_routes import Gathered, Shared, nearest_folder
 from reachmap.errors import ModelError
-from reachmap.incomplete import kind_spec, record, register_kind
+from reachmap.incomplete import kind_spec, register_kind
 from reachmap.model import Evidence
 
 __all__ = ["DjangoAdapter"]
@@ -77,55 +77,33 @@ def _bindings(parsed: Any) -> dict[str, tuple[Any, ...]]:
     return out
 
 
-class DjangoAdapter:
+class DjangoAdapter(Shared):
     """Django entry points of one repository, built on its Python adapter (which reads the files, parses them and resolves modules). Use one
-    adapter per run, as the language adapters are."""
+    adapter per run, as the language adapters are. The table per commit, `routes`, `routes_changed` and the areas of a change are `Shared` with the
+    FastAPI adapter; the words of the unmounted claim and the order of the reasons are Django's."""
 
     kind = "django"
+    TABLE = Table
+    HEAD_REASONS_FIRST = True
+    UNMOUNTED_KIND = "urlconf_unmounted"
+    UNMOUNTED_DETAIL = "no route is claimed for what it holds: no include carries it up to the root URLconf (an include in a comment is not an include)"
 
     def __init__(self, repo: str, language: Any, *, record_to: Any = None, root_urlconf: str | None = None, settings: str | None = None) -> None:
-        self.repo = repo
-        self.language = language
-        self._target = record_to
+        super().__init__(repo, language, record_to=record_to)
         self.root_urlconf = root_urlconf
         self.settings = settings
-        self._tables: dict[str, Table] = {}
         self._imported: dict[int, frozenset[str]] = {}  # per chain: the names a changed import statement bound that the change reaches
-        self.problems: list[str] = []  # what could not be established (a URL table that is not whole, an unreadable file)
 
     @classmethod
     def from_config(cls, repo: config.Repo, language: Any, *, record_to: Any = None) -> "DjangoAdapter":
         options = repo.entry_points or {}
         return cls(repo.name, language, record_to=record_to, root_urlconf=options.get("root_urlconf"), settings=options.get("settings"))
 
-    def problem(self, why: str) -> None:
-        if why not in self.problems:
-            self.problems.append(why)
-
-    @property
-    def target(self) -> Any:
-        return self._target if self._target is not None else self.language.target
-
-    def _table(self, sha: str) -> Table:
-        if sha not in self._tables:
-            self._tables[sha] = Table(self, sha)
-        return self._tables[sha]
-
     def module_of(self, path: str, sha: str) -> str:
         """The app a file belongs to: the nearest folder that holds an `apps.py`, else the folder at the top of its path."""
-        files = self.language.tree(sha)
-        folder = posixpath.dirname(path)
-        while folder:
-            if f"{folder}/apps.py" in files:
-                return posixpath.basename(folder)
-            folder = posixpath.dirname(folder)
-        return path.split("/")[0] if "/" in path else ""
+        return nearest_folder(self.language.tree(sha), path, "apps.py") or (path.split("/")[0] if "/" in path else "")
 
     # ---- what the walk asks
-
-    def is_entry_file(self, path: str, sha: str) -> bool:
-        """A URLconf, a file with a router or a `register` call, a file that holds a view or a class a view inherits from, a settings file."""
-        return path in self._table(sha).entry_files
 
     def structural_names(self, path: str, sha: str) -> frozenset[str]:
         """The names of a file that only wire it up (the views routes name, `urlpatterns`, `app_name`, routers, settings): whoever imports one of
@@ -158,12 +136,6 @@ class DjangoAdapter:
             table.called_elsewhere[key] = found
         return table.called_elsewhere[key]
 
-    def routes(self, repo: str | None, sha: str) -> list[Route]:
-        """Every API route of the repository at `sha`, with its full path and evidence, ordered by path and method."""
-        if repo is not None and repo != self.repo:
-            raise ValueError(f"this adapter reads {self.repo}, not {repo}")
-        return self._table(sha).routes()
-
     def unmounted(self, sha: str) -> list[tuple[str, str]]:
         """The units (a URLconf as (file, `urlpatterns`), a router as (file, variable)) nothing mounts up to the root URLconf."""
         return self._table(sha).unmounted()
@@ -172,78 +144,34 @@ class DjangoAdapter:
         """The routes by their URL name, with the namespaces of the includes on the way (`app:name`)."""
         return self._table(sha).url_names()
 
-    def routes_changed(self, before: str | None, after: str) -> tuple[list[Route], list[Route]]:
-        """(removed, added) routes between two commits by method and full path, each with the evidence of its own version. Without a pre-change
-        version nothing is computed: removals cannot be (the change set recorded it). Nor is a removal claimed from a table that is not whole (a
-        URLconf that does not parse, a root that is not known: its routes are not gone, they were not read), nor an addition against a base that
-        is not whole."""
-        if before is None:
-            return [], []
-        old, new = self._table(before), self._table(after)
-        removed, added = diff_routes(old.routes(), new.routes())
-        # a route of something that was not read is not removed, and one the base could not show is not new: only where the table has a hole, and everywhere when
-        # the hole is anywhere (an unknown root, a search that failed, a file that nothing readable includes)
-        why = "; ".join(([] if new.complete else new.reasons) + ([] if old.complete else old.reasons))[:300]
-        return guard_route_changes(self.target, self.repo, removed, added, base_ok=True, head_ok=True, why=why,
-                                   unsure_removed=lambda r: new.hole_covers(r.path), unsure_added=lambda r: old.hole_covers(r.path))
-
-    withholds_unread = True  # `routes_changed` guards itself: the http edge does not guard it again
-
-    def routes_complete(self, sha: str) -> tuple[bool, list[str]]:
-        """Whether the route table at `sha` was read completely, and why not."""
-        table = self._table(sha)
-        return table.complete, list(table.reasons)
-
     # ---- what a chain reaches
 
     def entry_points_reached(self, chains: Iterable[Any], sha: str | None = None) -> list[Reached]:
         """The API routes the chains reach: one `Area` per route, with the chain of Evidence from the change to the view (the imports on the way, or
         the changed line) followed by the route's own evidence, and whether it was established completely. What could not be established at all (a
         URL table that is not whole) is in `problems`."""
-        found: dict[tuple[Any, ...], dict[str, Any]] = {}
-        order: list[tuple[Any, ...]] = []
-        unmounted: dict[str, None] = {}
         chains_seen = list(chains)
+        gathered = Gathered()
         for chain in chains_seen:
             table = self._table(chain.sha)
             for comp, why in self._reached(table, chain):
                 if not comp.app:
-                    unmounted.setdefault(f"{comp.top[0]}:{comp.top[1]}")
+                    gathered.unmounted_at(comp.top)
                     continue
                 route = comp.route
-                key = (route.method, route.path, route.file, route.handler, route.evidence)
                 hops = self._direct_hop(chain, comp, why) if chain.direct else chain.hops
-                evidence = tuple([h for h in hops if h not in route.evidence] + list(route.evidence))
-                entry = found.setdefault(key, {"comp": comp, "chains": [], "sources": [], "complete": True, "reasons": []})
-                if evidence not in entry["chains"]:
-                    entry["chains"].append(evidence)
-                    entry["sources"].append(chain)
-                if not (chain.complete and table.complete):
-                    entry["complete"] = False
-                    entry["reasons"] += [r for r in tuple(chain.reasons) + tuple(table.reasons) if r not in entry["reasons"]]
-                if key not in order:
-                    order.append(key)
-        for subject in unmounted:
-            if any(self._table(chain.sha).unresolved for chain in chains_seen):
-                self.problem(f"{subject} may be mounted by something that could not be read: it is not said to be unmounted")
-                continue  # that claim cannot be made while a mount of the repository is unresolved (a blocking record says so)
-            record(self.target, "urlconf_unmounted", subject,
-                   detail="no route is claimed for what it holds: no include carries it up to the root URLconf (an include in a comment is not an include)")
-        out: list[Reached] = []
-        for key in order:
-            e = found[key]
-            comp: Comp = e["comp"]
-            route = comp.route
+                gathered.add(chain, table, route, tuple([h for h in hops if h not in route.evidence] + list(route.evidence)), comp=comp)
+
+        def partial(entry: dict[str, Any]) -> None:
+            comp: Comp = entry["comp"]
             for text, file, line in comp.notes:
                 record_quoted(self.target, "route_path_partial", f"{file}:{line}",
                               "a part of the route is not a string literal or a constant, or it is a regular expression: it is kept as a pattern with the part marked and nothing is guessed", text)
             if comp.methods_unknown:
                 record_quoted(self.target, "route_methods_unknown", f"{comp.handler.file}:{comp.view[1] if comp.view else comp.handler.top}",
                               "the class has a base outside the repository that is not known, so the methods it answers may be more than the ones listed", "", once=True)
-            area = api_area(self.repo, route, e["chains"])
-            out.append(Reached(area, (route,), e["complete"], tuple(e["reasons"]), tuple(e["sources"])))
-        out.sort(key=lambda r: (r.area.label, r.routes[0].file))
-        return out
+
+        return self.settle(gathered, chains_seen, partial)
 
     def _reached(self, table: Table, chain: Any) -> list[tuple[Comp, str]]:
         """The routes a chain reaches, each with why (`settings`, `whole`, `view`, `route`, `import`, `other`, `namespace`): the way the first hop is cited."""

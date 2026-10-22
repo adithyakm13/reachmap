@@ -16,18 +16,17 @@ from dataclasses import dataclass, field, replace
 from typing import Any
 
 from reachmap.adapters import Route, normalize_path
-from reachmap.adapters.base import citable, evidence_at, record_quoted
+from reachmap.adapters.base import record_quoted
 from reachmap.adapters.django import known
 from reachmap.adapters.django.facts import (
     ActionInfo, BaseRef, ClassInfo, Element, Facts, PATH_FUNCS, RouterDecl, Register, Span, callee, class_info, extract, kw, names_in, refs_in, span_of,
 )
 from reachmap.adapters.django.urlpath import convert_regex, convert_route, has_marker, marker, substitute
-from reachmap.model import Evidence, Read
+from reachmap.adapters.python_routes import DEPTH, TableBase, route_evidence
 
 __all__ = ["Comp", "Handler", "Table", "WHOLE"]
 
 PENDING = object()  # incomplete(): the file could not be read, and where it matters is said when it is known whether an include carries it
-DEPTH = 6  # how far a name is followed through imports, re-exports and constants
 GREP = ["urlpatterns", "include(", "Router(", ".register(", "ROOT_URLCONF", "DJANGO_SETTINGS_MODULE", "import *"]
 WHOLE = None  # members_reached: the whole class
 
@@ -164,18 +163,21 @@ class RouteSpec:
     notes: Notes = ()
 
 
-class Table:
-    """The routes of a repository at one commit. `adapter` supplies the Python adapter, the record target and the options."""
+class Table(TableBase):
+    """The routes of a repository at one commit. `adapter` supplies the Python adapter, the record target and the options. What it shares with the
+    FastAPI table (the search, the facts of a file, module resolution, constants, route evidence) is `TableBase`; what is Django's is the URLconf
+    chains, regular expression routes, DRF routers, namespaces and where the table has holes."""
+
+    LABEL = "url table"
+    NOUN = "URLs"
+    UNPARSED = "the URLs in it were not read"
+    DEGRADED = "no route is claimed from it, so routes may be missing"
+    PATTERNS = GREP
+    Str = Str
 
     def __init__(self, adapter: Any, sha: str) -> None:
-        self.adapter = adapter
-        self.language = adapter.language
-        self.sha = sha
-        self.facts: dict[str, Facts | None] = {}
-        self.complete = True
-        self.reasons: list[str] = []
-        self.candidates: set[str] = set()
-        self.unresolved = False  # something that may carry routes could not be read: a handler that looks unmounted may be mounted there
+        super().__init__(adapter, sha)
+        self.facts: dict[str, Facts | None]  # (set by TableBase)
         self.holes: list[str | None] = []  # where routes may be missing: the path of what could not be read (a prefix), or None for anywhere
         self.called_elsewhere: dict[tuple[str, str], bool] = {}  # the adapter's memo of whether a view is imported by a module that is not a URLconf
         self._unreadable_files: set[str] = set()  # files that could not be read or did not parse
@@ -183,7 +185,6 @@ class Table:
         self.settings: dict[str, Facts] = {}
         self.roots: list[str] = []
         self.comps: list[Comp] = []
-        self.entry_files: set[str] = set()
         self.handler_tops: dict[str, set[str]] = {}
         self._classes: dict[Ref, ClassInfo | None] = {}
         self._elements: dict[str, list[Element] | None] = {}
@@ -198,17 +199,10 @@ class Table:
     def incomplete(self, why: str, scope: Any = None) -> None:
         """The table is not whole. `scope` is the path prefix the unread part is under (routes under it may be missing), None for anywhere, `PENDING` when
         the caller says where later."""
-        self.complete = False
         self.unresolved = True  # whatever could not be read may be what mounts a URLconf that looks unmounted
         if scope is not PENDING:
             self.holes.append(scope if isinstance(scope, str) and "<unknown" not in scope else None)
-        if why not in self.reasons:
-            self.reasons.append(why)
-            self.adapter.problem(f"url table at {self.sha[:12]}: {why}")
-
-    @property
-    def target(self) -> Any:
-        return self.adapter.target
+        super().incomplete(why)
 
     def hole_covers(self, path: str) -> bool:
         """Whether routes at `path` may be missing from this table: a hole that is anywhere, or a prefix of it."""
@@ -222,50 +216,21 @@ class Table:
 
     # ---- finding and reading files
 
-    def _grep(self) -> None:
-        res = self.language.search(self.sha, GREP)
-        shown = " | ".join(GREP)
-        if res is None:
-            self.incomplete("the tree could not be read at this commit")
-            return
-        if res.state == Read.UNREADABLE:
-            self.incomplete(f"the search for {shown!r} was unreadable: {res.detail}")
-            return
-        if res.truncated_by == "examine_cap":
-            self.incomplete(f"search_truncated: the search for {shown!r} examined {res.examined} of {res.total} files")
-        for link, why in res.not_searched:
-            if link.endswith(".py"):
-                self.incomplete(f"{link} is a {why}: git grep does not search it, so URLs in it may be missed")
-                record_quoted(self.target, "read_unreadable", link, f"git grep does not search a {why}, so the URLs in it may be missed", blocks_selection=True, once=True)
-        for m in res.partial_matches:
-            if m.path.endswith(".py") and not self.language.is_test_path(m.path) and citable(m.path):
-                self.candidates.add(m.path)
+    def not_searched(self, link: str, why: str) -> None:
+        record_quoted(self.target, "read_unreadable", link, f"git grep does not search a {why}, so the URLs in it may be missed", blocks_selection=True, once=True)
 
-    def facts_of(self, path: str) -> Facts | None:
-        if path in self.facts:
-            return self.facts[path]
-        self.facts[path] = None
-        parsed = self.language.parsed(self.sha, path) if self.language.file_text(self.sha, path).is_found else None
-        if parsed is None:
-            self._unreadable_files.add(path)
-            self.incomplete(f"{path} could not be read", PENDING)
-            return None
-        if parsed.problems:
-            self._unreadable_files.add(path)
-            self.incomplete(f"{path} did not parse ({parsed.problems[0]}): the URLs in it were not read", PENDING)
-            record_quoted(self.target, "parse_degraded", path, "no route is claimed from it, so routes may be missing", parsed.problems[0], blocks_selection=True)
-            return None
-        self.facts[path] = extract(path, parsed)
-        return self.facts[path]
+    def unread(self, path: str, why: str) -> None:
+        self._unreadable_files.add(path)
+        self.incomplete(why, PENDING)
+
+    def read_facts(self, path: str, parsed: Any) -> Facts:
+        return extract(path, parsed)
 
     def parsed_of(self, path: str) -> Any:
         facts = self.facts_of(path)
         return facts.parsed if facts is not None else None
 
     # ---- names to things
-
-    def _modules(self, path: str, module: str, level: int) -> tuple[str, ...]:
-        return self.language.resolve_module(path, self.sha, module, level)
 
     def _top_names(self) -> frozenset[str]:
         """Every folder and every module name anywhere in the tree (a package may be mounted from any of them: `apps/` on the path, a vendored copy)."""
@@ -358,39 +323,6 @@ class Table:
             for g in self._modules(path, module, level):
                 out.merge(self._denote_name(g, name, depth + 1))
         return out
-
-    def eval(self, path: str, expr: ast.expr | None, depth: int = 0) -> Str:
-        if expr is None:
-            return Str()
-        if isinstance(expr, ast.Constant):
-            if isinstance(expr.value, str):
-                return Str(expr.value)
-            if expr.value is None:
-                return Str()
-        elif isinstance(expr, ast.JoinedStr):
-            out = Str()
-            for v in expr.values:
-                if isinstance(v, ast.Constant) and isinstance(v.value, str):
-                    out += Str(v.value)
-                elif isinstance(v, ast.FormattedValue) and v.conversion == -1 and v.format_spec is None:
-                    out += self.eval(path, v.value, depth + 1)
-                else:
-                    out += self._unknown(path, v)
-            return out
-        elif isinstance(expr, ast.BinOp) and isinstance(expr.op, ast.Add):
-            return self.eval(path, expr.left, depth + 1) + self.eval(path, expr.right, depth + 1)
-        elif isinstance(expr, ast.Name) and depth < DEPTH:
-            facts = self.facts_of(path)
-            if facts is not None:
-                if facts.consts.get(expr.id) is not None:
-                    return self.eval(path, facts.consts[expr.id], depth + 1)
-                if expr.id not in facts.assigns and expr.id in facts.from_binding:
-                    module, level, name = facts.from_binding[expr.id]
-                    for g in self._modules(path, module, level):
-                        other = self.facts_of(g)
-                        if other is not None and other.consts.get(name) is not None:
-                            return self.eval(g, other.consts[name], depth + 1)
-        return self._unknown(path, expr)
 
     @staticmethod
     def _unknown(path: str, expr: ast.AST) -> Str:
@@ -1020,7 +952,7 @@ class Table:
     # ---- composing
 
     def _build(self) -> None:
-        self._grep()
+        self.search()
         for path in sorted(self.candidates):
             self.facts_of(path)
         for f in [f for f in self.facts.values() if f is not None]:
@@ -1207,17 +1139,11 @@ class Table:
 
     def _comp(self, path: Str, rx: Notes, piece: Piece, spans: tuple[Span, ...], trail: tuple[Span, ...], ns: tuple[str, ...], name: str | None, app: bool, top: Ref) -> None:
         all_spans = tuple(spans) + tuple(reversed(trail))
-        evidence: list[Evidence] = []
         text = path.text()
         method = piece.method
-        for n, sp in enumerate(all_spans):
-            parsed = self.parsed_of(sp.file)
-            ev = evidence_at(self.adapter.repo, sp.file, self.sha, parsed, sp.start) if parsed is not None else None
-            if ev is None:
-                return
-            if n == 0:
-                ev = replace(ev, claim=f"route:{method} {text}:{piece.handler.file}")
-            evidence.append(ev)
+        evidence = route_evidence(self.adapter.repo, self.sha, [(sp.file, sp.start) for sp in all_spans], self.parsed_of, f"route:{method} {text}:{piece.handler.file}")
+        if evidence is None:
+            return
         view = piece.view
         files = {piece.handler.file, *(sp.file for sp in all_spans)}
         if view is not None:
@@ -1226,7 +1152,7 @@ class Table:
         notes = tuple(dict.fromkeys(tuple(path.unknown) + rx))
         route = Route(
             repo=self.adapter.repo, kind="api_route", method=method, path=text, file=all_spans[0].file, handler=piece.handler.label, target=piece.handler.file,
-            module=self.adapter.module_of(piece.handler.file, self.sha), evidence=tuple(evidence), partial=bool(notes), path_approximate=bool(rx),
+            module=self.adapter.module_of(piece.handler.file, self.sha), evidence=evidence, partial=bool(notes), path_approximate=bool(rx),
         )
         self.comps.append(Comp(route, method, piece.handler, view, all_spans, frozenset(files), app, top, notes, ns, piece.name or name, piece.methods_unknown))
 

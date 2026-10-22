@@ -9,9 +9,10 @@ from __future__ import annotations
 
 import ast
 from dataclasses import dataclass, field
-from typing import Any, Iterator
+from typing import Any
 
 from reachmap.adapters.django import known
+from reachmap.adapters.python_routes import FileFacts, callee, kw, literal_strings, names_in, statements
 
 __all__ = [
     "ActionInfo", "BaseRef", "ClassInfo", "Element", "Facts", "PATH_FUNCS", "RouterDecl", "Register", "Span", "callee", "extract", "refs_in", "kw",
@@ -19,25 +20,7 @@ __all__ = [
 ]
 
 PATH_FUNCS = {"path": False, "re_path": True, "url": True}  # callee name, and whether the route is a regular expression
-COMPOUND = (ast.If, ast.Try, getattr(ast, "TryStar", ast.Try), ast.With, ast.AsyncWith, ast.For, ast.AsyncFor, ast.While, getattr(ast, "Match", ast.If))
 FUNCS = (ast.FunctionDef, ast.AsyncFunctionDef)
-
-
-def callee(func: ast.expr) -> str | None:
-    """The last name of what a call calls: `path` of `path(...)` and of `urls.path(...)`."""
-    if isinstance(func, ast.Name):
-        return func.id
-    if isinstance(func, ast.Attribute):
-        return func.attr
-    return None
-
-
-def kw(call: ast.Call, name: str) -> ast.expr | None:
-    return next((k.value for k in call.keywords if k.arg == name), None)
-
-
-def names_in(*nodes: ast.AST | None) -> frozenset[str]:
-    return frozenset(n.id for node in nodes if node is not None for n in ast.walk(node) if isinstance(n, ast.Name))
 
 
 def _chain(node: ast.expr) -> list[str] | None:
@@ -64,19 +47,6 @@ def refs_in(*nodes: ast.AST | None) -> frozenset[str]:
                 if chain:
                     out.update(".".join(chain[:i]) for i in range(1, len(chain) + 1))
     return frozenset(out)
-
-
-def statements(body: list[ast.stmt]) -> Iterator[ast.stmt]:
-    """The statements at module level, through `if`, `try`, `with`, `for`, `while` and `match` blocks (code there runs when the module loads)."""
-    for stmt in body:
-        yield stmt
-        if isinstance(stmt, COMPOUND):
-            for attr in ("body", "orelse", "finalbody"):
-                yield from statements(getattr(stmt, attr, None) or [])
-            for handler in getattr(stmt, "handlers", ()):
-                yield from statements(handler.body)
-            for case in getattr(stmt, "cases", ()):
-                yield from statements(case.body)
 
 
 @dataclass(frozen=True, slots=True)
@@ -179,14 +149,9 @@ class ClassInfo:
 
 
 @dataclass(slots=True)
-class Facts:
-    path: str
-    parsed: Any
-    from_binding: dict[str, tuple[str, int, str]] = field(default_factory=dict)  # local name to (module, level, name)
-    module_binding: dict[str, tuple[str, int]] = field(default_factory=dict)  # local name to (module, level)
+class Facts(FileFacts):
     stars: list[tuple[str, int]] = field(default_factory=list)
     assigns: dict[str, list[tuple[str, ast.expr]]] = field(default_factory=dict)  # name to [(set | aug | append | extend, expr)]
-    consts: dict[str, ast.expr | None] = field(default_factory=dict)  # None: assigned more than once
     declared: set[str] = field(default_factory=set)
     kinds: dict[str, str] = field(default_factory=dict)  # a declared name to function | class | variable
     routers: dict[str, RouterDecl] = field(default_factory=dict)
@@ -208,8 +173,8 @@ def _action_info(span_file: str, node: ast.AST, deco: ast.Call) -> ActionInfo:
     methods: tuple[str, ...] | None
     if meth is None:
         methods = ("GET",)
-    elif isinstance(meth, (ast.List, ast.Tuple, ast.Set)) and all(isinstance(e, ast.Constant) and isinstance(e.value, str) for e in meth.elts):
-        methods = tuple(sorted({e.value.upper() for e in meth.elts}))  # type: ignore[union-attr]
+    elif (named := literal_strings(meth)) is not None:
+        methods = tuple(sorted({m.upper() for m in named}))
     else:
         methods = None
     up, un = kw(deco, "url_path"), kw(deco, "url_name")
@@ -243,19 +208,7 @@ def class_info(file: str, decl_node: ast.ClassDef, start: int, end: int, bases: 
 def extract(path: str, parsed: Any) -> Facts:
     """The facts of a parsed file (see the module docstring)."""
     facts = Facts(path, parsed)
-    for rec in parsed.imports:
-        if rec.kind == "from":
-            for n in rec.names:
-                facts.from_binding[n.asname or n.name] = (rec.module, rec.level, n.name)
-        elif rec.kind == "star":
-            facts.stars.append((rec.module, rec.level))
-        elif rec.kind == "import" and rec.names:
-            nm = rec.names[0]
-            if nm.asname:
-                facts.module_binding[nm.asname] = (nm.name, 0)
-            else:
-                first = nm.name.split(".")[0]
-                facts.module_binding[first] = (first, 0)
+    facts.stars = facts.bind_imports()
     for d in parsed.declarations:
         for name in d.names:
             facts.declared.add(name)
