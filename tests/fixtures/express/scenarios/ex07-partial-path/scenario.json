@@ -1,0 +1,11 @@
+{
+  "id": "ex07-partial-path",
+  "repo": "ex/orders",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex07-partial-path"
+  },
+  "commit_message": "The daily report says it is not cached",
+  "notes": "A route path that is a call is kept with the unknown part marked and said, never guessed."
+}

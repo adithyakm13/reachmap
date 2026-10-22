@@ -1,0 +1,11 @@
+{
+  "id": "sb01-service-member",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb01-service-member"
+  },
+  "commit_message": "InvoiceService.total multiplies by 120",
+  "notes": "A changed service method reaches the controller methods that call it and not the other routes of the controller."
+}

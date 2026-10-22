@@ -1,0 +1,11 @@
+{
+  "id": "s01-shared-component",
+  "repo": "acme/web",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s01-shared-component"
+  },
+  "commit_message": "Show the status in capitals and expose it as a data attribute",
+  "notes": "Body change in a shared component that is imported by two aliases and relatively."
+}

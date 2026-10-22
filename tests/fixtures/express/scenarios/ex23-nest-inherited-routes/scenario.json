@@ -1,0 +1,11 @@
+{
+  "id": "ex23-nest-inherited-routes",
+  "repo": "ex/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex23-nest-inherited-routes"
+  },
+  "commit_message": "A status controller on the base controller",
+  "notes": "A controller that inherits its routes is not read: said and blocking."
+}

@@ -1,0 +1,164 @@
+{
+  "schema": 1,
+  "id": "s05-endpoint-multiline",
+  "repo": "acme/web",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s05-endpoint-multiline"
+  },
+  "explains": "fetchSettlementSummary in src/modules/billing/api.ts changes. It calls apiGet with SETTLEMENT_SUMMARY_URL, a constant that endpoints.ts writes over two lines (the name on the first line, the string \"/api/billing/settlements/summary\" on the second); a one-line pattern would miss it. The URL has the segments api, billing, settlements, summary. In acme/api the router tree gives two candidate routes: GET /api/billing/settlements/summary (literal summary) and GET /api/billing/settlements/{settlement_id}. The literal route is the more specific match and wins, so the http edge goes to GET /api/billing/settlements/summary, with evidence at the client line and at the route decorator plus the three include_router lines that compose the full path (/api + /billing + /settlements + /summary). Only SettlementsPage imports fetchSettlementSummary, mounted at /billing/settlements. InvoiceListPage, InvoiceDetailPage import other names from the same api.ts, so named-export narrowing excludes them.",
+  "complete_for": [
+    "changed_symbol",
+    "caller",
+    "screen",
+    "http_edge"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/web",
+      "path": "src/modules/billing/api.ts",
+      "symbol": "fetchSettlementSummary"
+    },
+    {
+      "type": "caller",
+      "repo": "acme/web",
+      "path": "src/modules/billing/pages/SettlementsPage.tsx",
+      "symbol": "SettlementsPage",
+      "evidence": [
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/pages/SettlementsPage.tsx",
+          "contains": "import { fetchSettlementSummary } from \"../api\";"
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/web",
+        "path": "src/modules/billing/api.ts",
+        "contains": "apiGet<SettlementSummary>(SETTLEMENT_SUMMARY_URL)"
+      },
+      "via": [
+        {
+          "repo": "acme/web",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const SETTLEMENT_SUMMARY_URL ="
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/api/endpoints.ts",
+          "contains": "\"/api/billing/settlements/summary\""
+        }
+      ],
+      "to": {
+        "repo": "acme/api",
+        "method": "GET",
+        "path": "/api/billing/settlements/summary",
+        "evidence": [
+          {
+            "repo": "acme/api",
+            "path": "services/billing/app/routers/settlements.py",
+            "contains": "@router.get(\"/summary\")"
+          },
+          {
+            "repo": "acme/api",
+            "path": "services/billing/app/routers/billing.py",
+            "contains": "billing_router.include_router(settlements_router, prefix=\"/settlements\")"
+          },
+          {
+            "repo": "acme/api",
+            "path": "services/billing/app/api.py",
+            "contains": "api_router.include_router(billing_router, prefix=\"/billing\")"
+          },
+          {
+            "repo": "acme/api",
+            "path": "services/billing/app/main.py",
+            "contains": "app.include_router(api_router, prefix=\"/api\")"
+          }
+        ]
+      }
+    },
+    {
+      "type": "screen",
+      "repo": "acme/web",
+      "route": "/billing/settlements",
+      "chain": [
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/pages/SettlementsPage.tsx",
+          "contains": "import { fetchSettlementSummary } from \"../api\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/routes.tsx",
+          "contains": "import SettlementsPage from \"./pages/SettlementsPage\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/routes.tsx",
+          "contains": "<Route path=\"/billing/settlements\" element={<SettlementsPage />} />"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/web",
+        "path": "src/modules/billing/api.ts",
+        "contains": "apiGet<SettlementSummary>(SETTLEMENT_SUMMARY_URL)"
+      },
+      "to": {
+        "repo": "acme/api",
+        "method": "GET",
+        "path": "/api/billing/settlements/{settlement_id}"
+      },
+      "why": "the literal summary segment also fits the parameter route, but the literal route is more specific and wins"
+    },
+    {
+      "type": "caller",
+      "repo": "acme/web",
+      "path": "src/modules/billing/pages/InvoiceListPage.tsx",
+      "symbol": "InvoiceListPage",
+      "why": "imports fetchInvoices from the changed file, not fetchSettlementSummary",
+      "evidence": [
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/pages/InvoiceListPage.tsx",
+          "contains": "import { fetchInvoices } from \"../api\";"
+        }
+      ]
+    },
+    {
+      "type": "caller",
+      "repo": "acme/web",
+      "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
+      "symbol": "InvoiceDetailPage",
+      "why": "imports fetchAuditLog and fetchInvoice, not fetchSettlementSummary",
+      "evidence": [
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
+          "contains": "import { fetchAuditLog, fetchInvoice } from \"../api\";"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "acme/web",
+      "route": "/billing/invoices",
+      "why": "reached only through the excluded import"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/web",
+      "route": "/billing/invoices/:invoiceId",
+      "why": "reached only through the excluded import"
+    }
+  ],
+  "not_established": []
+}

@@ -1,0 +1,27 @@
+{
+  "note": "Synthetic: invented for the tests, shaped like the Qase API v1 (https://developers.qase.io). Not a recording of any real project.",
+  "status": 200,
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": {
+    "status": true,
+    "result": {
+      "title": "Acme Billing",
+      "code": "ACME",
+      "counts": {
+        "cases": 30,
+        "suites": 6,
+        "milestones": 0,
+        "runs": {
+          "total": 0,
+          "active": 0
+        },
+        "defects": {
+          "total": 0,
+          "open": 0
+        }
+      }
+    }
+  }
+}

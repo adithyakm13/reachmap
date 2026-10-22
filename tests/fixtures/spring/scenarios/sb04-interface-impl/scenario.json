@@ -1,0 +1,11 @@
+{
+  "id": "sb04-interface-impl",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb04-interface-impl"
+  },
+  "commit_message": "PricingImpl.price rounds up",
+  "notes": "A change in an implementation reaches the callers of its interface that spell the member."
+}

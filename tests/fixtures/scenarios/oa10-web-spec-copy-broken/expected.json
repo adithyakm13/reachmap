@@ -1,0 +1,69 @@
+{
+  "schema": 1,
+  "id": "oa10-web-spec-copy-broken",
+  "repo": "acme/ledger-web",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/oa10-web-spec-copy-broken"
+  },
+  "explains": "The copy of the spec the web client was generated from, api/openapi.json, is truncated by a bad download (it is not JSON), and InvoiceDetailPage changes in the same commit. In the web repository the change is read as usual: the page is mounted at /invoices/:invoiceId. The http edge to the api cannot be followed: which operations the generated client has comes from that spec, so which routes the page calls was not established. The spec is unreadable (blocking) and so is the edge (blocking); no http edge is made and nothing is said about routes being called or not called. The propagation says it is not complete.",
+  "complete_for": [
+    "changed_symbol",
+    "http_edge",
+    "screen"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/ledger-web",
+      "path": "src/modules/invoices/pages/InvoiceDetailPage.tsx",
+      "symbol": "InvoiceDetailPage"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/ledger-web",
+      "route": "/invoices/:invoiceId",
+      "chain": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/invoices/routes.tsx",
+          "contains": "import InvoiceDetailPage from \"./pages/InvoiceDetailPage\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/invoices/routes.tsx",
+          "contains": "<Route path=\"/invoices/:invoiceId\" element={<InvoiceDetailPage />} />"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/ledger-web",
+        "path": "src/modules/invoices/pages/InvoiceDetailPage.tsx",
+        "contains": "voidInvoice"
+      },
+      "to": {
+        "repo": "acme/ledger-api",
+        "method": "DELETE",
+        "path": "/v1/invoices/{invoiceId}"
+      },
+      "why": "the spec the calls are read from cannot be read, so no call is matched to an operation"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "edge_incomplete",
+      "subject": "edge:http:acme/ledger-web:acme/ledger-api",
+      "blocking": true
+    },
+    {
+      "kind": "spec_unreadable",
+      "subject": "acme/ledger-web:api/openapi.json",
+      "blocking": true
+    }
+  ]
+}

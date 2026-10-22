@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "id": "s12-generic-field",
+  "repo": "acme/contracts",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s12-generic-field"
+  },
+  "explains": "Settlement.interval changes its default (interval: str = \"daily\" becomes \"weekly\"). The name interval is defined in five models in contracts/models: Invoice, Settlement, Customer and Schedule, plus Cadence in common.py. Five definitions is above distinct_max = 3, so interval is not distinctive and a name match proves nothing about which model a consumer reads. The contract edge is dropped for this field and the report says not_distinctive (not blocking, a stated limit). No consumer line is claimed, even though consumers do read an attribute called interval: services/billing/app/services/scheduling.py in acme/api and worker/tasks/schedule_runner.py in acme/worker read schedule.interval, which is Schedule.interval, a different model's field.",
+  "complete_for": [
+    "changed_symbol",
+    "contract_read"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/contracts",
+      "path": "contracts/models/settlement.py",
+      "symbol": "Settlement.interval"
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "contract_read",
+      "repo": "acme/api",
+      "path": "services/billing/app/services/scheduling.py",
+      "why": "interval is not distinctive; this read is of Schedule.interval, not Settlement.interval",
+      "naive_match": {
+        "repo": "acme/api",
+        "path": "services/billing/app/services/scheduling.py",
+        "contains": "timedelta(days=schedule.interval)"
+      }
+    },
+    {
+      "type": "contract_read",
+      "repo": "acme/worker",
+      "path": "worker/tasks/schedule_runner.py",
+      "why": "interval is not distinctive; this read is of Schedule.interval, not Settlement.interval",
+      "naive_match": {
+        "repo": "acme/worker",
+        "path": "worker/tasks/schedule_runner.py",
+        "contains": "return schedule.interval"
+      }
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "not_distinctive",
+      "subject": "interval",
+      "blocking": false,
+      "definitions": 5
+    }
+  ]
+}

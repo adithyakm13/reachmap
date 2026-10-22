@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "workspace": "ledger",
+  "adapter": "openapi",
+  "scenario_prefix": "oa",
+  "limits": {"hops": 3, "hub_importers": 50, "distinct_max": 3, "timeout_s": 900},
+  "repos": {
+    "acme/ledger-api": {
+      "slug": "oa-api",
+      "host": "git",
+      "language": "python",
+      "roles": ["backend"],
+      "branches": ["main"],
+      "http_server": {"kind": "openapi", "spec": "api/openapi.json", "handlers": "app/handlers/*.py"},
+      "tests": {"markers": ["tests/", "test_"]}
+    },
+    "acme/ledger-web": {
+      "slug": "oa-web",
+      "host": "git",
+      "language": "typescript",
+      "roles": ["frontend"],
+      "branches": ["main"],
+      "aliases": {"from": "tsconfig.json"},
+      "entry_points": {"kind": "react-router", "routes_glob": "src/modules/*/routes.tsx"},
+      "http_client": {"kind": "openapi", "spec": "api/openapi.json", "client": "src/api/generated"},
+      "tests": {"markers": ["__tests__/", ".test.", ".spec."]}
+    }
+  },
+  "edges": [
+    {"kind": "http", "from": "acme/ledger-web", "to": "acme/ledger-api"}
+  ]
+}

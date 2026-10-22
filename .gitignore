@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Node
+node_modules/
+frontend/dist/
+npm-debug.log*
+
+# The frontend build copied into the package by `python -m reachmap.tools.bundle_frontend`
+reachmap/runner/static/
+
+# Reachmap output and caches
+reports/
+.reachmap/
+# Fixture data has a module folder called reports
+!tests/fixtures/**/reports/
+
+# Secrets
+.env*
+*.token
+
+# OS and editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Local bootstrap copy (tracked as docs/BOOTSTRAP.md)
+/REACHMAP-BOOTSTRAP.md
+
+# Reports written by `reachmap analyse` (default --out)
+reports/
+# The hostile and sample reports the renderers are tested with are fixtures, not output
+!tests/fixtures/reports/
+# ... and so is a folder called reports inside a fixture repository (a screens module of the M15 spec fixture)
+!tests/fixtures/**/reports/
+
+# Local agent worktrees
+/.claude/

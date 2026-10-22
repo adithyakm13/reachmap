@@ -1,0 +1,35 @@
+workspace = "acme"
+ticket_pattern = '([A-Z'
+colour = "blue"
+
+[limits]
+hops = 0
+depth = 4
+
+[repos."acme/web"]
+host = "svn"
+language = "cobol"
+roles = ["frontend", "gateway"]
+
+[repos."acme/api"]
+host = "git"
+language = "python"
+roles = ["backend"]
+entry_points = { kind = "gatsby" }
+
+[[edges]]
+kind = "http"
+from = "acme/web"
+to = "acme/nowhere"
+
+[[edges]]
+kind = "package"
+producer = "acme/api"
+consumer = "acme/web"
+manifest = "requirements.txt"
+pin_pattern = '^x==(.+)==(.+)$'
+import_marker = "x"
+
+[[test_sources]]
+kind = "qase"
+token_env = "not a variable name"

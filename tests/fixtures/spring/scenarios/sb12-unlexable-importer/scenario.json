@@ -1,0 +1,11 @@
+{
+  "id": "sb12-unlexable-importer",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb12-unlexable-importer"
+  },
+  "commit_message": "InvoiceService.total changes and a file that imports it does not lex",
+  "notes": "A file that cannot be read may import the changed class: the importers are not the whole list."
+}

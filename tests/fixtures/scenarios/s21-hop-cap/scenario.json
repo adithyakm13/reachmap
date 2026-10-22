@@ -1,0 +1,14 @@
+{
+  "id": "s21-hop-cap",
+  "repo": "acme/contracts",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s21-hop-cap"
+  },
+  "commit_message": "Make the settlement reference required on invoices (hop limit scenario)",
+  "notes": "Same change as s11 with limits.hops = 1: the http edge from api to web is the second edge.",
+  "limits": {
+    "hops": 1
+  }
+}

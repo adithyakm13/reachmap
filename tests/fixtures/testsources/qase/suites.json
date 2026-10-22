@@ -1,0 +1,83 @@
+{
+  "note": "Synthetic: invented for the tests, shaped like the Qase API v1 (https://developers.qase.io). Not a recording of any real project.",
+  "status": 200,
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": {
+    "status": true,
+    "result": {
+      "total": 6,
+      "filtered": 6,
+      "count": 6,
+      "entities": [
+        {
+          "id": 10,
+          "title": "Billing",
+          "description": null,
+          "preconditions": null,
+          "position": 10,
+          "cases_count": 8,
+          "parent_id": null,
+          "created": "2024-01-02 08:00:00",
+          "updated": "2024-01-02 08:00:00"
+        },
+        {
+          "id": 11,
+          "title": "Invoices",
+          "description": null,
+          "preconditions": null,
+          "position": 11,
+          "cases_count": 3,
+          "parent_id": 10,
+          "created": "2024-01-02 08:00:00",
+          "updated": "2024-01-02 08:00:00"
+        },
+        {
+          "id": 12,
+          "title": "Invoice detail",
+          "description": null,
+          "preconditions": null,
+          "position": 12,
+          "cases_count": 2,
+          "parent_id": 11,
+          "created": "2024-01-02 08:00:00",
+          "updated": "2024-01-02 08:00:00"
+        },
+        {
+          "id": 13,
+          "title": "Settlements",
+          "description": null,
+          "preconditions": null,
+          "position": 13,
+          "cases_count": 3,
+          "parent_id": 10,
+          "created": "2024-01-02 08:00:00",
+          "updated": "2024-01-02 08:00:00"
+        },
+        {
+          "id": 20,
+          "title": "Cases",
+          "description": null,
+          "preconditions": null,
+          "position": 20,
+          "cases_count": 4,
+          "parent_id": null,
+          "created": "2024-01-02 08:00:00",
+          "updated": "2024-01-02 08:00:00"
+        },
+        {
+          "id": 21,
+          "title": "Case notes",
+          "description": null,
+          "preconditions": null,
+          "position": 21,
+          "cases_count": 2,
+          "parent_id": 20,
+          "created": "2024-01-02 08:00:00",
+          "updated": "2024-01-02 08:00:00"
+        }
+      ]
+    }
+  }
+}

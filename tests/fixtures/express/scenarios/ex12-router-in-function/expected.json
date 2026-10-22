@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "id": "ex12-router-in-function",
+  "repo": "ex/orders",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex12-router-in-function"
+  },
+  "explains": "src/routes/factory.ts is added: buildRouter builds a router with Router() inside a function and returns it. This adapter reads apps and routers declared at module level; a router made inside a function may be mounted by any call, with any handlers, so the routes it serves are not established. That is a blocking routes_unread record at the line that builds the router, and the answer is not complete: an empty list of routes here is not 'no route'. Nothing mounts the router, no route is claimed for it.",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "screen",
+    "http_edge"
+  ],
+  "must_find": [
+    {
+      "type": "changed_file",
+      "repo": "ex/orders",
+      "path": "src/routes/factory.ts",
+      "role": "source"
+    },
+    {
+      "type": "changed_symbol",
+      "repo": "ex/orders",
+      "path": "src/routes/factory.ts",
+      "symbol": "buildRouter",
+      "change": "added"
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/",
+      "why": "the router is built in a function and mounted by nothing"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "routes_unread",
+      "subject": "src/routes/factory.ts:5",
+      "blocking": true
+    }
+  ]
+}

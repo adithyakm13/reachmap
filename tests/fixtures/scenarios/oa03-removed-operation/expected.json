@@ -1,0 +1,147 @@
+{
+  "schema": 1,
+  "id": "oa03-removed-operation",
+  "repo": "acme/ledger-api",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/oa03-removed-operation"
+  },
+  "explains": "The change deletes the operation GET /customers/{customerId} from api/openapi.json and deletes its handler module app/handlers/customers.py (the function get_customer). At the base the route was GET /v1/customers/{customerId}; at the head the spec has no such operation, so the route is removed (no area is reached: a removed route is not served). The web repository's copy of the spec still has the operation (the generated client was not regenerated), so CustomerPage still calls getCustomer, and the URL of that call, /v1/customers/{customerId}, fits no route after the change. That is a finding: a removed route still called, high risk (the page's request will fail) and low confidence (the client file is read from the web main branch and nothing proves the call is reached at run time), with the client line and the removed method key at the base as evidence. CustomerPage is mounted at /customers/:customerId: that screen is reached through the removed route's client.",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "http_edge",
+    "screen",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/ledger-api",
+      "path": "app/handlers/customers.py",
+      "symbol": "get_customer",
+      "change": "removed"
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/ledger-web",
+        "path": "src/modules/customers/pages/CustomerPage.tsx",
+        "contains": "getCustomer(\"cus-1\")"
+      },
+      "via": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"get\": {"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"/customers/{customerId}\": {"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"url\": \"https://ledger.example.invalid/v1\""
+        }
+      ],
+      "to": {
+        "repo": "acme/ledger-api",
+        "method": "GET",
+        "path": "/v1/customers/{customerId}",
+        "evidence": [
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"get\": {",
+            "at": "base"
+          },
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"/customers/{customerId}\": {",
+            "at": "base"
+          },
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"url\": \"https://ledger.example.invalid/v1\"",
+            "at": "base"
+          }
+        ],
+        "removed": true
+      }
+    },
+    {
+      "type": "finding",
+      "kind": "removed_route_still_called",
+      "risk": "high",
+      "confidence": "low",
+      "evidence": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/customers/pages/CustomerPage.tsx",
+          "contains": "getCustomer(\"cus-1\")"
+        },
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"get\": {",
+          "at": "base"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "acme/ledger-web",
+      "route": "/customers/:customerId",
+      "chain": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/customers/pages/CustomerPage.tsx",
+          "contains": "getCustomer(\"cus-1\")"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/customers/routes.tsx",
+          "contains": "import CustomerPage from \"./pages/CustomerPage\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/customers/routes.tsx",
+          "contains": "<Route path=\"/customers/:customerId\" element={<CustomerPage />} />"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "screen",
+      "repo": "acme/ledger-web",
+      "route": "/invoices/:invoiceId",
+      "why": "its calls are to other operations that still exist"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "not_distinctive",
+      "subject": "acme/ledger-web:downloadStatement",
+      "blocking": false,
+      "definitions": 4
+    },
+    {
+      "kind": "not_distinctive",
+      "subject": "acme/ledger-web:get",
+      "blocking": false,
+      "definitions": 2
+    },
+    {
+      "kind": "not_distinctive",
+      "subject": "acme/ledger-web:list",
+      "blocking": false,
+      "definitions": 1
+    }
+  ]
+}

@@ -1,0 +1,183 @@
+{
+  "schema": 1,
+  "id": "sb02-handler-body",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb02-handler-body"
+  },
+  "explains": "GET /ledger/v1/invoices/{id} trims the invoice: one line inside InvoiceController.get changes. The controller is the entry file, so the change reaches the routes of the changed handler and not its siblings (the other handlers are other members of the class and do not spell get). The route is composed from the method mapping /{id}, the class mapping Paths.INVOICES (BASE plus /invoices) and the context path /ledger. The name get is defined six times in non-test code (the handler, and Cache, Registry, Settings, Lookup and Memo), more than distinct_max = 3, so it is not distinctive: it is recorded and links nothing by name. InvoiceControllerTest uses the controller from the same package. The route is called by fetchInvoice, and that reaches the screen /invoices/:invoiceId.",
+  "complete_for": [
+    "changed_symbol",
+    "unit_test",
+    "route",
+    "screen",
+    "http_edge",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/ledger",
+      "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+      "symbol": "InvoiceController.get",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+          "contains": "return service.find(id).trim();"
+        }
+      ]
+    },
+    {
+      "type": "unit_test",
+      "repo": "acme/ledger",
+      "path": "src/test/java/com/acme/ledger/api/InvoiceControllerTest.java",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/test/java/com/acme/ledger/api/InvoiceControllerTest.java",
+          "contains": "private final InvoiceController controller = new InvoiceController(new InvoiceService(), new PricingImpl());"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/ledger/v1/invoices/{id}",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+          "contains": "@GetMapping(\"/{id}\")"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+          "contains": "@RequestMapping(Paths.INVOICES)"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "INVOICES = BASE + \"/invoices\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "BASE = \"/v1\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/resources/application.properties",
+          "contains": "server.servlet.context-path=/ledger"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "acme/ledger-web",
+      "route": "/invoices/:invoiceId",
+      "chain": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/services/invoices.ts",
+          "contains": "return apiGet(INVOICE_URL(invoiceId));"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/screens/InvoiceScreen.tsx",
+          "contains": "import { fetchInvoice, fetchTotal } from \"@/services/invoices\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/routes.tsx",
+          "contains": "import InvoiceScreen from \"./screens/InvoiceScreen\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/routes.tsx",
+          "contains": "<Route path=\"/invoices/:invoiceId\" element={<InvoiceScreen />} />"
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/ledger-web",
+        "path": "src/services/invoices.ts",
+        "contains": "return apiGet(INVOICE_URL(invoiceId));"
+      },
+      "via": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const INVOICE_URL = (invoiceId: string) =>"
+        }
+      ],
+      "to": {
+        "repo": "acme/ledger",
+        "method": "GET",
+        "path": "/ledger/v1/invoices/{id}",
+        "evidence": [
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+            "contains": "@GetMapping(\"/{id}\")"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+            "contains": "@RequestMapping(Paths.INVOICES)"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/Paths.java",
+            "contains": "INVOICES = BASE + \"/invoices\";"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/Paths.java",
+            "contains": "BASE = \"/v1\";"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/resources/application.properties",
+            "contains": "server.servlet.context-path=/ledger"
+          }
+        ]
+      }
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/ledger/v1/invoices/{id}/total",
+      "why": "another handler of the same class"
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "DELETE",
+      "path": "/ledger/v1/invoices/{id}",
+      "why": "another handler of the same class, same path, other method"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/ledger-web",
+      "route": "/invoices",
+      "why": "InvoicesScreen imports fetchInvoices, whose route is not reached"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "not_distinctive",
+      "subject": "get",
+      "blocking": false,
+      "definitions": 6
+    }
+  ]
+}

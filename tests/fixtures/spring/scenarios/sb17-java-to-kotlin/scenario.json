@@ -1,0 +1,11 @@
+{
+  "id": "sb17-java-to-kotlin",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb17-java-to-kotlin"
+  },
+  "commit_message": "CustomerService.fetch marks the number",
+  "notes": "A Java service used by a Kotlin controller reaches the Kotlin handler that calls it."
+}

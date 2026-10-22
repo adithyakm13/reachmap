@@ -1,0 +1,199 @@
+{
+  "schema": 1,
+  "id": "dj02-method-decorator",
+  "repo": "acme/portal",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/dj02-method-decorator"
+  },
+  "explains": "invoice_detail in billing/views.py changes (its body). It is a function view with @require_http_methods([\"GET\", \"PUT\"]), so one view gives two routes, one per method, and no route for the others. Both are mounted by the same path() line, path(\"invoices/<int:invoice_id>/\", ...): the converter <int:invoice_id> is the parameter {invoice_id}, under billing/ from config/urls.py. Full path: /billing/invoices/{invoice_id}, as GET and as PUT. The web client calls it with apiGet(invoiceUrl(invoiceId)), a GET with a parameter segment, which fits the GET route; nothing calls the PUT route. invoiceUrl is used by fetchInvoice, which InvoiceDetailPage calls, mounted at /billing/invoices/:invoiceId. voidInvoice posts to /billing/invoices/{id}/void/, a different route, so it is not an edge of this change. As in dj01, config/urls.py imports the module for another name and is excluded; billing/urls.py is the caller.",
+  "complete_for": [
+    "changed_symbol",
+    "caller",
+    "route",
+    "http_edge",
+    "screen",
+    "unit_test"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/portal",
+      "path": "billing/views.py",
+      "symbol": "invoice_detail"
+    },
+    {
+      "type": "caller",
+      "repo": "acme/portal",
+      "path": "billing/urls.py",
+      "symbol": "urlpatterns",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/urls.py",
+          "contains": "from . import views"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "billing/urls.py",
+          "contains": "views.invoice_detail"
+        }
+      ]
+    },
+    {
+      "type": "unit_test",
+      "repo": "acme/portal",
+      "path": "billing/tests/test_views.py",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/tests/test_views.py",
+          "contains": "from billing import views"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "GET",
+      "path": "/billing/invoices/{invoice_id}",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/urls.py",
+          "contains": "path(\"invoices/<int:invoice_id>/\", views.invoice_detail, name=\"invoice-detail\"),"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "config/urls.py",
+          "contains": "path(\"billing/\", include(\"billing.urls\")),"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "PUT",
+      "path": "/billing/invoices/{invoice_id}",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/urls.py",
+          "contains": "path(\"invoices/<int:invoice_id>/\", views.invoice_detail, name=\"invoice-detail\"),"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "config/urls.py",
+          "contains": "path(\"billing/\", include(\"billing.urls\")),"
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/portal-web",
+        "path": "src/modules/billing/api.ts",
+        "contains": "apiGet<Invoice>(invoiceUrl(invoiceId))"
+      },
+      "via": [
+        {
+          "repo": "acme/portal-web",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const invoiceUrl = (invoiceId: string) => `/billing/invoices/${invoiceId}/`;"
+        }
+      ],
+      "to": {
+        "repo": "acme/portal",
+        "method": "GET",
+        "path": "/billing/invoices/{invoice_id}",
+        "evidence": [
+          {
+            "repo": "acme/portal",
+            "path": "billing/urls.py",
+            "contains": "path(\"invoices/<int:invoice_id>/\", views.invoice_detail, name=\"invoice-detail\"),"
+          },
+          {
+            "repo": "acme/portal",
+            "path": "config/urls.py",
+            "contains": "path(\"billing/\", include(\"billing.urls\")),"
+          }
+        ]
+      }
+    },
+    {
+      "type": "screen",
+      "repo": "acme/portal-web",
+      "route": "/billing/invoices/:invoiceId",
+      "chain": [
+        {
+          "repo": "acme/portal-web",
+          "path": "src/modules/billing/api.ts",
+          "contains": "apiGet<Invoice>(invoiceUrl(invoiceId))"
+        },
+        {
+          "repo": "acme/portal-web",
+          "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
+          "contains": "import { fetchInvoice, voidInvoice } from \"../api\";"
+        },
+        {
+          "repo": "acme/portal-web",
+          "path": "src/modules/billing/routes.tsx",
+          "contains": "import InvoiceDetailPage from \"./pages/InvoiceDetailPage\";"
+        },
+        {
+          "repo": "acme/portal-web",
+          "path": "src/modules/billing/routes.tsx",
+          "contains": "<Route path=\"/billing/invoices/:invoiceId\" element={<InvoiceDetailPage />} />"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "caller",
+      "repo": "acme/portal",
+      "path": "config/urls.py",
+      "why": "imports billing.views as billing_views and uses only legacy_year",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "config/urls.py",
+          "contains": "from billing import views as billing_views"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "billing/views.py",
+          "contains": "@require_http_methods([\"GET\", \"PUT\"])"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "POST",
+      "path": "/billing/invoices/{invoice_id}",
+      "why": "the decorator allows GET and PUT only"
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "ANY",
+      "path": "/billing/invoices",
+      "why": "the list view is another route"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/portal-web",
+      "route": "/billing/invoices",
+      "why": "calls the list route and the overdue route"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/portal-web",
+      "route": "/cases",
+      "why": "calls the cases routes"
+    }
+  ],
+  "not_established": []
+}

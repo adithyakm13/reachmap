@@ -1,0 +1,11 @@
+{
+  "id": "oa08-web-generated-call",
+  "repo": "acme/ledger-web",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/oa08-web-generated-call"
+  },
+  "commit_message": "Trim the invoice id",
+  "notes": "fetchInvoice in the invoices module changes; it calls getInvoice of the generated client."
+}

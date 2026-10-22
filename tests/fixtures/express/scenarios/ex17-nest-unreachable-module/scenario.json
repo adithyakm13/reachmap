@@ -1,0 +1,11 @@
+{
+  "id": "ex17-nest-unreachable-module",
+  "repo": "ex/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex17-nest-unreachable-module"
+  },
+  "commit_message": "The trial balance names its date",
+  "notes": "A controller whose module nothing imports is not mounted."
+}

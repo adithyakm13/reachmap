@@ -1,0 +1,11 @@
+{
+  "note": "Synthetic: invented for the tests, shaped like the Qase API v1 (https://developers.qase.io). Not a recording of any real project.",
+  "status": 401,
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": {
+    "status": false,
+    "errorMessage": "Unauthorized."
+  }
+}

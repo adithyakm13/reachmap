@@ -1,0 +1,9 @@
+{
+  "slug": "acme-contracts",
+  "name": "acme/contracts",
+  "steps": [
+    {"dir": "01-initial", "branch": "main", "message": "Add the invoice, settlement, customer and schedule models", "tags": ["v1.2.0"]},
+    {"dir": "02-settlement-reference", "branch": "main", "message": "Add an optional settlement reference to invoices and settlements", "tags": ["v1.9.0"]},
+    {"dir": "03-due-date", "branch": "main", "message": "Add an optional due date to invoices", "tags": ["v1.10.0"]}
+  ]
+}

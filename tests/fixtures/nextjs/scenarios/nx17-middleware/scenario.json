@@ -1,0 +1,11 @@
+{
+  "id": "nx17-middleware",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx17-middleware"
+  },
+  "commit_message": "Middleware reads the session and keeps the result",
+  "notes": "Middleware reaches every screen and route: its matcher is not evaluated."
+}

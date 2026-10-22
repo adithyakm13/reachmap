@@ -1,0 +1,18 @@
+{
+  "slug": "acme-api",
+  "name": "acme/api",
+  "steps": [
+    {"dir": "01-skeleton", "branch": "main", "message": "Add the billing and cases services and the shared money helpers"},
+    {"dir": "02-release-1.2", "branch": "release/1.2", "from": "main", "message": "Release 1.2.0", "tags": ["v1.2.0"]},
+    {"dir": "03-settlement-reference", "branch": "main", "message": "Show settlement references and move to acme-contracts 1.9.0"},
+    {"dir": "04-release-1.x", "branch": "release/1.x", "from": "main", "message": "Release 1.9.0", "tags": ["v1.9.0"]},
+    {"dir": "05-bump-contracts", "branch": "main", "message": "Move to acme-contracts 1.10.0"},
+    {"dir": "06-fix-rounding", "branch": "release/1.x", "message": "Round invoice totals half up"},
+    {
+      "dir": "07-fix-rounding-cherry-pick",
+      "overlay": "06-fix-rounding",
+      "branch": "release/1.2",
+      "message": "Round invoice totals half up (cherry picked from release/1.x)"
+    }
+  ]
+}

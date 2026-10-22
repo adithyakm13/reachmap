@@ -1,0 +1,130 @@
+{
+  "schema": 1,
+  "id": "ex02-inline-handler",
+  "repo": "ex/orders",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex02-inline-handler"
+  },
+  "explains": "A line inside the arrow function of customersRouter.get(\"/:customerId/orders\", ...) in src/routes/customers.ts changes. The handler is written in the route call, outside every declaration, so the change is a module-level change of the file and the statement that holds the line is the route: GET /api/v1/customers/{customerId}/orders. The statement belongs to the router customersRouter (Router({ mergeParams: true }), which does not change the path), mounted by apiRouter.use(API_VERSION + \"/customers\", customersRouter) under app.use(API_PREFIX, apiRouter). The two other routes of the router are other statements and are not reached. The client calls customerOrdersUrl(customerId), /api/v1/customers/${customerId}/orders, with a parameter segment that fits {customerId}; fetchCustomerOrders calls it, so the http edge goes to the route and CustomerScreen, mounted at /customers/:customerId, is reached (it calls fetchCustomer too, a different URL).",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "screen",
+    "http_edge",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "changed_file",
+      "repo": "ex/orders",
+      "path": "src/routes/customers.ts",
+      "role": "source"
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/api/v1/customers/{customerId}/orders",
+      "evidence": [
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/customers.ts",
+          "contains": "customersRouter.get(\"/:customerId/orders\", (req, res) => {"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/index.ts",
+          "contains": "apiRouter.use(API_VERSION + \"/customers\", customersRouter);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/app.ts",
+          "contains": "app.use(API_PREFIX, apiRouter);"
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "ex/web",
+        "path": "src/services/customers.ts",
+        "contains": "return apiGet(customerOrdersUrl(customerId));"
+      },
+      "via": [
+        {
+          "repo": "ex/web",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const customerOrdersUrl = (customerId: string) =>"
+        }
+      ],
+      "to": {
+        "repo": "ex/orders",
+        "method": "GET",
+        "path": "/api/v1/customers/{customerId}/orders",
+        "evidence": [
+          {
+            "repo": "ex/orders",
+            "path": "src/routes/customers.ts",
+            "contains": "customersRouter.get(\"/:customerId/orders\", (req, res) => {"
+          },
+          {
+            "repo": "ex/orders",
+            "path": "src/routes/index.ts",
+            "contains": "apiRouter.use(API_VERSION + \"/customers\", customersRouter);"
+          },
+          {
+            "repo": "ex/orders",
+            "path": "src/app.ts",
+            "contains": "app.use(API_PREFIX, apiRouter);"
+          }
+        ]
+      }
+    },
+    {
+      "type": "screen",
+      "repo": "ex/web",
+      "route": "/customers/:customerId",
+      "chain": [
+        {
+          "repo": "ex/web",
+          "path": "src/services/customers.ts",
+          "contains": "return apiGet(customerOrdersUrl(customerId));"
+        },
+        {
+          "repo": "ex/web",
+          "path": "src/screens/CustomerScreen.tsx",
+          "contains": "import { fetchCustomer, fetchCustomerOrders } from \"@/services/customers\";"
+        },
+        {
+          "repo": "ex/web",
+          "path": "src/routes.tsx",
+          "contains": "import CustomerScreen from \"./screens/CustomerScreen\";"
+        },
+        {
+          "repo": "ex/web",
+          "path": "src/routes.tsx",
+          "contains": "<Route path=\"/customers/:customerId\" element={<CustomerScreen />} />"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/api/v1/customers",
+      "why": "another statement of the router"
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/api/v1/customers/{customerId}",
+      "why": "another statement of the router"
+    }
+  ],
+  "not_established": []
+}

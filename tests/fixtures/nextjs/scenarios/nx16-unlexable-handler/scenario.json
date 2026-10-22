@@ -1,0 +1,11 @@
+{
+  "id": "nx16-unlexable-handler",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx16-unlexable-handler"
+  },
+  "commit_message": "Add a route file that does not lex",
+  "notes": "A route file whose methods cannot be told: no route is claimed and the answer says it is not complete."
+}

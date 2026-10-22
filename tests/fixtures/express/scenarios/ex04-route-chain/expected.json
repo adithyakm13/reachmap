@@ -1,0 +1,71 @@
+{
+  "schema": 1,
+  "id": "ex04-route-chain",
+  "repo": "ex/orders",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex04-route-chain"
+  },
+  "explains": "addLine in src/controllers/orders.ts flags the added line. src/routes/orders.ts imports it by name and wires it in a chain: router.route(\"/:id/lines\").get(listLines).post(addLine). The chain is one statement with two routes; the change reaches the call that names addLine, so the route is POST /api/v1/orders/{id}/lines and not GET /api/v1/orders/{id}/lines, which is the call of listLines. A route of a chain is cited at the line of its method call and then at the line of .route(, where the path is, then at the mounts. The client calls no URL that fits a lines route.",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "screen",
+    "http_edge",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "ex/orders",
+      "path": "src/controllers/orders.ts",
+      "symbol": "addLine"
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "POST",
+      "path": "/api/v1/orders/{id}/lines",
+      "evidence": [
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/orders.ts",
+          "contains": ".post(addLine);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/orders.ts",
+          "contains": ".route(\"/:id/lines\")"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/index.ts",
+          "contains": "apiRouter.use(API_VERSION + \"/orders\", ordersRouter);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/app.ts",
+          "contains": "app.use(API_PREFIX, apiRouter);"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/api/v1/orders/{id}/lines",
+      "why": "the other call of the chain uses listLines"
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/api/v1/orders",
+      "why": "another statement"
+    }
+  ],
+  "not_established": []
+}

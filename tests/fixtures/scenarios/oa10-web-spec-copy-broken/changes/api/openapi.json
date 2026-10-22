@@ -1,0 +1,104 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Ledger API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://ledger.example.invalid/v1"
+    }
+  ],
+  "paths": {
+    "/invoices": {
+      "get": {
+        "operationId": "listInvoices",
+        "tags": [
+          "invoices"
+        ],
+        "summary": "List invoices",
+        "responses": {
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Invoice"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createInvoice",
+        "tags": [
+          "invoices"
+        ],
+        "summary": "Create an invoice",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewInvoice"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Invoice"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/invoices/{invoiceId}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/InvoiceId"
+        }
+      ],
+      "get": {
+        "operationId": "getInvoice",
+        "tags": [
+          "invoices"
+        ],
+        "summary": "Fetch one invoice",
+        "responses": {
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Invoice"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "voidInvoice",
+        "tags": [
+          "invoices"
+        ],
+        "summary": "Void an invoice",
+        "responses": {
+          "204": {
+            "description": "voided"
+          },
+    

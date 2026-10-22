@@ -1,0 +1,182 @@
+/* The graphs. React Flow's own sheet is imported by `graphs/Graphs.tsx`, so it is fetched with the graph chunk and not with the page; these are
+   the boxes and the lines of this workspace. Static: nothing here is computed at run time. */
+
+.rm-flow {
+  height: 260px;
+  width: 100%;
+  border: 1px solid var(--rm-line);
+  border-radius: var(--mantine-radius-md);
+  overflow: hidden;
+  background: var(--mantine-color-body);
+}
+.rm-flow[data-size="200"] { height: 200px; }
+.rm-flow[data-size="260"] { height: 260px; }
+.rm-flow[data-size="320"] { height: 320px; }
+.rm-flow[data-size="400"] { height: 400px; }
+.rm-flow[data-size="480"] { height: 480px; }
+
+.rm-flow .react-flow__edge-path {
+  stroke: var(--mantine-color-gray-5);
+  stroke-width: 1.5;
+}
+.rm-flow .rm-edge-candidate .react-flow__edge-path {
+  stroke-dasharray: 5 4;
+}
+.rm-flow .react-flow__edge-text {
+  font-family: var(--mantine-font-family);
+  font-size: 10px;
+  fill: var(--mantine-color-dimmed);
+}
+.rm-flow .react-flow__edge-textbg {
+  fill: var(--mantine-color-body);
+}
+.rm-flow .react-flow__arrowhead polyline {
+  stroke: var(--mantine-color-gray-5);
+  fill: var(--mantine-color-gray-5);
+}
+/* React Flow makes a node that is neither selectable nor draggable inert; the box of a step or an area is a button of its own */
+.rm-flow .react-flow__node {
+  pointer-events: all !important;
+}
+.rm-flow .react-flow__handle {
+  opacity: 0;
+  pointer-events: none;
+}
+.rm-flow .react-flow__controls {
+  box-shadow: none;
+  border: 1px solid var(--rm-line);
+  border-radius: var(--mantine-radius-sm);
+  overflow: hidden;
+}
+.rm-flow .react-flow__controls-button {
+  background: var(--mantine-color-body);
+  border-bottom: 1px solid var(--rm-line);
+  fill: var(--mantine-color-text);
+  color: var(--mantine-color-text);
+}
+.rm-flow .react-flow__controls-button:hover {
+  background: var(--rm-hover);
+}
+.rm-flow .react-flow__background {
+  background: var(--mantine-color-body);
+}
+.rm-flow .react-flow__background pattern circle {
+  fill: var(--mantine-color-default-border);
+}
+
+/* a repository group of the reach graph */
+.rm-repo {
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--rm-line);
+  border-radius: var(--mantine-radius-md);
+  background: var(--rm-subtle);
+}
+.rm-repo-origin {
+  border-color: var(--mantine-color-accent-5);
+}
+.rm-repo-empty {
+  position: absolute;
+  left: 10px;
+  top: 38px;
+  font-size: 11px;
+  font-style: italic;
+  color: var(--mantine-color-dimmed);
+}
+.rm-repo-label {
+  position: absolute;
+  left: 10px;
+  top: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: var(--mantine-font-family-monospace);
+}
+
+.rm-area {
+  border: 1px solid var(--rm-line);
+  border-radius: var(--mantine-radius-sm);
+  background: var(--mantine-color-body);
+  height: 34px;
+  width: 176px;
+  font-size: 11px;
+}
+.rm-area-candidate {
+  border-style: dashed;
+  color: var(--mantine-color-dimmed);
+}
+.rm-area-button {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-family: var(--mantine-font-family-monospace);
+  text-align: left;
+  padding: 0 8px;
+  cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.rm-area-button:disabled {
+  cursor: default;
+}
+.rm-area-button:not(:disabled):hover {
+  background: var(--rm-hover);
+}
+.rm-more {
+  font-size: 11px;
+  color: var(--mantine-color-dimmed);
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  height: 34px;
+}
+
+.rm-plain {
+  width: 188px;
+  height: 52px;
+  border: 1px solid var(--rm-line);
+  border-radius: var(--mantine-radius-md);
+  background: var(--mantine-color-body);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 11px;
+  font-weight: 500;
+  overflow: hidden;
+  text-align: center;
+}
+
+/* a chain: a list of steps, a header where it passes into another repository, a link between two steps */
+.rm-chain {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.rm-chain-lane {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin: 10px 0 6px;
+  padding: 2px 8px;
+  border-left: 3px solid var(--mantine-color-accent-5);
+  background: var(--rm-subtle);
+  border-radius: 0 var(--mantine-radius-sm) var(--mantine-radius-sm) 0;
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 0.75rem;
+  overflow-wrap: anywhere;
+}
+.rm-chain-item:first-child .rm-chain-lane {
+  margin-top: 0;
+}
+.rm-chain-link {
+  min-height: 16px;
+  margin-left: 14px;
+  border-left: 2px solid var(--rm-line);
+  padding: 2px 0 2px 10px;
+  display: flex;
+  align-items: center;
+}

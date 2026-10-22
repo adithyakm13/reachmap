@@ -1,0 +1,11 @@
+{
+  "id": "nx05-direct-handler-change",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx05-direct-handler-change"
+  },
+  "commit_message": "GET /api/orders/{id} trims the id",
+  "notes": "A change inside one method reaches that route, not its sibling DELETE."
+}

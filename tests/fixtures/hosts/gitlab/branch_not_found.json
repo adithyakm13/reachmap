@@ -1,0 +1,13 @@
+{
+  "status": 404,
+  "headers": {
+    "Content-Type": "application/json",
+    "RateLimit-Limit": "2000",
+    "RateLimit-Remaining": "1990",
+    "X-Request-Id": "01HF8Z3K5V9C2N7QWERTY12345",
+    "Server": "nginx"
+  },
+  "body": {
+    "message": "404 Branch Not Found"
+  }
+}

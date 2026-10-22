@@ -1,0 +1,11 @@
+{
+  "id": "sb16-test-only",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb16-test-only"
+  },
+  "commit_message": "InvoiceServiceTest checks another length",
+  "notes": "A change to a test alone is a unit test and reaches no route."
+}

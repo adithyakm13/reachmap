@@ -1,0 +1,11 @@
+{
+  "id": "s13-branch-matrix",
+  "repo": "acme/api",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s13-branch-matrix"
+  },
+  "commit_message": "Round invoice totals half up (forward port)",
+  "notes": "The same fix is already on release/1.x and release/1.2 but not on main."
+}

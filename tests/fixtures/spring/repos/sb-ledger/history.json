@@ -1,0 +1,19 @@
+{
+  "steps": [
+    {
+      "dir": "01-build",
+      "branch": "main",
+      "message": "Build file and application configuration"
+    },
+    {
+      "dir": "02-code",
+      "branch": "main",
+      "message": "Controllers, services, Kotlin controller and utilities"
+    },
+    {
+      "dir": "03-tests",
+      "branch": "main",
+      "message": "Tests"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "ex02-inline-handler",
+  "repo": "ex/orders",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex02-inline-handler"
+  },
+  "commit_message": "The customer orders route wraps its list",
+  "notes": "A line inside a handler written in the route call reaches that route and no other route of the router."
+}

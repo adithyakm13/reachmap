@@ -1,0 +1,231 @@
+{
+  "schema": 1,
+  "id": "nx12-not-a-route",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx12-not-a-route"
+  },
+  "explains": "Four changed files have names that Next.js gives a meaning only in some places. src/components/layout.tsx (Frame) is a plain component, not a layout: layouts are layout files inside the app folder. It is imported by src/app/(shop)/cart/page.tsx, so /cart is reached by that import, and by src/app/_private/page.tsx, which is in a private folder (a folder that starts with an underscore is not routed), so no screen comes of it. src/lib/route.ts (buildRoute) and src/utils/middleware.ts (withLogging) are helpers, not a route handler and not middleware (middleware is the file beside the app folder, src/middleware.ts); both are imported by src/app/api/health/route.ts and used in GET, so GET /api/health is reached, with one chain for each import. The mobile client calls the health URL in ping, so the http edge goes to the route and StatusScreen (mounted at /status) is reached through the first chain. The change to the page in the private folder reaches nothing. Nothing is matched by file name alone: no other screen or route is reached, and in particular not every page (as a changed layout would) or every route (as changed middleware would).",
+  "complete_for": [
+    "changed_symbol",
+    "caller",
+    "route",
+    "screen",
+    "http_edge"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "nx/shop",
+      "path": "src/components/layout.tsx",
+      "symbol": "Frame"
+    },
+    {
+      "type": "changed_symbol",
+      "repo": "nx/shop",
+      "path": "src/lib/route.ts",
+      "symbol": "buildRoute"
+    },
+    {
+      "type": "changed_symbol",
+      "repo": "nx/shop",
+      "path": "src/utils/middleware.ts",
+      "symbol": "withLogging"
+    },
+    {
+      "type": "changed_symbol",
+      "repo": "nx/shop",
+      "path": "src/app/_private/page.tsx",
+      "symbol": "PrivatePage"
+    },
+    {
+      "type": "caller",
+      "repo": "nx/shop",
+      "path": "src/app/(shop)/cart/page.tsx",
+      "symbol": "CartPage",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/cart/page.tsx",
+          "contains": "import Frame from \"@/components/layout\";"
+        }
+      ]
+    },
+    {
+      "type": "caller",
+      "repo": "nx/shop",
+      "path": "src/app/_private/page.tsx",
+      "symbol": "PrivatePage",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/_private/page.tsx",
+          "contains": "import Frame from \"@/components/layout\";"
+        }
+      ]
+    },
+    {
+      "type": "caller",
+      "repo": "nx/shop",
+      "path": "src/app/api/health/route.ts",
+      "symbol": "GET",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/api/health/route.ts",
+          "contains": "import { buildRoute } from \"@/lib/route\";"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/api/health/route.ts",
+          "contains": "import { withLogging } from \"@/utils/middleware\";"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/cart",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/cart/page.tsx",
+          "contains": "import Frame from \"@/components/layout\";"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/cart/page.tsx",
+          "contains": "export default function CartPage"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "GET",
+      "path": "/api/health",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/api/health/route.ts",
+          "contains": "export async function GET()"
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "nx/mobile",
+        "path": "src/services/health.ts",
+        "contains": "return apiGet(HEALTH_URL);"
+      },
+      "via": [
+        {
+          "repo": "nx/mobile",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const HEALTH_URL = \"/api/health\";"
+        }
+      ],
+      "to": {
+        "repo": "nx/shop",
+        "method": "GET",
+        "path": "/api/health",
+        "evidence": [
+          {
+            "repo": "nx/shop",
+            "path": "src/app/api/health/route.ts",
+            "contains": "export async function GET()"
+          }
+        ]
+      }
+    },
+    {
+      "type": "screen",
+      "repo": "nx/mobile",
+      "route": "/status",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/api/health/route.ts",
+          "contains": "import { buildRoute } from \"@/lib/route\";"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/services/health.ts",
+          "contains": "return apiGet(HEALTH_URL);"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/screens/StatusScreen.tsx",
+          "contains": "import { ping, fetchStatus } from \"@/services/health\";"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/routes.tsx",
+          "contains": "import StatusScreen from \"./screens/StatusScreen\";"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/routes.tsx",
+          "contains": "<Route path=\"/status\" element={<StatusScreen />} />"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/_private",
+      "why": "a page in a private folder is not routed"
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/",
+      "why": "components/layout.tsx is not a layout"
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/about",
+      "why": "components/layout.tsx is not a layout"
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/products",
+      "why": "components/layout.tsx is not a layout"
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/dashboard",
+      "why": "components/layout.tsx is not a layout"
+    },
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "GET",
+      "path": "/api/products",
+      "why": "lib/route.ts is not a route file"
+    },
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "GET",
+      "path": "/api/orders",
+      "why": "utils/middleware.ts is not middleware"
+    },
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "ANY",
+      "path": "/api/legacy/status",
+      "why": "utils/middleware.ts is not middleware"
+    }
+  ],
+  "not_established": []
+}

@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "workspace": "portal",
+  "limits": {"hops": 3, "hub_importers": 50, "distinct_max": 3, "timeout_s": 900},
+  "repos": {
+    "acme/portal": {
+      "slug": "dj-portal",
+      "host": "git",
+      "language": "python",
+      "roles": ["backend"],
+      "branches": ["main"],
+      "entry_points": {"kind": "django"},
+      "tests": {"markers": ["tests/", "test_"]}
+    },
+    "acme/portal-web": {
+      "slug": "dj-portal-web",
+      "host": "git",
+      "language": "typescript",
+      "roles": ["frontend"],
+      "branches": ["main"],
+      "aliases": {"from": "tsconfig.json"},
+      "entry_points": {"kind": "react-router", "routes_glob": "src/modules/*/routes.tsx"},
+      "http_client": {"kind": "endpoints-file", "path": "src/api/endpoints.ts"},
+      "tests": {"markers": ["__tests__/", ".test.", ".spec."]}
+    }
+  },
+  "edges": [
+    {"kind": "http", "from": "acme/portal-web", "to": "acme/portal"}
+  ]
+}

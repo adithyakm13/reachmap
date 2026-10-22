@@ -1,0 +1,154 @@
+{
+  "schema": 1,
+  "id": "sb20-client-change",
+  "repo": "acme/ledger-web",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb20-client-change"
+  },
+  "explains": "fetchTotal in the web client's src/services/invoices.ts changes. Two files import the module: InvoiceScreen imports fetchInvoice and fetchTotal, so it is a caller and its screen /invoices/:invoiceId is reached; InvoicesScreen imports fetchInvoices only and is excluded by narrowing. The changed line calls apiGet(INVOICE_TOTAL_URL(invoiceId)): the endpoint builds /ledger/v1/invoices/${invoiceId}/total, which fits the route GET /ledger/v1/invoices/{id}/total of the Spring service (read at its primary branch), so the http edge goes from the client line to that route, with the route's evidence. The Spring service answers it with the handler total of InvoiceController.",
+  "complete_for": [
+    "changed_symbol",
+    "changed_file",
+    "caller",
+    "screen",
+    "http_edge"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/ledger-web",
+      "path": "src/services/invoices.ts",
+      "symbol": "fetchTotal",
+      "evidence": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/services/invoices.ts",
+          "contains": "return apiGet(INVOICE_TOTAL_URL(invoiceId)).then((total) => total);"
+        }
+      ]
+    },
+    {
+      "type": "changed_file",
+      "repo": "acme/ledger-web",
+      "path": "src/services/invoices.ts",
+      "role": "source"
+    },
+    {
+      "type": "caller",
+      "repo": "acme/ledger-web",
+      "path": "src/screens/InvoiceScreen.tsx",
+      "symbol": "InvoiceScreen",
+      "evidence": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/screens/InvoiceScreen.tsx",
+          "contains": "import { fetchInvoice, fetchTotal } from \"@/services/invoices\";"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "acme/ledger-web",
+      "route": "/invoices/:invoiceId",
+      "chain": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/screens/InvoiceScreen.tsx",
+          "contains": "import { fetchInvoice, fetchTotal } from \"@/services/invoices\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/routes.tsx",
+          "contains": "import InvoiceScreen from \"./screens/InvoiceScreen\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/routes.tsx",
+          "contains": "<Route path=\"/invoices/:invoiceId\" element={<InvoiceScreen />} />"
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/ledger-web",
+        "path": "src/services/invoices.ts",
+        "contains": "return apiGet(INVOICE_TOTAL_URL(invoiceId)).then((total) => total);"
+      },
+      "via": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const INVOICE_TOTAL_URL = (invoiceId: string) =>"
+        }
+      ],
+      "to": {
+        "repo": "acme/ledger",
+        "method": "GET",
+        "path": "/ledger/v1/invoices/{id}/total",
+        "evidence": [
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+            "contains": "@GetMapping(\"/{id}/total\")"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+            "contains": "@RequestMapping(Paths.INVOICES)"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/Paths.java",
+            "contains": "INVOICES = BASE + \"/invoices\";"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/Paths.java",
+            "contains": "BASE = \"/v1\";"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/resources/application.properties",
+            "contains": "server.servlet.context-path=/ledger"
+          }
+        ]
+      }
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "caller",
+      "repo": "acme/ledger-web",
+      "path": "src/screens/InvoicesScreen.tsx",
+      "why": "it imports fetchInvoices only",
+      "evidence": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/screens/InvoicesScreen.tsx",
+          "contains": "import { fetchInvoices } from \"@/services/invoices\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/services/invoices.ts",
+          "contains": "export function fetchTotal"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "acme/ledger-web",
+      "route": "/invoices",
+      "why": "InvoicesScreen imports fetchInvoices only"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/ledger-web",
+      "route": "/status",
+      "why": "StatusScreen does not import the module"
+    }
+  ],
+  "not_established": []
+}

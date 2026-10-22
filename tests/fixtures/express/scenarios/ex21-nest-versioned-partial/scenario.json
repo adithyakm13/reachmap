@@ -1,0 +1,11 @@
+{
+  "id": "ex21-nest-versioned-partial",
+  "repo": "ex/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex21-nest-versioned-partial"
+  },
+  "commit_message": "A balance names its currency",
+  "notes": "A path part this cannot evaluate is kept marked and said."
+}

@@ -1,0 +1,21 @@
+{
+  "slug": "acme-web",
+  "name": "acme/web",
+  "steps": [
+    {"dir": "01-scaffold", "branch": "main", "message": "Scaffold the web app with path aliases"},
+    {"dir": "02-components", "branch": "main", "message": "Add StatusBadge, a legacy list and the dates spec"},
+    {"dir": "03-billing", "branch": "main", "message": "Add the billing module and the endpoints file"},
+    {"dir": "04-cases-reports", "branch": "main", "message": "Add the cases and reports modules"},
+    {
+      "dir": "05-hub-and-backtest",
+      "branch": "main",
+      "message": "Add dashboard widgets and the backtest engine",
+      "generate": [{"rule": "hub_importers", "dir": "src/widgets", "count": 55, "target": "src/lib/format.ts"}]
+    },
+    {"dir": "06-release-2.0", "branch": "release/2.0", "from": "main", "message": "Release 2.0.0", "tags": ["v2.0.0"]},
+    {"dir": "07-docs", "branch": "main", "message": "Add a README"},
+    {"dir": "08-release-2.1", "branch": "release/2.1", "from": "main", "message": "Release 2.1.0", "tags": ["v2.1.0"]},
+    {"dir": "09-release-2.0-hotfix", "branch": "release/2.0", "message": "Hotfix: format dates in UTC and drop the stale editor config"},
+    {"dir": "10-changelog", "branch": "main", "message": "Start the changelog"}
+  ]
+}

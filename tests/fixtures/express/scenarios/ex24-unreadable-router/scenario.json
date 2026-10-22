@@ -1,0 +1,11 @@
+{
+  "id": "ex24-unreadable-router",
+  "repo": "ex/orders",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex24-unreadable-router"
+  },
+  "commit_message": "The customers router has a stray backtick",
+  "notes": "A router file that does not lex at the head: its routes were not read, they were not removed."
+}

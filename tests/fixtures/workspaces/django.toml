@@ -1,0 +1,34 @@
+# The workspace of the Django fixtures (tests/fixtures/workspaces/django.json): a Django project with a DRF API and the React client of it.
+# Every remote is a path under ${REACHMAP_FIXTURES}: the directory tests/fixtures/dj.py wrote the repositories into.
+workspace = "portal"
+
+[limits]
+hops = 3
+hub_importers = 50
+distinct_max = 3
+timeout_s = 900
+
+[repos."acme/portal"]
+host = "git"
+remote = "${REACHMAP_FIXTURES}/dj-portal"
+language = "python"
+roles = ["backend"]
+branches = ["main"]
+entry_points = { kind = "django" }
+tests = { markers = ["tests/", "test_"] }
+
+[repos."acme/portal-web"]
+host = "git"
+remote = "${REACHMAP_FIXTURES}/dj-portal-web"
+language = "typescript"
+roles = ["frontend"]
+branches = ["main"]
+aliases = { from = "tsconfig.json" }
+entry_points = { kind = "react-router", routes_glob = "src/modules/*/routes.tsx" }
+http_client = { kind = "endpoints-file", path = "src/api/endpoints.ts" }
+tests = { markers = ["__tests__/", ".test.", ".spec."] }
+
+[[edges]]
+kind = "http"
+from = "acme/portal-web"
+to = "acme/portal"

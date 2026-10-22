@@ -1,0 +1,451 @@
+{
+ "about": "Cases for the banned wording check: the Python one (tests/test_wording.py) and the TypeScript mirror (frontend/src/report/wording.test.ts) must give `found` for each text. `found` is what reachmap/wording.py returns. Whitespace of every kind, word boundaries next to marks, digits, underscores and astral letters, and the case folding of U+0130, U+0131, U+017F and U+212A are in it.",
+ "cases": [
+  {
+   "text": "safe",
+   "found": [
+    "safe"
+   ]
+  },
+  {
+   "text": "unsafe",
+   "found": []
+  },
+  {
+   "text": "safe_x",
+   "found": []
+  },
+  {
+   "text": "safe-x",
+   "found": [
+    "safe"
+   ]
+  },
+  {
+   "text": "x-safe",
+   "found": [
+    "safe"
+   ]
+  },
+  {
+   "text": "safe2",
+   "found": []
+  },
+  {
+   "text": "safe\u00b2",
+   "found": []
+  },
+  {
+   "text": "safe\u0301",
+   "found": [
+    "safe"
+   ]
+  },
+  {
+   "text": "\u017fafe",
+   "found": [
+    "safe"
+   ]
+  },
+  {
+   "text": "SAFE",
+   "found": [
+    "safe"
+   ]
+  },
+  {
+   "text": "no\u0085impact",
+   "found": [
+    "no impact"
+   ]
+  },
+  {
+   "text": "no\u001cimpact",
+   "found": [
+    "no impact"
+   ]
+  },
+  {
+   "text": "no\ufeffimpact",
+   "found": []
+  },
+  {
+   "text": "no\u00a0impact",
+   "found": [
+    "no impact"
+   ]
+  },
+  {
+   "text": "no\u2028impact",
+   "found": [
+    "no impact"
+   ]
+  },
+  {
+   "text": "fully--covered",
+   "found": [
+    "fully covered"
+   ]
+  },
+  {
+   "text": "fully - covered",
+   "found": [
+    "fully covered"
+   ]
+  },
+  {
+   "text": "covered\tby",
+   "found": [
+    "covered by"
+   ]
+  },
+  {
+   "text": "covered\nby",
+   "found": [
+    "covered by"
+   ]
+  },
+  {
+   "text": "\u0130s safe",
+   "found": [
+    "safe",
+    "is safe"
+   ]
+  },
+  {
+   "text": "\u212aafe",
+   "found": []
+  },
+  {
+   "text": "caf\u00e9 safe",
+   "found": [
+    "safe"
+   ]
+  },
+  {
+   "text": "safe\u200dx",
+   "found": [
+    "safe"
+   ]
+  },
+  {
+   "text": "x\u200csafe",
+   "found": [
+    "safe"
+   ]
+  },
+  {
+   "text": "no_impact",
+   "found": []
+  },
+  {
+   "text": "nothing to test",
+   "found": [
+    "nothing to test"
+   ]
+  },
+  {
+   "text": "nothing-to-test",
+   "found": [
+    "nothing to test"
+   ]
+  },
+  {
+   "text": "NOTHING  TO\tTEST",
+   "found": [
+    "nothing to test"
+   ]
+  },
+  {
+   "text": "\u0441afe",
+   "found": []
+  },
+  {
+   "text": "safe\u0663",
+   "found": []
+  },
+  {
+   "text": "\u2160safe",
+   "found": []
+  },
+  {
+   "text": "\u00aasafe",
+   "found": []
+  },
+  {
+   "text": "The change is safe to release",
+   "found": [
+    "safe",
+    "is safe",
+    "safe to release"
+   ]
+  },
+  {
+   "text": "a safe place",
+   "found": [
+    "safe"
+   ]
+  },
+  {
+   "text": "safety",
+   "found": []
+  },
+  {
+   "text": "safely",
+   "found": []
+  },
+  {
+   "text": "safeguard",
+   "found": []
+  },
+  {
+   "text": "x_safe",
+   "found": []
+  },
+  {
+   "text": "2safe",
+   "found": []
+  },
+  {
+   "text": "safe.",
+   "found": [
+    "safe"
+   ]
+  },
+  {
+   "text": "(safe)",
+   "found": [
+    "safe"
+   ]
+  },
+  {
+   "text": "Safe",
+   "found": [
+    "safe"
+   ]
+  },
+  {
+   "text": "is safe",
+   "found": [
+    "safe",
+    "is safe"
+   ]
+  },
+  {
+   "text": "IS  SAFE",
+   "found": [
+    "safe",
+    "is safe"
+   ]
+  },
+  {
+   "text": "is\tsafe",
+   "found": [
+    "safe",
+    "is safe"
+   ]
+  },
+  {
+   "text": "is\u00a0safe",
+   "found": [
+    "safe",
+    "is safe"
+   ]
+  },
+  {
+   "text": "is\u3000safe",
+   "found": [
+    "safe",
+    "is safe"
+   ]
+  },
+  {
+   "text": "is\u2003safe",
+   "found": [
+    "safe",
+    "is safe"
+   ]
+  },
+  {
+   "text": "is\u0085safe",
+   "found": [
+    "safe",
+    "is safe"
+   ]
+  },
+  {
+   "text": "is\u001csafe",
+   "found": [
+    "safe",
+    "is safe"
+   ]
+  },
+  {
+   "text": "is\ufeffsafe",
+   "found": [
+    "safe"
+   ]
+  },
+  {
+   "text": "is\u200bsafe",
+   "found": [
+    "safe"
+   ]
+  },
+  {
+   "text": "covered by",
+   "found": [
+    "covered by"
+   ]
+  },
+  {
+   "text": "covered-by",
+   "found": [
+    "covered by"
+   ]
+  },
+  {
+   "text": "covered--by",
+   "found": [
+    "covered by"
+   ]
+  },
+  {
+   "text": "covered - by",
+   "found": [
+    "covered by"
+   ]
+  },
+  {
+   "text": "already covers",
+   "found": [
+    "already covers"
+   ]
+  },
+  {
+   "text": "no need to test",
+   "found": [
+    "no need to test"
+   ]
+  },
+  {
+   "text": "NOTHING-TO-TEST",
+   "found": [
+    "nothing to test"
+   ]
+  },
+  {
+   "text": "fully covered",
+   "found": [
+    "fully covered"
+   ]
+  },
+  {
+   "text": "fully-covered",
+   "found": [
+    "fully covered"
+   ]
+  },
+  {
+   "text": "no impact",
+   "found": [
+    "no impact"
+   ]
+  },
+  {
+   "text": "no-impact",
+   "found": [
+    "no impact"
+   ]
+  },
+  {
+   "text": "noimpact",
+   "found": []
+  },
+  {
+   "text": "Kafe",
+   "found": []
+  },
+  {
+   "text": "safe\u017f",
+   "found": []
+  },
+  {
+   "text": "\u0131s safe",
+   "found": [
+    "safe",
+    "is safe"
+   ]
+  },
+  {
+   "text": "safe\u0345",
+   "found": [
+    "safe"
+   ]
+  },
+  {
+   "text": "\u0345safe",
+   "found": [
+    "safe"
+   ]
+  },
+  {
+   "text": "safe\u0661",
+   "found": []
+  },
+  {
+   "text": "\u0661safe",
+   "found": []
+  },
+  {
+   "text": "safe\u2160",
+   "found": []
+  },
+  {
+   "text": "\u00b2safe",
+   "found": []
+  },
+  {
+   "text": "safe\ud835\udc2c",
+   "found": []
+  },
+  {
+   "text": "\ud835\udc2csafe",
+   "found": []
+  },
+  {
+   "text": "safe\ud83d\ude00",
+   "found": [
+    "safe"
+   ]
+  },
+  {
+   "text": "\ud83d\ude00safe",
+   "found": [
+    "safe"
+   ]
+  },
+  {
+   "text": "sa\u00adfe",
+   "found": []
+  },
+  {
+   "text": "safe\u200d",
+   "found": [
+    "safe"
+   ]
+  },
+  {
+   "text": "",
+   "found": []
+  },
+  {
+   "text": "Callers of formatAmount were not established",
+   "found": []
+  },
+  {
+   "text": "Screens reached through StatusBadge",
+   "found": []
+  }
+ ]
+}

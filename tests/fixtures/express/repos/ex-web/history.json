@@ -1,0 +1,9 @@
+{
+  "steps": [
+    {
+      "dir": "01-web",
+      "branch": "main",
+      "message": "Web client: endpoints, services, screens and routes"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "dj08-generic-name",
+  "repo": "acme/portal",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/dj08-generic-name"
+  },
+  "commit_message": "Count the open cases",
+  "notes": "Body change in a view called index, a name four modules define."
+}

@@ -1,0 +1,8 @@
+{
+  "note": "Synthetic: invented for the tests, shaped like the Qase API v1 (https://developers.qase.io). Not a recording of any real project.",
+  "status": 200,
+  "headers": {
+    "Content-Type": "text/html"
+  },
+  "body_text": "<html><body>Gateway ok</body></html>"
+}

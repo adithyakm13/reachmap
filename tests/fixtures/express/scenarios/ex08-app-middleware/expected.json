@@ -1,0 +1,623 @@
+{
+  "schema": 1,
+  "id": "ex08-app-middleware",
+  "repo": "ex/orders",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex08-app-middleware"
+  },
+  "explains": "requestLog in src/middleware/requestLog.ts prints the address. src/app.ts imports it and registers it with app.use(requestLog), a statement that runs for every request the app answers and that is not a route: what it reaches cannot be narrowed to a route, and undecidable means affected, so every route of the app is reached, in the file and through its mounts: the fifteen routes of the service. (The registration order and a path prefix are not evaluated.) The client calls six of them: ORDERS_URL, orderUrl, customerOrdersUrl, customerUrl, ADMIN_STATS_URL and INVOICES_URL, so six http edges and four screens: /orders, /orders/:orderId, /customers/:customerId and /stats. Nothing of the ledger service is reached: it is another repository and no edge leads from here to it.",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "screen",
+    "http_edge",
+    "finding",
+    "caller"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "ex/orders",
+      "path": "src/middleware/requestLog.ts",
+      "symbol": "requestLog"
+    },
+    {
+      "type": "caller",
+      "repo": "ex/orders",
+      "path": "src/app.ts",
+      "evidence": [
+        {
+          "repo": "ex/orders",
+          "path": "src/app.ts",
+          "contains": "import { requestLog } from \"./middleware/requestLog\";"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/health",
+      "evidence": [
+        {
+          "repo": "ex/orders",
+          "path": "src/app.ts",
+          "contains": "app.get(\"/health\", (req, res) => {"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/legacy/invoices",
+      "evidence": [
+        {
+          "repo": "ex/orders",
+          "path": "src/legacy/invoices.js",
+          "contains": "router.get(\"/\", listInvoices);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/legacy/index.js",
+          "contains": "router.use(\"/invoices\", invoices);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/app.ts",
+          "contains": "app.use(\"/legacy\", require(\"./legacy\"));"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/legacy/invoices/{invoiceId}",
+      "evidence": [
+        {
+          "repo": "ex/orders",
+          "path": "src/legacy/invoices.js",
+          "contains": "router.get(\"/:invoiceId\", getInvoice);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/legacy/index.js",
+          "contains": "router.use(\"/invoices\", invoices);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/app.ts",
+          "contains": "app.use(\"/legacy\", require(\"./legacy\"));"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/api/v1/admin/stats",
+      "evidence": [
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/admin.ts",
+          "contains": "router.get(\"/stats\", stats);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/index.ts",
+          "contains": "apiRouter.use(`${API_VERSION}/admin`, admin.router);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/app.ts",
+          "contains": "app.use(API_PREFIX, apiRouter);"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/api/v1/customers",
+      "evidence": [
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/customers.ts",
+          "contains": "customersRouter.get(\"/\", ctrl.list);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/index.ts",
+          "contains": "apiRouter.use(API_VERSION + \"/customers\", customersRouter);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/app.ts",
+          "contains": "app.use(API_PREFIX, apiRouter);"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/api/v1/customers/{customerId}",
+      "evidence": [
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/customers.ts",
+          "contains": "customersRouter.get(\"/:customerId\", ctrl.get);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/index.ts",
+          "contains": "apiRouter.use(API_VERSION + \"/customers\", customersRouter);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/app.ts",
+          "contains": "app.use(API_PREFIX, apiRouter);"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/api/v1/customers/{customerId}/orders",
+      "evidence": [
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/customers.ts",
+          "contains": "customersRouter.get(\"/:customerId/orders\", (req, res) => {"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/index.ts",
+          "contains": "apiRouter.use(API_VERSION + \"/customers\", customersRouter);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/app.ts",
+          "contains": "app.use(API_PREFIX, apiRouter);"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/api/v1/orders",
+      "evidence": [
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/orders.ts",
+          "contains": "router.get(\"/\", listOrders);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/index.ts",
+          "contains": "apiRouter.use(API_VERSION + \"/orders\", ordersRouter);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/app.ts",
+          "contains": "app.use(API_PREFIX, apiRouter);"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/api/v1/orders/{id}",
+      "evidence": [
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/orders.ts",
+          "contains": "router.get(\"/:id\", requireAuth, getOrder);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/index.ts",
+          "contains": "apiRouter.use(API_VERSION + \"/orders\", ordersRouter);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/app.ts",
+          "contains": "app.use(API_PREFIX, apiRouter);"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "POST",
+      "path": "/api/v1/orders",
+      "evidence": [
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/orders.ts",
+          "contains": "router.post(\"/\", requireAuth, createOrder);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/index.ts",
+          "contains": "apiRouter.use(API_VERSION + \"/orders\", ordersRouter);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/app.ts",
+          "contains": "app.use(API_PREFIX, apiRouter);"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/api/v1/orders/{id}/lines",
+      "evidence": [
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/orders.ts",
+          "contains": ".get(listLines)"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/orders.ts",
+          "contains": ".route(\"/:id/lines\")"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/index.ts",
+          "contains": "apiRouter.use(API_VERSION + \"/orders\", ordersRouter);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/app.ts",
+          "contains": "app.use(API_PREFIX, apiRouter);"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "POST",
+      "path": "/api/v1/orders/{id}/lines",
+      "evidence": [
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/orders.ts",
+          "contains": ".post(addLine);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/orders.ts",
+          "contains": ".route(\"/:id/lines\")"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/index.ts",
+          "contains": "apiRouter.use(API_VERSION + \"/orders\", ordersRouter);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/app.ts",
+          "contains": "app.use(API_PREFIX, apiRouter);"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/api/v1/reports/<unknown:dailyPath()>",
+      "evidence": [
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/reports.ts",
+          "contains": "router.get(dailyPath(), daily);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/index.ts",
+          "contains": "apiRouter.use(API_VERSION + \"/reports\", reportsRouter);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/app.ts",
+          "contains": "app.use(API_PREFIX, apiRouter);"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/api/v1/reports/monthly",
+      "evidence": [
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/reports.ts",
+          "contains": "router.get(\"/monthly\", monthly);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/index.ts",
+          "contains": "apiRouter.use(API_VERSION + \"/reports\", reportsRouter);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/app.ts",
+          "contains": "app.use(API_PREFIX, apiRouter);"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/api/search",
+      "evidence": [
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/search.ts",
+          "contains": "searchRouter.get(\"/\", search);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/app.ts",
+          "contains": "app.use(API_PREFIX + \"/search\", searchRouter);"
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "ex/web",
+        "path": "src/services/orders.ts",
+        "contains": "return apiGet(ORDERS_URL);"
+      },
+      "via": [
+        {
+          "repo": "ex/web",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const ORDERS_URL = \"/api/v1/orders\";"
+        }
+      ],
+      "to": {
+        "repo": "ex/orders",
+        "method": "GET",
+        "path": "/api/v1/orders",
+        "evidence": [
+          {
+            "repo": "ex/orders",
+            "path": "src/routes/orders.ts",
+            "contains": "router.get(\"/\", listOrders);"
+          },
+          {
+            "repo": "ex/orders",
+            "path": "src/routes/index.ts",
+            "contains": "apiRouter.use(API_VERSION + \"/orders\", ordersRouter);"
+          },
+          {
+            "repo": "ex/orders",
+            "path": "src/app.ts",
+            "contains": "app.use(API_PREFIX, apiRouter);"
+          }
+        ]
+      }
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "ex/web",
+        "path": "src/services/orders.ts",
+        "contains": "return apiGet(orderUrl(orderId));"
+      },
+      "via": [
+        {
+          "repo": "ex/web",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const orderUrl = (orderId: string) =>"
+        }
+      ],
+      "to": {
+        "repo": "ex/orders",
+        "method": "GET",
+        "path": "/api/v1/orders/{id}",
+        "evidence": [
+          {
+            "repo": "ex/orders",
+            "path": "src/routes/orders.ts",
+            "contains": "router.get(\"/:id\", requireAuth, getOrder);"
+          },
+          {
+            "repo": "ex/orders",
+            "path": "src/routes/index.ts",
+            "contains": "apiRouter.use(API_VERSION + \"/orders\", ordersRouter);"
+          },
+          {
+            "repo": "ex/orders",
+            "path": "src/app.ts",
+            "contains": "app.use(API_PREFIX, apiRouter);"
+          }
+        ]
+      }
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "ex/web",
+        "path": "src/services/customers.ts",
+        "contains": "return apiGet(customerOrdersUrl(customerId));"
+      },
+      "via": [
+        {
+          "repo": "ex/web",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const customerOrdersUrl = (customerId: string) =>"
+        }
+      ],
+      "to": {
+        "repo": "ex/orders",
+        "method": "GET",
+        "path": "/api/v1/customers/{customerId}/orders",
+        "evidence": [
+          {
+            "repo": "ex/orders",
+            "path": "src/routes/customers.ts",
+            "contains": "customersRouter.get(\"/:customerId/orders\", (req, res) => {"
+          },
+          {
+            "repo": "ex/orders",
+            "path": "src/routes/index.ts",
+            "contains": "apiRouter.use(API_VERSION + \"/customers\", customersRouter);"
+          },
+          {
+            "repo": "ex/orders",
+            "path": "src/app.ts",
+            "contains": "app.use(API_PREFIX, apiRouter);"
+          }
+        ]
+      }
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "ex/web",
+        "path": "src/services/customers.ts",
+        "contains": "return apiGet(customerUrl(customerId));"
+      },
+      "via": [
+        {
+          "repo": "ex/web",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const customerUrl = (customerId: string) =>"
+        }
+      ],
+      "to": {
+        "repo": "ex/orders",
+        "method": "GET",
+        "path": "/api/v1/customers/{customerId}",
+        "evidence": [
+          {
+            "repo": "ex/orders",
+            "path": "src/routes/customers.ts",
+            "contains": "customersRouter.get(\"/:customerId\", ctrl.get);"
+          },
+          {
+            "repo": "ex/orders",
+            "path": "src/routes/index.ts",
+            "contains": "apiRouter.use(API_VERSION + \"/customers\", customersRouter);"
+          },
+          {
+            "repo": "ex/orders",
+            "path": "src/app.ts",
+            "contains": "app.use(API_PREFIX, apiRouter);"
+          }
+        ]
+      }
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "ex/web",
+        "path": "src/services/admin.ts",
+        "contains": "return apiGet(ADMIN_STATS_URL);"
+      },
+      "via": [
+        {
+          "repo": "ex/web",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const ADMIN_STATS_URL = \"/api/v1/admin/stats\";"
+        }
+      ],
+      "to": {
+        "repo": "ex/orders",
+        "method": "GET",
+        "path": "/api/v1/admin/stats",
+        "evidence": [
+          {
+            "repo": "ex/orders",
+            "path": "src/routes/admin.ts",
+            "contains": "router.get(\"/stats\", stats);"
+          },
+          {
+            "repo": "ex/orders",
+            "path": "src/routes/index.ts",
+            "contains": "apiRouter.use(`${API_VERSION}/admin`, admin.router);"
+          },
+          {
+            "repo": "ex/orders",
+            "path": "src/app.ts",
+            "contains": "app.use(API_PREFIX, apiRouter);"
+          }
+        ]
+      }
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "ex/web",
+        "path": "src/services/admin.ts",
+        "contains": "return apiGet(INVOICES_URL);"
+      },
+      "via": [
+        {
+          "repo": "ex/web",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const INVOICES_URL = \"/legacy/invoices\";"
+        }
+      ],
+      "to": {
+        "repo": "ex/orders",
+        "method": "GET",
+        "path": "/legacy/invoices",
+        "evidence": [
+          {
+            "repo": "ex/orders",
+            "path": "src/legacy/invoices.js",
+            "contains": "router.get(\"/\", listInvoices);"
+          },
+          {
+            "repo": "ex/orders",
+            "path": "src/legacy/index.js",
+            "contains": "router.use(\"/invoices\", invoices);"
+          },
+          {
+            "repo": "ex/orders",
+            "path": "src/app.ts",
+            "contains": "app.use(\"/legacy\", require(\"./legacy\"));"
+          }
+        ]
+      }
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "screen",
+      "repo": "ex/console",
+      "route": "/ledger",
+      "why": "the ledger service is another repository"
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/draft",
+      "why": "the draft router is not mounted"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "route_path_partial",
+      "subject": "src/routes/reports.ts:7",
+      "blocking": false
+    }
+  ]
+}

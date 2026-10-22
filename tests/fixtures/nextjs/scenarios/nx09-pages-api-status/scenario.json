@@ -1,0 +1,11 @@
+{
+  "id": "nx09-pages-api-status",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx09-pages-api-status"
+  },
+  "commit_message": "The legacy status API reports a version",
+  "notes": "A Pages Router API file reached by a client whose method matches no method of it, only ANY."
+}

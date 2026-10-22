@@ -1,0 +1,107 @@
+{
+  "schema": 1,
+  "id": "sb08-added-route",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb08-added-route"
+  },
+  "explains": "A handler is added to InvoiceController: GET /{id}/lines/count. The new method is the changed symbol and its mapping makes a route that did not exist: GET /ledger/v1/invoices/{id}/lines/count. No other handler is reached. Nothing in the web client names that URL, and every client call fits a route, so the added route is said as uncalled (added_route_uncalled, low risk, medium confidence).",
+  "complete_for": [
+    "changed_symbol",
+    "unit_test",
+    "route",
+    "screen",
+    "http_edge",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/ledger",
+      "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+      "symbol": "InvoiceController.countLines",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+          "contains": "@GetMapping(\"/{id}/lines/count\")"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+          "contains": "return service.lines(id).length();"
+        }
+      ]
+    },
+    {
+      "type": "unit_test",
+      "repo": "acme/ledger",
+      "path": "src/test/java/com/acme/ledger/api/InvoiceControllerTest.java",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/test/java/com/acme/ledger/api/InvoiceControllerTest.java",
+          "contains": "private final InvoiceController controller = new InvoiceController(new InvoiceService(), new PricingImpl());"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/ledger/v1/invoices/{id}/lines/count",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+          "contains": "@GetMapping(\"/{id}/lines/count\")"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+          "contains": "@RequestMapping(Paths.INVOICES)"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "INVOICES = BASE + \"/invoices\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "BASE = \"/v1\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/resources/application.properties",
+          "contains": "server.servlet.context-path=/ledger"
+        }
+      ]
+    },
+    {
+      "type": "finding",
+      "kind": "added_route_uncalled",
+      "risk": "low",
+      "confidence": "medium",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+          "contains": "@GetMapping(\"/{id}/lines/count\")"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/ledger/v1/invoices/{id}/lines",
+      "why": "the handler next to it is not changed"
+    }
+  ],
+  "not_established": []
+}

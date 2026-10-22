@@ -1,0 +1,11 @@
+{
+  "id": "nx07-pages-router-app",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx07-pages-router-app"
+  },
+  "commit_message": "Widen the legacy wrapper",
+  "notes": "_app reaches every Pages Router screen and nothing else."
+}

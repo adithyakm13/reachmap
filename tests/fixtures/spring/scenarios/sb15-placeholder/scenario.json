@@ -1,0 +1,11 @@
+{
+  "id": "sb15-placeholder",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb15-placeholder"
+  },
+  "commit_message": "The reports base moves",
+  "notes": "A property that a mapping names is part of that route."
+}

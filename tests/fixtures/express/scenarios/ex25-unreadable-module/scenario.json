@@ -1,0 +1,11 @@
+{
+  "id": "ex25-unreadable-module",
+  "repo": "ex/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex25-unreadable-module"
+  },
+  "commit_message": "The ledger module has a stray backtick",
+  "notes": "A module file that does not lex at the head: the controllers it lists were not read as served, they were not removed."
+}

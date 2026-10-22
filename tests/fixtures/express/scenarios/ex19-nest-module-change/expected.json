@@ -1,0 +1,370 @@
+{
+  "schema": 1,
+  "id": "ex19-nest-module-change",
+  "repo": "ex/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex19-nest-module-change"
+  },
+  "explains": "The providers of LedgerModule gain a value. A module decides what its controllers are given, so every controller it lists is reached: LedgerController, with its four routes: GET /api/ledger/entries, GET /api/ledger/entries/{id}, POST /api/ledger/entries and DELETE /api/ledger/entries/{id}. The balances controller belongs to another module. The client calls all four URLs: fetchEntries, fetchEntry, addEntry and removeEntry, so four edges and the screens /ledger and /ledger/:entryId.",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "screen",
+    "http_edge",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "ex/ledger",
+      "path": "src/ledger/ledger.module.ts",
+      "symbol": "LedgerModule"
+    },
+    {
+      "type": "route",
+      "repo": "ex/ledger",
+      "method": "GET",
+      "path": "/api/ledger/entries",
+      "evidence": [
+        {
+          "repo": "ex/ledger",
+          "path": "src/ledger/ledger.controller.ts",
+          "contains": "@Get()"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/ledger/ledger.controller.ts",
+          "contains": "@Controller(ENTRIES_PATH)"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/ledger/ledger.module.ts",
+          "contains": "controllers: [LedgerController],"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/main.ts",
+          "contains": "app.setGlobalPrefix(\"api\");"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "ex/ledger",
+      "method": "GET",
+      "path": "/api/ledger/entries/{id}",
+      "evidence": [
+        {
+          "repo": "ex/ledger",
+          "path": "src/ledger/ledger.controller.ts",
+          "contains": "@Get(\":id\")"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/ledger/ledger.controller.ts",
+          "contains": "@Controller(ENTRIES_PATH)"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/ledger/ledger.module.ts",
+          "contains": "controllers: [LedgerController],"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/main.ts",
+          "contains": "app.setGlobalPrefix(\"api\");"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "ex/ledger",
+      "method": "POST",
+      "path": "/api/ledger/entries",
+      "evidence": [
+        {
+          "repo": "ex/ledger",
+          "path": "src/ledger/ledger.controller.ts",
+          "contains": "@Post()"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/ledger/ledger.controller.ts",
+          "contains": "@Controller(ENTRIES_PATH)"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/ledger/ledger.module.ts",
+          "contains": "controllers: [LedgerController],"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/main.ts",
+          "contains": "app.setGlobalPrefix(\"api\");"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "ex/ledger",
+      "method": "DELETE",
+      "path": "/api/ledger/entries/{id}",
+      "evidence": [
+        {
+          "repo": "ex/ledger",
+          "path": "src/ledger/ledger.controller.ts",
+          "contains": "@Delete(\":id\")"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/ledger/ledger.controller.ts",
+          "contains": "@Controller(ENTRIES_PATH)"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/ledger/ledger.module.ts",
+          "contains": "controllers: [LedgerController],"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/main.ts",
+          "contains": "app.setGlobalPrefix(\"api\");"
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "ex/console",
+        "path": "src/services/ledger.ts",
+        "contains": "return apiGet(ENTRIES_URL);"
+      },
+      "via": [
+        {
+          "repo": "ex/console",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const ENTRIES_URL = \"/api/ledger/entries\";"
+        }
+      ],
+      "to": {
+        "repo": "ex/ledger",
+        "method": "GET",
+        "path": "/api/ledger/entries",
+        "evidence": [
+          {
+            "repo": "ex/ledger",
+            "path": "src/ledger/ledger.controller.ts",
+            "contains": "@Get()"
+          },
+          {
+            "repo": "ex/ledger",
+            "path": "src/ledger/ledger.controller.ts",
+            "contains": "@Controller(ENTRIES_PATH)"
+          },
+          {
+            "repo": "ex/ledger",
+            "path": "src/ledger/ledger.module.ts",
+            "contains": "controllers: [LedgerController],"
+          },
+          {
+            "repo": "ex/ledger",
+            "path": "src/main.ts",
+            "contains": "app.setGlobalPrefix(\"api\");"
+          }
+        ]
+      }
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "ex/console",
+        "path": "src/services/ledger.ts",
+        "contains": "return apiGet(entryUrl(entryId));"
+      },
+      "via": [
+        {
+          "repo": "ex/console",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const entryUrl = (entryId: string) =>"
+        }
+      ],
+      "to": {
+        "repo": "ex/ledger",
+        "method": "GET",
+        "path": "/api/ledger/entries/{id}",
+        "evidence": [
+          {
+            "repo": "ex/ledger",
+            "path": "src/ledger/ledger.controller.ts",
+            "contains": "@Get(\":id\")"
+          },
+          {
+            "repo": "ex/ledger",
+            "path": "src/ledger/ledger.controller.ts",
+            "contains": "@Controller(ENTRIES_PATH)"
+          },
+          {
+            "repo": "ex/ledger",
+            "path": "src/ledger/ledger.module.ts",
+            "contains": "controllers: [LedgerController],"
+          },
+          {
+            "repo": "ex/ledger",
+            "path": "src/main.ts",
+            "contains": "app.setGlobalPrefix(\"api\");"
+          }
+        ]
+      }
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "ex/console",
+        "path": "src/services/ledger.ts",
+        "contains": "return apiPost(ENTRIES_URL, entry);"
+      },
+      "via": [
+        {
+          "repo": "ex/console",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const ENTRIES_URL = \"/api/ledger/entries\";"
+        }
+      ],
+      "to": {
+        "repo": "ex/ledger",
+        "method": "POST",
+        "path": "/api/ledger/entries",
+        "evidence": [
+          {
+            "repo": "ex/ledger",
+            "path": "src/ledger/ledger.controller.ts",
+            "contains": "@Post()"
+          },
+          {
+            "repo": "ex/ledger",
+            "path": "src/ledger/ledger.controller.ts",
+            "contains": "@Controller(ENTRIES_PATH)"
+          },
+          {
+            "repo": "ex/ledger",
+            "path": "src/ledger/ledger.module.ts",
+            "contains": "controllers: [LedgerController],"
+          },
+          {
+            "repo": "ex/ledger",
+            "path": "src/main.ts",
+            "contains": "app.setGlobalPrefix(\"api\");"
+          }
+        ]
+      }
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "ex/console",
+        "path": "src/services/ledger.ts",
+        "contains": "return apiDelete(entryUrl(entryId));"
+      },
+      "via": [
+        {
+          "repo": "ex/console",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const entryUrl = (entryId: string) =>"
+        }
+      ],
+      "to": {
+        "repo": "ex/ledger",
+        "method": "DELETE",
+        "path": "/api/ledger/entries/{id}",
+        "evidence": [
+          {
+            "repo": "ex/ledger",
+            "path": "src/ledger/ledger.controller.ts",
+            "contains": "@Delete(\":id\")"
+          },
+          {
+            "repo": "ex/ledger",
+            "path": "src/ledger/ledger.controller.ts",
+            "contains": "@Controller(ENTRIES_PATH)"
+          },
+          {
+            "repo": "ex/ledger",
+            "path": "src/ledger/ledger.module.ts",
+            "contains": "controllers: [LedgerController],"
+          },
+          {
+            "repo": "ex/ledger",
+            "path": "src/main.ts",
+            "contains": "app.setGlobalPrefix(\"api\");"
+          }
+        ]
+      }
+    },
+    {
+      "type": "screen",
+      "repo": "ex/console",
+      "route": "/ledger",
+      "chain": [
+        {
+          "repo": "ex/console",
+          "path": "src/services/ledger.ts",
+          "contains": "return apiGet(ENTRIES_URL);"
+        },
+        {
+          "repo": "ex/console",
+          "path": "src/screens/LedgerScreen.tsx",
+          "contains": "import { fetchEntries, addEntry } from \"@/services/ledger\";"
+        },
+        {
+          "repo": "ex/console",
+          "path": "src/routes.tsx",
+          "contains": "import LedgerScreen from \"./screens/LedgerScreen\";"
+        },
+        {
+          "repo": "ex/console",
+          "path": "src/routes.tsx",
+          "contains": "<Route path=\"/ledger\" element={<LedgerScreen />} />"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "ex/console",
+      "route": "/ledger/:entryId",
+      "chain": [
+        {
+          "repo": "ex/console",
+          "path": "src/services/ledger.ts",
+          "contains": "return apiGet(entryUrl(entryId));"
+        },
+        {
+          "repo": "ex/console",
+          "path": "src/screens/EntryScreen.tsx",
+          "contains": "import { fetchEntry, removeEntry } from \"@/services/ledger\";"
+        },
+        {
+          "repo": "ex/console",
+          "path": "src/routes.tsx",
+          "contains": "import EntryScreen from \"./screens/EntryScreen\";"
+        },
+        {
+          "repo": "ex/console",
+          "path": "src/routes.tsx",
+          "contains": "<Route path=\"/ledger/:entryId\" element={<EntryScreen />} />"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "ex/ledger",
+      "method": "GET",
+      "path": "/api/<unknown:version>/balances",
+      "why": "another module"
+    }
+  ],
+  "not_established": []
+}

@@ -1,0 +1,11 @@
+{
+  "id": "sb10-context-path",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb10-context-path"
+  },
+  "commit_message": "The context path moves to /billing",
+  "notes": "The context path is part of every route."
+}

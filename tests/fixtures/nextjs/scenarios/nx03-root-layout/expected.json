@@ -1,0 +1,337 @@
+{
+  "schema": 1,
+  "id": "nx03-root-layout",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx03-root-layout"
+  },
+  "explains": "The html element of the root layout src/app/layout.tsx gets a dir attribute (inside RootLayout). The root layout wraps every page of the App Router, so every App Router screen is reached: /, /about, /cart, /dashboard (one screen: its folder's page.tsx and the parallel slot page @analytics/page.tsx both answer /dashboard, one chain each), /dashboard/settings, /docs/* (a catch-all is a trailing star), /feed, /help (an optional catch-all answers /help and /help/*, one screen with the second path also mounted), /photos/:id (the page of photos/[id] and the intercepting page feed/@modal/(..)photos/[id], which intercepts the same URL, one screen with a chain each), /products and /products/:slug. That is eleven screens, more than eight, so the priority is sample, not must test. The four Pages Router pages and the route handlers are not wrapped by an App Router layout. The intercepting page is shown in place of the page it intercepts only on some navigations, so its route is partial and the run says so (route_intercepted, not blocking).",
+  "complete_for": [
+    "changed_symbol",
+    "caller",
+    "screen"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "nx/shop",
+      "path": "src/app/layout.tsx",
+      "symbol": "RootLayout"
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/layout.tsx",
+          "contains": "<html lang=\"en\" dir=\"ltr\">"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/layout.tsx",
+          "contains": "<body>{children}</body>"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/page.tsx",
+          "contains": "export default function HomePage"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/about",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/layout.tsx",
+          "contains": "<html lang=\"en\" dir=\"ltr\">"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/layout.tsx",
+          "contains": "<body>{children}</body>"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(marketing)/about/page.tsx",
+          "contains": "export default function AboutPage"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/cart",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/layout.tsx",
+          "contains": "<html lang=\"en\" dir=\"ltr\">"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/layout.tsx",
+          "contains": "<body>{children}</body>"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/cart/page.tsx",
+          "contains": "export default function CartPage"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/dashboard/settings",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/layout.tsx",
+          "contains": "<html lang=\"en\" dir=\"ltr\">"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/layout.tsx",
+          "contains": "<body>{children}</body>"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/dashboard/settings/page.tsx",
+          "contains": "export default function SettingsPage"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/docs/*",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/layout.tsx",
+          "contains": "<html lang=\"en\" dir=\"ltr\">"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/layout.tsx",
+          "contains": "<body>{children}</body>"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/docs/[...slug]/page.tsx",
+          "contains": "export default function DocsPage"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/feed",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/layout.tsx",
+          "contains": "<html lang=\"en\" dir=\"ltr\">"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/layout.tsx",
+          "contains": "<body>{children}</body>"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/feed/page.tsx",
+          "contains": "export default function FeedPage"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/help",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/layout.tsx",
+          "contains": "<html lang=\"en\" dir=\"ltr\">"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/layout.tsx",
+          "contains": "<body>{children}</body>"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/help/[[...topic]]/page.tsx",
+          "contains": "export default function HelpPage"
+        }
+      ],
+      "also_mounted": [
+        "/help/*"
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/products",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/layout.tsx",
+          "contains": "<html lang=\"en\" dir=\"ltr\">"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/layout.tsx",
+          "contains": "<body>{children}</body>"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/products/page.tsx",
+          "contains": "export default function ProductsPage"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/products/:slug",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/layout.tsx",
+          "contains": "<html lang=\"en\" dir=\"ltr\">"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/layout.tsx",
+          "contains": "<body>{children}</body>"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/products/[slug]/page.tsx",
+          "contains": "export default function ProductPage"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/dashboard",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/layout.tsx",
+          "contains": "<html lang=\"en\" dir=\"ltr\">"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/layout.tsx",
+          "contains": "<body>{children}</body>"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/dashboard/page.tsx",
+          "contains": "export default function DashboardPage"
+        }
+      ],
+      "also_mounted_evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/layout.tsx",
+          "contains": "<html lang=\"en\" dir=\"ltr\">"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/layout.tsx",
+          "contains": "<body>{children}</body>"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/dashboard/@analytics/page.tsx",
+          "contains": "export default function AnalyticsSlot"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/photos/:id",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/layout.tsx",
+          "contains": "<html lang=\"en\" dir=\"ltr\">"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/layout.tsx",
+          "contains": "<body>{children}</body>"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/photos/[id]/page.tsx",
+          "contains": "export default function PhotoPage"
+        }
+      ],
+      "also_mounted_evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/layout.tsx",
+          "contains": "<html lang=\"en\" dir=\"ltr\">"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/layout.tsx",
+          "contains": "<body>{children}</body>"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/feed/@modal/(..)photos/[id]/page.tsx",
+          "contains": "export default function PhotoModal"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/legacy",
+      "why": "a Pages Router page"
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/legacy/:id",
+      "why": "a Pages Router page"
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/404",
+      "why": "a Pages Router page"
+    },
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "GET",
+      "path": "/api/orders",
+      "why": "a route handler is not wrapped by a layout"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "route_intercepted",
+      "subject": "src/app/feed/@modal/(..)photos/[id]/page.tsx",
+      "blocking": false
+    }
+  ]
+}

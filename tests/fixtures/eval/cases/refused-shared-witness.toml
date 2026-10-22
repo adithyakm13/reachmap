@@ -1,0 +1,16 @@
+# Refused: two originals, one witness. The follow-up commit w01 touched files outside both diffs, so counting it for both would count
+# one witness twice (context section 9, independence on both axes).
+
+[[case]]
+id = "c01-shared-badge"
+repo = "acme/web"
+merged_at = "2023-11-15T09:13:20Z"
+original = { compare = "main...scenario/s01-shared-component" }
+witness = { range = "scenario/s01-shared-component..eval/w01-invoice-list-column" }
+
+[[case]]
+id = "c05-case-table-again"
+repo = "acme/web"
+merged_at = "2023-11-15T16:13:20Z"
+original = { compare = "main...scenario/s19-generic-name" }
+witness = { range = "scenario/s01-shared-component..eval/w01-invoice-list-column" }

@@ -1,0 +1,151 @@
+{
+  "schema": 1,
+  "id": "dj08-generic-name",
+  "repo": "acme/portal",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/dj08-generic-name"
+  },
+  "explains": "index in cases/views.py changes (its body). The name is the one every app gives its front page: four modules define a function called index (billing/views.py, billing/reports.py, billing/legacy_views.py and cases/views.py), more than distinct_max = 3, so the name is not distinctive and must not be used to find other code. Which route it serves follows from the imports only: cases/urls.py does `from . import views` and maps path(\"\", views.index), and config/urls.py includes the module object cases_urls under cases/ (a module object, not a string; its app_name, cases, is the namespace). So the route is ANY /cases, from the path() line and the include line. The index view of billing, mounted at /billing, is another function with the same name and is not reached. The web client calls CASES_URL, \"/cases/\", with apiGet; the screen is /cases. The report says not_distinctive for index (not blocking: a stated limit).",
+  "complete_for": [
+    "changed_symbol",
+    "caller",
+    "route",
+    "http_edge",
+    "screen"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/portal",
+      "path": "cases/views.py",
+      "symbol": "index"
+    },
+    {
+      "type": "caller",
+      "repo": "acme/portal",
+      "path": "cases/urls.py",
+      "symbol": "urlpatterns",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "cases/urls.py",
+          "contains": "from . import views"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "cases/urls.py",
+          "contains": "views.index"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "ANY",
+      "path": "/cases",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "cases/urls.py",
+          "contains": "path(\"\", views.index, name=\"index\"),"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "config/urls.py",
+          "contains": "path(\"cases/\", include(cases_urls)),"
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/portal-web",
+        "path": "src/modules/cases/api.ts",
+        "contains": "apiGet<CaseSummary[]>(CASES_URL)"
+      },
+      "via": [
+        {
+          "repo": "acme/portal-web",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const CASES_URL = \"/cases/\";"
+        }
+      ],
+      "to": {
+        "repo": "acme/portal",
+        "method": "ANY",
+        "path": "/cases",
+        "evidence": [
+          {
+            "repo": "acme/portal",
+            "path": "cases/urls.py",
+            "contains": "path(\"\", views.index, name=\"index\"),"
+          },
+          {
+            "repo": "acme/portal",
+            "path": "config/urls.py",
+            "contains": "path(\"cases/\", include(cases_urls)),"
+          }
+        ]
+      }
+    },
+    {
+      "type": "screen",
+      "repo": "acme/portal-web",
+      "route": "/cases",
+      "chain": [
+        {
+          "repo": "acme/portal-web",
+          "path": "src/modules/cases/api.ts",
+          "contains": "apiGet<CaseSummary[]>(CASES_URL)"
+        },
+        {
+          "repo": "acme/portal-web",
+          "path": "src/modules/cases/pages/CasesPage.tsx",
+          "contains": "import { fetchCases } from \"../api\";"
+        },
+        {
+          "repo": "acme/portal-web",
+          "path": "src/modules/cases/routes.tsx",
+          "contains": "import CasesPage from \"./pages/CasesPage\";"
+        },
+        {
+          "repo": "acme/portal-web",
+          "path": "src/modules/cases/routes.tsx",
+          "contains": "<Route path=\"/cases\" element={<CasesPage />} />"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "ANY",
+      "path": "/billing",
+      "why": "another function called index, in billing/views.py"
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "ANY",
+      "path": "/cases/{case_id}",
+      "why": "the detail view of the same app is another route"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/portal-web",
+      "route": "/billing/invoices",
+      "why": "calls the billing routes"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "not_distinctive",
+      "subject": "index",
+      "blocking": false,
+      "definitions": 4
+    }
+  ]
+}

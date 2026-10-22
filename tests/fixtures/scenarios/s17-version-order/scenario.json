@@ -1,0 +1,10 @@
+{
+  "id": "s17-version-order",
+  "repo": "acme/contracts",
+  "change": {
+    "kind": "range",
+    "base": "v1.9.0",
+    "head": "v1.10.0"
+  },
+  "notes": "Range between two tags. Consumer pins 1.10.0, 1.9.0 and 1.2.0 must be ordered as versions, not strings."
+}

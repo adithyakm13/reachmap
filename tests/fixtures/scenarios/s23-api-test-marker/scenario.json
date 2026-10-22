@@ -1,0 +1,11 @@
+{
+  "id": "s23-api-test-marker",
+  "repo": "acme/api",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s23-api-test-marker"
+  },
+  "commit_message": "Skip non-positive rates in the replay and fall back to 1.0 for unknown currencies",
+  "notes": "Source files whose paths contain the characters of the markers tests/ and test_ as substrings, changed together with a real test."
+}

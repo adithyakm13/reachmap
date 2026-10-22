@@ -1,0 +1,11 @@
+{
+  "id": "oa06-schema-ref-changed",
+  "repo": "acme/ledger-api",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/oa06-schema-ref-changed"
+  },
+  "commit_message": "Make the currency of an amount required",
+  "notes": "components.schemas.Money requires currency; every operation that reaches Money through $ref (Invoice and Customer refer to each other) changes."
+}

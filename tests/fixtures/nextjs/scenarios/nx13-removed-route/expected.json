@@ -1,0 +1,115 @@
+{
+  "schema": 1,
+  "id": "nx13-removed-route",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx13-removed-route"
+  },
+  "explains": "src/pages/api/legacy/status.ts is deleted. Before the change it was the API route ANY /api/legacy/status (every method). The mobile client still names the URL: STATUS_URL is /api/legacy/status and fetchStatus calls apiGet(STATUS_URL) on the client's primary branch. A removed route that a client still calls is a finding with high risk and low confidence, with the client line and the removed route's line at the base as evidence. After the change the URL fits no route of the server. The client call is followed to its screen: StatusScreen, mounted at /status. Nothing is added, so there is no added route.",
+  "complete_for": [
+    "changed_symbol",
+    "finding",
+    "http_edge",
+    "screen"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "nx/shop",
+      "path": "src/pages/api/legacy/status.ts",
+      "symbol": "handler",
+      "change": "removed",
+      "removed_line": {
+        "repo": "nx/shop",
+        "path": "src/pages/api/legacy/status.ts",
+        "contains": "export default function handler(",
+        "at": "base"
+      }
+    },
+    {
+      "type": "finding",
+      "kind": "removed_route_still_called",
+      "risk": "high",
+      "confidence": "low",
+      "evidence": [
+        {
+          "repo": "nx/mobile",
+          "path": "src/services/health.ts",
+          "contains": "return apiGet(STATUS_URL);"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/pages/api/legacy/status.ts",
+          "contains": "export default function handler(",
+          "at": "base"
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "nx/mobile",
+        "path": "src/services/health.ts",
+        "contains": "return apiGet(STATUS_URL);"
+      },
+      "via": [
+        {
+          "repo": "nx/mobile",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const STATUS_URL = \"/api/legacy/status\";"
+        }
+      ],
+      "to": {
+        "repo": "nx/shop",
+        "method": "ANY",
+        "path": "/api/legacy/status",
+        "removed": true,
+        "evidence": [
+          {
+            "repo": "nx/shop",
+            "path": "src/pages/api/legacy/status.ts",
+            "contains": "export default function handler(",
+            "at": "base"
+          }
+        ]
+      }
+    },
+    {
+      "type": "screen",
+      "repo": "nx/mobile",
+      "route": "/status",
+      "chain": [
+        {
+          "repo": "nx/mobile",
+          "path": "src/services/health.ts",
+          "contains": "return apiGet(STATUS_URL);"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/screens/StatusScreen.tsx",
+          "contains": "import { ping, fetchStatus } from \"@/services/health\";"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/routes.tsx",
+          "contains": "import StatusScreen from \"./screens/StatusScreen\";"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/routes.tsx",
+          "contains": "<Route path=\"/status\" element={<StatusScreen />} />"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "finding",
+      "kind": "added_route_uncalled",
+      "why": "nothing is added"
+    }
+  ],
+  "not_established": []
+}

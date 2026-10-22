@@ -1,0 +1,85 @@
+{
+  "schema": 1,
+  "id": "sb05-same-package",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb05-same-package"
+  },
+  "explains": "Helper.describe changes. Helper is a class of the package com.acme.ledger.api, the package of StatusController, so StatusController uses it with no import line: the use is the reference in the handler flags (Helper.describe(flags.get(mode))), which is the first line of the chain. Only that handler is reached: GET /ledger/v1/status/flags, with the class path from the constant Paths.STATUS. The handler status does not spell Helper. The web client does not call the flags route.",
+  "complete_for": [
+    "changed_symbol",
+    "caller",
+    "route",
+    "screen",
+    "http_edge",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/ledger",
+      "path": "src/main/java/com/acme/ledger/api/Helper.java",
+      "symbol": "Helper.describe",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Helper.java",
+          "contains": "return \"mode=\" + mode;"
+        }
+      ]
+    },
+    {
+      "type": "caller",
+      "repo": "acme/ledger",
+      "path": "src/main/java/com/acme/ledger/api/StatusController.java",
+      "symbol": "StatusController.flags",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/StatusController.java",
+          "contains": "return Helper.describe(flags.get(\"mode\"));"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/ledger/v1/status/flags",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/StatusController.java",
+          "contains": "@GetMapping(Paths.STATUS + \"/flags\")"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "STATUS = BASE + \"/status\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "BASE = \"/v1\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/resources/application.properties",
+          "contains": "server.servlet.context-path=/ledger"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/ledger/v1/status",
+      "why": "the handler status does not use Helper"
+    }
+  ],
+  "not_established": []
+}

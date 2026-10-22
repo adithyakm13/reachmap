@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "reachmap"
+dynamic = ["version"]
+description = "What a change reaches across repositories, and what to test, with evidence"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.11"
+dependencies = []
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Software Development :: Testing",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+[project.urls]
+Homepage = "https://github.com/adithyakm13/reachmap"
+Repository = "https://github.com/adithyakm13/reachmap"
+Documentation = "https://github.com/adithyakm13/reachmap/tree/main/docs"
+Changelog = "https://github.com/adithyakm13/reachmap/blob/main/CHANGELOG.md"
+Issues = "https://github.com/adithyakm13/reachmap/issues"
+
+[project.scripts]
+reachmap = "reachmap.cli:main"
+
+[tool.setuptools.dynamic]
+version = { attr = "reachmap.__version__" }  # one place: reachmap/__init__.py (read from the source, the package is not imported)
+
+[tool.setuptools.packages.find]
+include = ["reachmap*"]
+
+[tool.setuptools.package-data]
+"reachmap.report" = ["assets/*"]
+"reachmap.runner" = ["minimal/*"]  # the workspace (`static/`) comes only from frontend/dist, through setup.py

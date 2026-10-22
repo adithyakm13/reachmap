@@ -1,0 +1,22 @@
+{
+  "status": 200,
+  "headers": {
+    "Content-Type": "application/json; charset=utf-8",
+    "X-RateLimit-Limit": "5000",
+    "X-RateLimit-Remaining": "4871",
+    "X-RateLimit-Reset": "1700003600",
+    "X-GitHub-Request-Id": "A1B2:3C4D:5E6F7A:8B9C0D:6553A1B2"
+  },
+  "body": {
+    "name": "release/1.x",
+    "commit": {
+      "sha": "1111111111111111111111111111111111111111",
+      "node_id": "C_kwDOA",
+      "url": "https://api.github.com/repos/acme/web/commits/1111111111111111111111111111111111111111"
+    },
+    "_links": {
+      "self": "https://api.github.com/repos/acme/web/branches/release/1.x"
+    },
+    "protected": true
+  }
+}

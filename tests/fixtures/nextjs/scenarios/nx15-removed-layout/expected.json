@@ -1,0 +1,106 @@
+{
+  "schema": 1,
+  "id": "nx15-removed-layout",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx15-removed-layout"
+  },
+  "explains": "src/app/(shop)/layout.tsx is deleted. A deleted file is no chain of the import walk, but every page below the folder lost its layout: cart, products and products/[slug] (/cart, /products, /products/:slug). The chain runs from the line of the layout that rendered its children, read at the base commit where the layout still was, to the page's default export at the head. Pages of another group, the home page and the Pages Router pages never had this layout. Nothing imported the layout.",
+  "complete_for": [
+    "changed_symbol",
+    "caller",
+    "screen"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "nx/shop",
+      "path": "src/app/(shop)/layout.tsx",
+      "symbol": "ShopLayout",
+      "change": "removed",
+      "removed_line": {
+        "repo": "nx/shop",
+        "path": "src/app/(shop)/layout.tsx",
+        "contains": "<main>{children}</main>",
+        "at": "base"
+      }
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/cart",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/layout.tsx",
+          "contains": "<main>{children}</main>",
+          "at": "base"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/cart/page.tsx",
+          "contains": "export default function CartPage"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/products",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/layout.tsx",
+          "contains": "<main>{children}</main>",
+          "at": "base"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/products/page.tsx",
+          "contains": "export default function ProductsPage"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/products/:slug",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/layout.tsx",
+          "contains": "<main>{children}</main>",
+          "at": "base"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/products/[slug]/page.tsx",
+          "contains": "export default function ProductPage"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/about",
+      "why": "another route group"
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/",
+      "why": "above the folder of the layout"
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/legacy",
+      "why": "a Pages Router page"
+    }
+  ],
+  "not_established": []
+}

@@ -1,0 +1,109 @@
+{
+  "schema": 1,
+  "id": "nx09-pages-api-status",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx09-pages-api-status"
+  },
+  "explains": "The response of the handler in src/pages/api/legacy/status.ts gains a field. The file is under pages/api, so it is the API route ANY /api/legacy/status (every method). The mobile client names it: STATUS_URL is /api/legacy/status and fetchStatus calls apiGet(STATUS_URL), a GET, which a route that answers every method fits exactly. The http edge goes from services/health.ts to the route and StatusScreen, which calls fetchStatus (and ping, which calls the health URL: not this route), is mounted at /status. The route GET /api/health is not reached, so the client's ping line is not an edge of this change.",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "screen",
+    "http_edge"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "nx/shop",
+      "path": "src/pages/api/legacy/status.ts",
+      "symbol": "handler"
+    },
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "ANY",
+      "path": "/api/legacy/status",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/pages/api/legacy/status.ts",
+          "contains": "export default function handler("
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "nx/mobile",
+        "path": "src/services/health.ts",
+        "contains": "return apiGet(STATUS_URL);"
+      },
+      "via": [
+        {
+          "repo": "nx/mobile",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const STATUS_URL = \"/api/legacy/status\";"
+        }
+      ],
+      "to": {
+        "repo": "nx/shop",
+        "method": "ANY",
+        "path": "/api/legacy/status",
+        "evidence": [
+          {
+            "repo": "nx/shop",
+            "path": "src/pages/api/legacy/status.ts",
+            "contains": "export default function handler("
+          }
+        ]
+      }
+    },
+    {
+      "type": "screen",
+      "repo": "nx/mobile",
+      "route": "/status",
+      "chain": [
+        {
+          "repo": "nx/mobile",
+          "path": "src/services/health.ts",
+          "contains": "return apiGet(STATUS_URL);"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/screens/StatusScreen.tsx",
+          "contains": "import { ping, fetchStatus } from \"@/services/health\";"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/routes.tsx",
+          "contains": "import StatusScreen from \"./screens/StatusScreen\";"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/routes.tsx",
+          "contains": "<Route path=\"/status\" element={<StatusScreen />} />"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "nx/mobile",
+        "path": "src/services/health.ts",
+        "contains": "return apiGet(HEALTH_URL);"
+      },
+      "to": {
+        "repo": "nx/shop",
+        "method": "GET",
+        "path": "/api/health"
+      },
+      "why": "that route is not reached"
+    }
+  ],
+  "not_established": []
+}

@@ -1,0 +1,16 @@
+# Refused: the witness of c07 is a revert of the original (the same file with the inverse diff). A revert undoes exactly the diff, so it cannot
+# test whether the report reaches beyond the diff.
+
+[[case]]
+id = "c03-case-table"
+repo = "acme/web"
+merged_at = "2023-11-15T16:13:20Z"
+original = { compare = "main...scenario/s19-generic-name" }
+witness = { compare = "main...eval/w03-schedule-report" }
+
+[[case]]
+id = "c07-badge-reverted"
+repo = "acme/web"
+merged_at = "2023-11-15T09:13:20Z"
+original = { compare = "main...scenario/s01-shared-component" }
+witness = { range = "scenario/s01-shared-component..eval/w05-revert-s01" }

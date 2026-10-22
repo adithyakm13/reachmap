@@ -1,0 +1,11 @@
+{
+  "id": "dj04-service-helper",
+  "repo": "acme/portal",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/dj04-service-helper"
+  },
+  "commit_message": "Treat no invoices as a zero total",
+  "notes": "Change in a service function that a function view and a viewset action call; the monthly report imports another name of the module."
+}

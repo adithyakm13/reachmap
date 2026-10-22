@@ -1,0 +1,11 @@
+{
+  "id": "dj14-settings-flag",
+  "repo": "acme/portal",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/dj14-settings-flag"
+  },
+  "commit_message": "Turn debug on",
+  "notes": "A setting other than ROOT_URLCONF changes: it may change what every route does, and the run does not follow it."
+}

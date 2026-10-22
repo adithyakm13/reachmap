@@ -1,0 +1,175 @@
+{
+  "schema": 1,
+  "id": "dj03-class-view-method",
+  "repo": "acme/portal",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/dj03-class-view-method"
+  },
+  "explains": "VoidInvoiceView.post in billing/views.py changes (the body of its post method). The class is mounted with views.VoidInvoiceView.as_view() at path(\"invoices/<int:invoice_id>/void/\"), and a class view answers the methods it defines: post. The route is POST /billing/invoices/{invoice_id}/void, with the path() line and the billing include as evidence. The web client posts to it: voidInvoice calls apiPost(voidInvoiceUrl(invoiceId)), and InvoiceDetailPage calls voidInvoice, mounted at /billing/invoices/:invoiceId. The GET call of the same page goes to the detail route, which this change does not reach, but the screen is one and the page is reached through the void call.",
+  "complete_for": [
+    "changed_symbol",
+    "caller",
+    "route",
+    "http_edge",
+    "screen",
+    "unit_test"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/portal",
+      "path": "billing/views.py",
+      "symbol": "VoidInvoiceView.post"
+    },
+    {
+      "type": "caller",
+      "repo": "acme/portal",
+      "path": "billing/urls.py",
+      "symbol": "urlpatterns",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/urls.py",
+          "contains": "from . import views"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "billing/urls.py",
+          "contains": "views.VoidInvoiceView.as_view()"
+        }
+      ]
+    },
+    {
+      "type": "unit_test",
+      "repo": "acme/portal",
+      "path": "billing/tests/test_views.py",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/tests/test_views.py",
+          "contains": "from billing import views"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "POST",
+      "path": "/billing/invoices/{invoice_id}/void",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/urls.py",
+          "contains": "path(\"invoices/<int:invoice_id>/void/\", views.VoidInvoiceView.as_view(), name=\"invoice-void\"),"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "config/urls.py",
+          "contains": "path(\"billing/\", include(\"billing.urls\")),"
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/portal-web",
+        "path": "src/modules/billing/api.ts",
+        "contains": "apiPost<Invoice>(voidInvoiceUrl(invoiceId), {})"
+      },
+      "via": [
+        {
+          "repo": "acme/portal-web",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const voidInvoiceUrl = (invoiceId: string) => `/billing/invoices/${invoiceId}/void/`;"
+        }
+      ],
+      "to": {
+        "repo": "acme/portal",
+        "method": "POST",
+        "path": "/billing/invoices/{invoice_id}/void",
+        "evidence": [
+          {
+            "repo": "acme/portal",
+            "path": "billing/urls.py",
+            "contains": "path(\"invoices/<int:invoice_id>/void/\", views.VoidInvoiceView.as_view(), name=\"invoice-void\"),"
+          },
+          {
+            "repo": "acme/portal",
+            "path": "config/urls.py",
+            "contains": "path(\"billing/\", include(\"billing.urls\")),"
+          }
+        ]
+      }
+    },
+    {
+      "type": "screen",
+      "repo": "acme/portal-web",
+      "route": "/billing/invoices/:invoiceId",
+      "chain": [
+        {
+          "repo": "acme/portal-web",
+          "path": "src/modules/billing/api.ts",
+          "contains": "apiPost<Invoice>(voidInvoiceUrl(invoiceId), {})"
+        },
+        {
+          "repo": "acme/portal-web",
+          "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
+          "contains": "import { fetchInvoice, voidInvoice } from \"../api\";"
+        },
+        {
+          "repo": "acme/portal-web",
+          "path": "src/modules/billing/routes.tsx",
+          "contains": "import InvoiceDetailPage from \"./pages/InvoiceDetailPage\";"
+        },
+        {
+          "repo": "acme/portal-web",
+          "path": "src/modules/billing/routes.tsx",
+          "contains": "<Route path=\"/billing/invoices/:invoiceId\" element={<InvoiceDetailPage />} />"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "caller",
+      "repo": "acme/portal",
+      "path": "config/urls.py",
+      "why": "imports billing.views as billing_views and uses only legacy_year",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "config/urls.py",
+          "contains": "from billing import views as billing_views"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "billing/views.py",
+          "contains": "class VoidInvoiceView(View):"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "GET",
+      "path": "/billing/invoices/{invoice_id}/void",
+      "why": "the class defines post and nothing else"
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "GET",
+      "path": "/billing/invoices/{invoice_id}",
+      "why": "the detail view is another route"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/portal-web",
+      "route": "/billing/invoices",
+      "why": "calls the list route and the overdue route"
+    }
+  ],
+  "not_established": []
+}

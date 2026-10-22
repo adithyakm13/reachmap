@@ -1,0 +1,11 @@
+{
+  "id": "oa04-added-operation",
+  "repo": "acme/ledger-api",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/oa04-added-operation"
+  },
+  "commit_message": "Add the invoice PDF",
+  "notes": "GET /invoices/{invoiceId}/pdf is added to the spec with its handler; no client names it."
+}

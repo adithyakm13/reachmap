@@ -1,0 +1,204 @@
+{
+  "schema": 1,
+  "id": "oa01-handler-body",
+  "repo": "acme/ledger-api",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/oa01-handler-body"
+  },
+  "explains": "get_invoice in app/handlers/invoices.py changes (its return line). The spec api/openapi.json names the operation GET /invoices/{invoiceId} with operationId getInvoice, and the handler tree (app/handlers/*.py) has the function get_invoice, the snake_case form of that name, so the handler is found by name and nothing looser. The route is the server base path of the spec, /v1 (the url of its only server), then the path of the operation: GET /v1/invoices/{invoiceId}, cited at the method key, the path key and the server url line of the spec. On the web side the copy of the spec in the web repository gives the same URL and the method GET to the generated function getInvoice, which only fetchInvoice in src/modules/invoices/api.ts calls (its pages import fetchInvoice, not getInvoice); InvoiceDetailPage imports fetchInvoice and the invoices routes file mounts that page at /invoices/:invoiceId. voidInvoice, in the same page, is a DELETE: a different operation of the same path that the changed GET handler does not serve. InvoiceListPage and NewInvoicePage use other generated functions. The names get and list (generic words) and downloadStatement (defined four times) are dropped and recorded.",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "http_edge",
+    "screen"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/ledger-api",
+      "path": "app/handlers/invoices.py",
+      "symbol": "get_invoice"
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger-api",
+      "method": "GET",
+      "path": "/v1/invoices/{invoiceId}",
+      "evidence": [
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"get\": {"
+        },
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"/invoices/{invoiceId}\": {"
+        },
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"url\": \"https://ledger.example.invalid/v1\""
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/ledger-web",
+        "path": "src/modules/invoices/api.ts",
+        "contains": "return getInvoice(invoiceId);"
+      },
+      "via": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"get\": {"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"/invoices/{invoiceId}\": {"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"url\": \"https://ledger.example.invalid/v1\""
+        }
+      ],
+      "to": {
+        "repo": "acme/ledger-api",
+        "method": "GET",
+        "path": "/v1/invoices/{invoiceId}",
+        "evidence": [
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"get\": {"
+          },
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"/invoices/{invoiceId}\": {"
+          },
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"url\": \"https://ledger.example.invalid/v1\""
+          }
+        ]
+      }
+    },
+    {
+      "type": "screen",
+      "repo": "acme/ledger-web",
+      "route": "/invoices/:invoiceId",
+      "chain": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/invoices/api.ts",
+          "contains": "return getInvoice(invoiceId);"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/invoices/pages/InvoiceDetailPage.tsx",
+          "contains": "import { fetchInvoice } from \"../api\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/invoices/routes.tsx",
+          "contains": "import InvoiceDetailPage from \"./pages/InvoiceDetailPage\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/invoices/routes.tsx",
+          "contains": "<Route path=\"/invoices/:invoiceId\" element={<InvoiceDetailPage />} />"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "acme/ledger-api",
+      "method": "GET",
+      "path": "/v1/invoices",
+      "why": "list_invoices is another function; its handler and its operation are untouched by the change"
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger-api",
+      "method": "POST",
+      "path": "/v1/invoices",
+      "why": "create_invoice is another function; its handler and its operation are untouched by the change"
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger-api",
+      "method": "DELETE",
+      "path": "/v1/invoices/{invoiceId}",
+      "why": "void_invoice is another function; its handler and its operation are untouched by the change"
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger-api",
+      "method": "GET",
+      "path": "/v1/customers/{customerId}",
+      "why": "get_customer is in another module; its handler and its operation are untouched by the change"
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/ledger-web",
+        "path": "src/modules/invoices/pages/InvoiceDetailPage.tsx",
+        "contains": "voidInvoice(\"inv-1\")"
+      },
+      "to": {
+        "repo": "acme/ledger-api",
+        "method": "DELETE",
+        "path": "/v1/invoices/{invoiceId}"
+      },
+      "why": "voidInvoice is a DELETE; the changed handler serves the GET of the same path"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/ledger-web",
+      "route": "/invoices",
+      "why": "InvoiceListPage imports fetchInvoices only, a function the change does not reach"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/ledger-web",
+      "route": "/invoices/new",
+      "why": "NewInvoicePage calls createInvoice, a POST of another operation"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/ledger-web",
+      "route": "/customers/:customerId",
+      "why": "CustomerPage calls getCustomer, a GET of another path"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "not_distinctive",
+      "subject": "acme/ledger-web:downloadStatement",
+      "blocking": false,
+      "definitions": 4
+    },
+    {
+      "kind": "not_distinctive",
+      "subject": "acme/ledger-web:get",
+      "blocking": false,
+      "definitions": 2
+    },
+    {
+      "kind": "not_distinctive",
+      "subject": "acme/ledger-web:list",
+      "blocking": false,
+      "definitions": 1
+    }
+  ]
+}

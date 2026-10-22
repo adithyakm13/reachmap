@@ -1,0 +1,6 @@
+workspace = "acme"
+
+[repos."acme/web"]
+host = "git"
+language = "typescript"
+roles = ["frontend"]

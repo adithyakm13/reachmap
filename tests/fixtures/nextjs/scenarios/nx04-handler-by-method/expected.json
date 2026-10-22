@@ -1,0 +1,207 @@
+{
+  "schema": 1,
+  "id": "nx04-handler-by-method",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx04-handler-by-method"
+  },
+  "explains": "listOrders in src/lib/orders.ts changes its return value. Four files import src/lib/orders.ts. src/app/(shop)/cart/page.tsx imports listOrders and calls it in CartPage, so /cart is reached. src/app/api/orders/route.ts imports listOrders and createOrder and uses listOrders only in GET, so only the route GET /api/orders is reached, not POST /api/orders (a route handler file has one route per exported HTTP method, and the change reaches the methods that use it). src/app/api/orders/[id]/route.ts imports only getOrder and cancelOrder, and src/pages/api/legacy/items/[id].ts imports only getOrder: both are excluded by named-export narrowing with their import line and the declaration of the changed symbol as evidence. The route GET /api/orders is called by the mobile client: ORDERS_URL is /api/orders, fetchOrders calls apiGet(ORDERS_URL), so the http edge goes from services/orders.ts in nx/mobile to the route. OrdersScreen calls fetchOrders and is mounted at /orders. OrderScreen imports only fetchOrder and cancelOrder from the services and is excluded.",
+  "complete_for": [
+    "changed_symbol",
+    "caller",
+    "route",
+    "screen",
+    "http_edge"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "nx/shop",
+      "path": "src/lib/orders.ts",
+      "symbol": "listOrders"
+    },
+    {
+      "type": "caller",
+      "repo": "nx/shop",
+      "path": "src/app/api/orders/route.ts",
+      "symbol": "GET",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/api/orders/route.ts",
+          "contains": "import { listOrders, createOrder } from \"@/lib/orders\";"
+        }
+      ]
+    },
+    {
+      "type": "caller",
+      "repo": "nx/shop",
+      "path": "src/app/(shop)/cart/page.tsx",
+      "symbol": "CartPage",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/cart/page.tsx",
+          "contains": "import { listOrders } from \"@/lib/orders\";"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "GET",
+      "path": "/api/orders",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/api/orders/route.ts",
+          "contains": "export async function GET()"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/cart",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/cart/page.tsx",
+          "contains": "import { listOrders } from \"@/lib/orders\";"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/cart/page.tsx",
+          "contains": "export default function CartPage"
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "nx/mobile",
+        "path": "src/services/orders.ts",
+        "contains": "return apiGet(ORDERS_URL);"
+      },
+      "via": [
+        {
+          "repo": "nx/mobile",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const ORDERS_URL = \"/api/orders\";"
+        }
+      ],
+      "to": {
+        "repo": "nx/shop",
+        "method": "GET",
+        "path": "/api/orders",
+        "evidence": [
+          {
+            "repo": "nx/shop",
+            "path": "src/app/api/orders/route.ts",
+            "contains": "export async function GET()"
+          }
+        ]
+      }
+    },
+    {
+      "type": "screen",
+      "repo": "nx/mobile",
+      "route": "/orders",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/api/orders/route.ts",
+          "contains": "import { listOrders, createOrder } from \"@/lib/orders\";"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/services/orders.ts",
+          "contains": "return apiGet(ORDERS_URL);"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/screens/OrdersScreen.tsx",
+          "contains": "import { fetchOrders } from \"@/services/orders\";"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/routes.tsx",
+          "contains": "import OrdersScreen from \"./screens/OrdersScreen\";"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/routes.tsx",
+          "contains": "<Route path=\"/orders\" element={<OrdersScreen />} />"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "caller",
+      "repo": "nx/shop",
+      "path": "src/app/api/orders/[id]/route.ts",
+      "why": "it imports getOrder and cancelOrder only",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/api/orders/[id]/route.ts",
+          "contains": "import { getOrder, cancelOrder } from \"@/lib/orders\";"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/lib/orders.ts",
+          "contains": "export function listOrders"
+        }
+      ]
+    },
+    {
+      "type": "caller",
+      "repo": "nx/shop",
+      "path": "src/pages/api/legacy/items/[id].ts",
+      "why": "it imports getOrder only",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/pages/api/legacy/items/[id].ts",
+          "contains": "import { getOrder } from \"@/lib/orders\";"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/lib/orders.ts",
+          "contains": "export function listOrders"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "POST",
+      "path": "/api/orders",
+      "why": "POST uses createOrder, which is unchanged"
+    },
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "GET",
+      "path": "/api/orders/{id}",
+      "why": "its file imports getOrder and cancelOrder only"
+    },
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "ANY",
+      "path": "/api/legacy/items/{id}",
+      "why": "its file imports getOrder only"
+    },
+    {
+      "type": "screen",
+      "repo": "nx/mobile",
+      "route": "/orders/:orderId",
+      "why": "OrderScreen imports fetchOrder and cancelOrder, not fetchOrders"
+    }
+  ],
+  "not_established": []
+}

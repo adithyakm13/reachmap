@@ -1,0 +1,128 @@
+{
+  "schema": 1,
+  "id": "nx06-module-level-handler",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx06-module-level-handler"
+  },
+  "explains": "src/app/api/orders/route.ts calls warmCache(\"orders\") at the top of the file, outside every declaration: it runs when the module loads, whichever method is called. The label changes, so the change is a module-level change of the file and reaches every method of it: GET /api/orders and POST /api/orders. (A changed import line would reach only the methods that use the names it binds.) The mobile client calls GET /api/orders through fetchOrders, so the http edge and the screen /orders follow; nothing in the client calls POST /api/orders. The change is not inside any declaration, so there is a changed file and no named changed symbol.",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "screen",
+    "http_edge"
+  ],
+  "must_find": [
+    {
+      "type": "changed_file",
+      "repo": "nx/shop",
+      "path": "src/app/api/orders/route.ts",
+      "role": "source"
+    },
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "GET",
+      "path": "/api/orders",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/api/orders/route.ts",
+          "contains": "export async function GET()"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "POST",
+      "path": "/api/orders",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/api/orders/route.ts",
+          "contains": "export async function POST("
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "nx/mobile",
+        "path": "src/services/orders.ts",
+        "contains": "return apiGet(ORDERS_URL);"
+      },
+      "via": [
+        {
+          "repo": "nx/mobile",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const ORDERS_URL = \"/api/orders\";"
+        }
+      ],
+      "to": {
+        "repo": "nx/shop",
+        "method": "GET",
+        "path": "/api/orders",
+        "evidence": [
+          {
+            "repo": "nx/shop",
+            "path": "src/app/api/orders/route.ts",
+            "contains": "export async function GET()"
+          }
+        ]
+      }
+    },
+    {
+      "type": "screen",
+      "repo": "nx/mobile",
+      "route": "/orders",
+      "chain": [
+        {
+          "repo": "nx/mobile",
+          "path": "src/services/orders.ts",
+          "contains": "return apiGet(ORDERS_URL);"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/screens/OrdersScreen.tsx",
+          "contains": "import { fetchOrders } from \"@/services/orders\";"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/routes.tsx",
+          "contains": "import OrdersScreen from \"./screens/OrdersScreen\";"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/routes.tsx",
+          "contains": "<Route path=\"/orders\" element={<OrdersScreen />} />"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "GET",
+      "path": "/api/orders/{id}",
+      "why": "another file"
+    },
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "DELETE",
+      "path": "/api/orders/{id}",
+      "why": "another file"
+    },
+    {
+      "type": "screen",
+      "repo": "nx/mobile",
+      "route": "/orders/:orderId",
+      "why": "OrderScreen imports fetchOrder and cancelOrder only"
+    }
+  ],
+  "not_established": []
+}

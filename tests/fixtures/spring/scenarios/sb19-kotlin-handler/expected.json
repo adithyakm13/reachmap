@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "id": "sb19-kotlin-handler",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb19-kotlin-handler"
+  },
+  "explains": "One line inside the Kotlin handler CustomerController.all changes. The controller is the entry file: the change reaches the route of that handler, GET /ledger/customers, and not the handler one. The class mapping is /customers and the context path /ledger. Nothing imports a controller and no test uses it.",
+  "complete_for": [
+    "changed_symbol",
+    "unit_test",
+    "route",
+    "screen",
+    "http_edge",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/ledger",
+      "path": "src/main/kotlin/com/acme/ledger/api/CustomerController.kt",
+      "symbol": "CustomerController.all",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/kotlin/com/acme/ledger/api/CustomerController.kt",
+          "contains": "return service.all().trim()"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/ledger/customers",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/kotlin/com/acme/ledger/api/CustomerController.kt",
+          "contains": "@GetMapping"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/kotlin/com/acme/ledger/api/CustomerController.kt",
+          "contains": "@RequestMapping(\"/customers\")"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/resources/application.properties",
+          "contains": "server.servlet.context-path=/ledger"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/ledger/customers/{id}",
+      "why": "another handler of the same class"
+    }
+  ],
+  "not_established": []
+}

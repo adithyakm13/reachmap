@@ -1,0 +1,11 @@
+{
+  "id": "oa02-service-function",
+  "repo": "acme/ledger-api",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/oa02-service-function"
+  },
+  "commit_message": "Copy the total before returning it",
+  "notes": "invoice_total in the ledger service changes; get_invoice imports it by name."
+}

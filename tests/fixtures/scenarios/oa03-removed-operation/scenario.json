@@ -1,0 +1,11 @@
+{
+  "id": "oa03-removed-operation",
+  "repo": "acme/ledger-api",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/oa03-removed-operation"
+  },
+  "commit_message": "Remove the customer lookup",
+  "notes": "GET /customers/{customerId} leaves the spec and its handler module is deleted; the web app still calls getCustomer."
+}

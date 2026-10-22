@@ -1,0 +1,32 @@
+{
+  "status": 200,
+  "headers": {
+    "Content-Type": "application/json",
+    "RateLimit-Limit": "2000",
+    "RateLimit-Remaining": "1990",
+    "X-Request-Id": "01HF8Z3K5V9C2N7QWERTY12345",
+    "Server": "nginx"
+  },
+  "body": {
+    "name": "release/1.x",
+    "merged": false,
+    "protected": true,
+    "default": false,
+    "developers_can_push": false,
+    "developers_can_merge": false,
+    "can_push": true,
+    "web_url": "https://gitlab.com/acme/api/-/tree/release/1.x",
+    "commit": {
+      "id": "1111111111111111111111111111111111111111",
+      "short_id": "11111111",
+      "created_at": "2023-11-14T23:13:20.000+00:00",
+      "parent_ids": [],
+      "title": "Release 1.9.0",
+      "message": "Release 1.9.0\n",
+      "author_name": "Fixture Author",
+      "author_email": "fixtures@example.invalid",
+      "committed_date": "2023-11-14T23:13:20.000+00:00",
+      "web_url": "https://gitlab.com/acme/api/-/commit/1111111111111111111111111111111111111111"
+    }
+  }
+}

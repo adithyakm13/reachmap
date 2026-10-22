@@ -1,0 +1,11 @@
+{
+  "id": "s14-test-marker",
+  "repo": "acme/web",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s14-test-marker"
+  },
+  "commit_message": "Skip empty trades in the backtest and test the overdue badge",
+  "notes": "A source file under backtest/ and a test file under __tests__/ change together."
+}

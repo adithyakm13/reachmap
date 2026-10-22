@@ -1,0 +1,10 @@
+{
+  "slug": "acme-e2e",
+  "name": "acme/e2e",
+  "note": "A small invented web app with Playwright and Cypress specs, for the M15 tests only. It is not one of the four M1 repositories and no scenario of M1 uses it.",
+  "steps": [
+    {"dir": "01-app", "branch": "main", "message": "Add the shop app: billing, cases and reports screens"},
+    {"dir": "02-specs", "branch": "main", "message": "Add Playwright and Cypress specs"},
+    {"dir": "03-money-change", "branch": "topic/money-rounding", "from": "main", "message": "Round money to the nearest cent"}
+  ]
+}

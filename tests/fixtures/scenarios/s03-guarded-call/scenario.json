@@ -1,0 +1,11 @@
+{
+  "id": "s03-guarded-call",
+  "repo": "acme/web",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s03-guarded-call"
+  },
+  "commit_message": "Pad legacy amounts so exported columns line up",
+  "notes": "Change inside the mode === legacy branch of formatAmount."
+}

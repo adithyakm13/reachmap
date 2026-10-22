@@ -1,0 +1,171 @@
+{
+  "schema": 1,
+  "id": "dj09-include-moved",
+  "repo": "acme/portal",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/dj09-include-moved"
+  },
+  "explains": "The include of the cases URLconf in config/urls.py moves under another prefix: path(\"cases/\", include(cases_urls)) becomes path(\"support/cases/\", include(cases_urls)). The changed line is the include itself, so every route below it is reached: ANY /support/cases and ANY /support/cases/{case_id}, with the path() line of cases/urls.py and the new include line as evidence. The routes at the old paths are gone: ANY /cases is removed (and ANY /cases/{case_id}). The web client still calls CASES_URL, \"/cases/\" (fetchCases, called by CasesPage), and no route fits it any more: a removed route still called, which is high risk and low confidence, with evidence at the client line and at the removed path() line at the base. The screen /cases is reached through that edge. The client call fits no route of the changed table, and routes were added, so the run cannot say that no client calls an added route: it records the call that fits nothing and an incomplete edge (blocking), and says no added route is uncalled.",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "http_edge",
+    "screen",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/portal",
+      "path": "config/urls.py",
+      "symbol": "urlpatterns"
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "ANY",
+      "path": "/support/cases",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "cases/urls.py",
+          "contains": "path(\"\", views.index, name=\"index\"),"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "config/urls.py",
+          "contains": "path(\"support/cases/\", include(cases_urls)),"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "ANY",
+      "path": "/support/cases/{case_id}",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "cases/urls.py",
+          "contains": "path(\"<int:case_id>/\", views.detail, name=\"detail\"),"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "config/urls.py",
+          "contains": "path(\"support/cases/\", include(cases_urls)),"
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/portal-web",
+        "path": "src/modules/cases/api.ts",
+        "contains": "apiGet<CaseSummary[]>(CASES_URL)"
+      },
+      "via": [
+        {
+          "repo": "acme/portal-web",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const CASES_URL = \"/cases/\";"
+        }
+      ],
+      "to": {
+        "repo": "acme/portal",
+        "method": "ANY",
+        "path": "/cases",
+        "removed": true,
+        "evidence": [
+          {
+            "repo": "acme/portal",
+            "path": "cases/urls.py",
+            "contains": "path(\"\", views.index, name=\"index\"),",
+            "at": "base"
+          },
+          {
+            "repo": "acme/portal",
+            "path": "config/urls.py",
+            "contains": "path(\"cases/\", include(cases_urls)),",
+            "at": "base"
+          }
+        ]
+      }
+    },
+    {
+      "type": "finding",
+      "kind": "removed_route_still_called",
+      "risk": "high",
+      "confidence": "low",
+      "evidence": [
+        {
+          "repo": "acme/portal-web",
+          "path": "src/modules/cases/api.ts",
+          "contains": "apiGet<CaseSummary[]>(CASES_URL)"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "cases/urls.py",
+          "contains": "path(\"\", views.index, name=\"index\"),",
+          "at": "base"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "acme/portal-web",
+      "route": "/cases",
+      "chain": [
+        {
+          "repo": "acme/portal-web",
+          "path": "src/modules/cases/api.ts",
+          "contains": "apiGet<CaseSummary[]>(CASES_URL)"
+        },
+        {
+          "repo": "acme/portal-web",
+          "path": "src/modules/cases/pages/CasesPage.tsx",
+          "contains": "import { fetchCases } from \"../api\";"
+        },
+        {
+          "repo": "acme/portal-web",
+          "path": "src/modules/cases/routes.tsx",
+          "contains": "import CasesPage from \"./pages/CasesPage\";"
+        },
+        {
+          "repo": "acme/portal-web",
+          "path": "src/modules/cases/routes.tsx",
+          "contains": "<Route path=\"/cases\" element={<CasesPage />} />"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "ANY",
+      "path": "/cases",
+      "why": "the route is removed by the change: it is stated as removed, never as reached"
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "ANY",
+      "path": "/billing",
+      "why": "the billing include did not change"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "client_url_unmatched",
+      "subject": "acme/portal-web:src/modules/cases/api.ts:10",
+      "blocking": false
+    },
+    {
+      "kind": "edge_incomplete",
+      "subject": "edge:http:acme/portal-web:acme/portal",
+      "blocking": true
+    }
+  ]
+}

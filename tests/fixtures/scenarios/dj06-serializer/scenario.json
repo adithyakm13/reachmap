@@ -1,0 +1,11 @@
+{
+  "id": "dj06-serializer",
+  "repo": "acme/portal",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/dj06-serializer"
+  },
+  "commit_message": "Add the e-mail to the customer serializer",
+  "notes": "Change in a serializer that one viewset names: every route of that viewset, none of the other viewset."
+}

@@ -1,0 +1,11 @@
+{
+  "id": "ex20-nest-bootstrap",
+  "repo": "ex/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex20-nest-bootstrap"
+  },
+  "commit_message": "Enable CORS",
+  "notes": "The file that creates the application reaches every route: global pipes, guards and the prefix are in it."
+}

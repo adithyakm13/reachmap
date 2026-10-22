@@ -1,0 +1,11 @@
+{
+  "id": "oa07-spec-broken",
+  "repo": "acme/ledger-api",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/oa07-spec-broken"
+  },
+  "commit_message": "Merge the pdf branch",
+  "notes": "The spec holds merge conflict markers and is not JSON; get_invoice changes in the same commit."
+}

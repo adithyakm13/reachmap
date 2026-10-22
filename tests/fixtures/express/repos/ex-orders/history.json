@@ -1,0 +1,9 @@
+{
+  "steps": [
+    {
+      "dir": "01-service",
+      "branch": "main",
+      "message": "Orders service: Express routers, controllers, services and a CommonJS legacy router"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+# Four independent witness cases on the M1 fixtures (`reachmap witness valid.toml --config tests/fixtures/reachmap.toml`). The witness
+# changes are the branches eval/... that tests/fixtures/eval/build.py adds to the built repositories; `merged_at` is the date of the head
+# commit of the original change (a test checks it).
+#
+#   c01  the follow-up touches a page the report cites in a finding and in a screen: a hit by findings, screens and any evidence
+#   c02  the original is in acme/api and the follow-up in acme/web, in a route file that only the second chain of a screen cites: a hit by screens only
+#   c03  the follow-up touches a file the report never cites: a miss
+#   c04  the follow-up touches a file that only an exclusion finding cites: a miss (an exclusion is not a prediction)
+
+[[case]]
+id = "c01-shared-badge"
+repo = "acme/web"
+merged_at = "2023-11-15T09:13:20Z"
+original = { compare = "main...scenario/s01-shared-component" }
+witness = { range = "scenario/s01-shared-component..eval/w01-invoice-list-column" }
+
+[[case]]
+id = "c02-voided-invoice"
+repo = "acme/api"
+merged_at = "2023-11-15T06:13:20Z"
+original = { compare = "main...scenario/s06-nested-mount-handler" }
+witness = { compare = "main...eval/w02-cases-routes", repo = "acme/web" }
+
+[[case]]
+id = "c03-case-table"
+repo = "acme/web"
+merged_at = "2023-11-15T16:13:20Z"
+original = { compare = "main...scenario/s19-generic-name" }
+witness = { compare = "main...eval/w03-schedule-report" }
+
+[[case]]
+id = "c04-dates-helper"
+repo = "acme/web"
+merged_at = "2023-11-15T12:13:20Z"
+original = { compare = "main...scenario/s04-named-export" }
+witness = { compare = "main...eval/w04-reports-home" }

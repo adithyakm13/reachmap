@@ -1,0 +1,11 @@
+{
+  "id": "dj07-unmounted-urls",
+  "repo": "acme/portal",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/dj07-unmounted-urls"
+  },
+  "commit_message": "Name the exported file",
+  "notes": "Body change in a view of a URLconf that nothing includes: no route, and the URLconf is said."
+}

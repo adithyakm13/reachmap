@@ -1,0 +1,115 @@
+{
+  "schema": 1,
+  "id": "s04-named-export",
+  "repo": "acme/web",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s04-named-export"
+  },
+  "explains": "Only parseLegacyDate changes in src/lib/dates.ts; formatDate is untouched. Four files import from dates.ts. CaseListPage imports only parseLegacyDate (by the @/ alias), so it is affected and its screen /cases is reached. The spec src/lib/dates.spec.ts imports both names, so it is listed as a unit test. InvoiceListPage and ReportsHomePage import only formatDate; comparing against the pre-change file shows formatDate did not change, so named-export narrowing excludes them and their screens /billing/invoices and /reports.",
+  "complete_for": [
+    "changed_symbol",
+    "caller",
+    "screen",
+    "unit_test"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/web",
+      "path": "src/lib/dates.ts",
+      "symbol": "parseLegacyDate"
+    },
+    {
+      "type": "caller",
+      "repo": "acme/web",
+      "path": "src/modules/cases/pages/CaseListPage.tsx",
+      "symbol": "CaseListPage",
+      "evidence": [
+        {
+          "repo": "acme/web",
+          "path": "src/modules/cases/pages/CaseListPage.tsx",
+          "contains": "import { parseLegacyDate } from \"@/lib/dates\";"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "acme/web",
+      "route": "/cases",
+      "chain": [
+        {
+          "repo": "acme/web",
+          "path": "src/modules/cases/pages/CaseListPage.tsx",
+          "contains": "import { parseLegacyDate } from \"@/lib/dates\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/cases/routes.tsx",
+          "contains": "import CaseListPage from \"./pages/CaseListPage\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/cases/routes.tsx",
+          "contains": "<Route path=\"/cases\" element={<CaseListPage />} />"
+        }
+      ]
+    },
+    {
+      "type": "unit_test",
+      "repo": "acme/web",
+      "path": "src/lib/dates.spec.ts",
+      "evidence": [
+        {
+          "repo": "acme/web",
+          "path": "src/lib/dates.spec.ts",
+          "contains": "import { formatDate, parseLegacyDate } from \"./dates\";"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "caller",
+      "repo": "acme/web",
+      "path": "src/modules/billing/pages/InvoiceListPage.tsx",
+      "symbol": "InvoiceListPage",
+      "why": "imports only formatDate, which did not change",
+      "evidence": [
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/pages/InvoiceListPage.tsx",
+          "contains": "import { formatDate } from \"@/lib/dates\";"
+        }
+      ]
+    },
+    {
+      "type": "caller",
+      "repo": "acme/web",
+      "path": "src/modules/reports/pages/ReportsHomePage.tsx",
+      "symbol": "ReportsHomePage",
+      "why": "imports only formatDate, which did not change",
+      "evidence": [
+        {
+          "repo": "acme/web",
+          "path": "src/modules/reports/pages/ReportsHomePage.tsx",
+          "contains": "import { formatDate } from \"@/lib/dates\";"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "acme/web",
+      "route": "/billing/invoices",
+      "why": "its only dates import is formatDate"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/web",
+      "route": "/reports",
+      "why": "its only dates import is formatDate"
+    }
+  ],
+  "not_established": []
+}

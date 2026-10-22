@@ -1,0 +1,11 @@
+{
+  "id": "s05-endpoint-multiline",
+  "repo": "acme/web",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s05-endpoint-multiline"
+  },
+  "commit_message": "Default the settlement references to an empty list",
+  "notes": "The caller of the two-line endpoint constant changes."
+}

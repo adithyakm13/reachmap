@@ -1,0 +1,56 @@
+{
+ "stamp": "recorded via MCP, client reported as",
+ "label": "Model notes, recorded via MCP; not evidence.",
+ "kinds": {
+  "observation": "observation",
+  "question": "question",
+  "proposed_test": "proposed test",
+  "proposed_file": "proposed file"
+ },
+ "states": {
+  "current": "current: made on the latest revision, about the claim this report makes",
+  "stale": "stale: made on an earlier revision, or about a claim that has changed since",
+  "orphaned": "orphaned: what it was about is not in the latest report"
+ },
+ "reasons": {
+  "verified": "the file exists at a revision the report read and names a changed symbol in code, outside a comment or a string",
+  "no_config": "no workspace configuration was given to reachmap mcp, so no file was read",
+  "unknown_repo": "the repository is not in the workspace configuration, so no file was read",
+  "repo_not_read": "the report did not read this repository at any revision, so there is no revision to read the file at",
+  "symbol_not_changed": "the symbol is not the name of a symbol or a contract field that this change touched",
+  "symbol_qualifier": "the symbol is qualified with a class or module other than the one the change touched",
+  "symbol_not_distinctive": "the symbol is defined too often, or its definitions could not be counted, so it does not link code by name",
+  "file_absent": "the file is not in the tree at the revision the report read",
+  "file_unreadable": "the file could not be read, so nothing is established about it",
+  "no_reader": "this kind of file is not read as code by this version",
+  "unparsed": "the file could not be read as code",
+  "not_in_code": "the symbol does not appear in the code of the file (a comment or a string does not count)",
+  "unchecked_text": "a proposed file given as plain note text was not checked; propose_file checks one"
+ },
+ "intro": "A note is what a model client wrote beside this report. It is not a finding, not evidence and not coverage, and it changes no area, priority, risk, confidence, count or gap. A verified proposed file is still a note: the check says the file exists at a revision the report read and names the symbol in code, not that the change reaches it.",
+ "groups": [
+  [
+   "current",
+   "Current notes",
+   "Made on the latest revision, about the claim this report makes.",
+   "notes-current"
+  ],
+  [
+   "stale",
+   "Notes on an earlier revision or an older claim",
+   "Each shows the revision it was made on. A rerun makes a note stale; it is kept, not applied.",
+   "notes-stale"
+  ],
+  [
+   "orphaned",
+   "Notes about something no longer in the latest report",
+   "The area or finding these were about is gone. They are listed here and attached to nothing.",
+   "notes-orphaned"
+  ]
+ ],
+ "other": [
+  "Notes with a state this version does not know",
+  "The state is shown as it was recorded.",
+  "notes-other"
+ ]
+}

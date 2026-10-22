@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "id": "dj14-settings-flag",
+  "repo": "acme/portal",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/dj14-settings-flag"
+  },
+  "explains": "DEBUG in config/settings/base.py changes. The adapter follows one setting to the routes, ROOT_URLCONF, and this is another: a debug flag, like middleware or an installed app, may change what every route does, and the run does not follow it. It does not say that no route is affected. No route is claimed, and the run records that this settings file was changed beyond ROOT_URLCONF (blocking: whether the routes are affected was not established).",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "http_edge",
+    "screen"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/portal",
+      "path": "config/settings/base.py",
+      "symbol": "DEBUG"
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "ANY",
+      "path": "/billing/invoices",
+      "why": "the setting is not followed to a route"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "settings_not_followed",
+      "subject": "config/settings/base.py",
+      "blocking": true
+    }
+  ]
+}

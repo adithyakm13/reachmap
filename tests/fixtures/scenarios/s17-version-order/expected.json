@@ -1,0 +1,89 @@
+{
+  "schema": 1,
+  "id": "s17-version-order",
+  "repo": "acme/contracts",
+  "change": {
+    "kind": "range",
+    "base": "v1.9.0",
+    "head": "v1.10.0"
+  },
+  "explains": "The range v1.9.0..v1.10.0 adds the optional field Invoice.due_date. Consumers pin acme-contracts as follows: acme/api main pins 1.10.0, acme/api release/1.x pins 1.9.0, acme/api release/1.2 pins 1.2.0, acme/worker main pins 1.9.0. Versions are ordered by parsing the numbers (1.2.0 < 1.9.0 < 1.10.0), never as strings: as strings \"1.10.0\" sorts before \"1.9.0\", which would wrongly say api main (1.10.0) is older than the change. Containment is checked against the tag, not inferred from the number: v1.10.0 contains the change commit, v1.9.0 and v1.2.0 do not. So api main contains the change (adopted); api release/1.x, api release/1.2 and worker main do not (exposure on adoption). The changed field is read by no consumer.",
+  "complete_for": [
+    "changed_symbol",
+    "consumer"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/contracts",
+      "path": "contracts/models/invoice.py",
+      "symbol": "Invoice.due_date"
+    },
+    {
+      "type": "consumer",
+      "repo": "acme/api",
+      "branch": "main",
+      "pin": "1.10.0",
+      "adoption": "adopted",
+      "contains_change": true,
+      "evidence": [
+        {
+          "repo": "acme/api",
+          "path": "requirements.txt",
+          "contains": "acme-contracts==1.10.0",
+          "branch": "main"
+        }
+      ]
+    },
+    {
+      "type": "consumer",
+      "repo": "acme/api",
+      "branch": "release/1.x",
+      "pin": "1.9.0",
+      "adoption": "on_adoption",
+      "contains_change": false,
+      "evidence": [
+        {
+          "repo": "acme/api",
+          "path": "requirements.txt",
+          "contains": "acme-contracts==1.9.0",
+          "branch": "release/1.x"
+        }
+      ]
+    },
+    {
+      "type": "consumer",
+      "repo": "acme/api",
+      "branch": "release/1.2",
+      "pin": "1.2.0",
+      "adoption": "on_adoption",
+      "contains_change": false,
+      "evidence": [
+        {
+          "repo": "acme/api",
+          "path": "requirements.txt",
+          "contains": "acme-contracts==1.2.0",
+          "branch": "release/1.2"
+        }
+      ]
+    },
+    {
+      "type": "consumer",
+      "repo": "acme/worker",
+      "branch": "main",
+      "pin": "1.9.0",
+      "adoption": "on_adoption",
+      "contains_change": false,
+      "evidence": [
+        {
+          "repo": "acme/worker",
+          "path": "requirements.txt",
+          "contains": "acme-contracts==1.9.0",
+          "branch": "main"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [],
+  "not_established": []
+}

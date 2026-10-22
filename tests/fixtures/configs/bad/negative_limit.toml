@@ -1,0 +1,9 @@
+workspace = "acme"
+
+[limits]
+hops = -1
+
+[repos."acme/web"]
+host = "github"
+language = "typescript"
+roles = ["frontend"]

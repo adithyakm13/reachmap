@@ -1,0 +1,11 @@
+{
+  "id": "sb14-other-property",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb14-other-property"
+  },
+  "commit_message": "The server port changes",
+  "notes": "A configuration key that makes no path is not followed and the run says so."
+}

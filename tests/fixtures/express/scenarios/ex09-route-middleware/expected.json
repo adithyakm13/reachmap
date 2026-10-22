@@ -1,0 +1,164 @@
+{
+  "schema": 1,
+  "id": "ex09-route-middleware",
+  "repo": "ex/orders",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex09-route-middleware"
+  },
+  "explains": "requireAuth in src/middleware/auth.ts accepts a session. src/routes/orders.ts imports it and names it in two route calls: router.get(\"/:id\", requireAuth, getOrder) and router.post(\"/\", requireAuth, createOrder). Those two routes are reached: GET /api/v1/orders/{id} and POST /api/v1/orders. The other statements of the router do not name it. The client calls orderUrl(orderId), so the edge to GET /api/v1/orders/{id} and OrderScreen follow; nothing in the client calls POST /api/v1/orders.",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "screen",
+    "http_edge",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "ex/orders",
+      "path": "src/middleware/auth.ts",
+      "symbol": "requireAuth"
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/api/v1/orders/{id}",
+      "evidence": [
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/orders.ts",
+          "contains": "router.get(\"/:id\", requireAuth, getOrder);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/index.ts",
+          "contains": "apiRouter.use(API_VERSION + \"/orders\", ordersRouter);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/app.ts",
+          "contains": "app.use(API_PREFIX, apiRouter);"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "POST",
+      "path": "/api/v1/orders",
+      "evidence": [
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/orders.ts",
+          "contains": "router.post(\"/\", requireAuth, createOrder);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/index.ts",
+          "contains": "apiRouter.use(API_VERSION + \"/orders\", ordersRouter);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/app.ts",
+          "contains": "app.use(API_PREFIX, apiRouter);"
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "ex/web",
+        "path": "src/services/orders.ts",
+        "contains": "return apiGet(orderUrl(orderId));"
+      },
+      "via": [
+        {
+          "repo": "ex/web",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const orderUrl = (orderId: string) =>"
+        }
+      ],
+      "to": {
+        "repo": "ex/orders",
+        "method": "GET",
+        "path": "/api/v1/orders/{id}",
+        "evidence": [
+          {
+            "repo": "ex/orders",
+            "path": "src/routes/orders.ts",
+            "contains": "router.get(\"/:id\", requireAuth, getOrder);"
+          },
+          {
+            "repo": "ex/orders",
+            "path": "src/routes/index.ts",
+            "contains": "apiRouter.use(API_VERSION + \"/orders\", ordersRouter);"
+          },
+          {
+            "repo": "ex/orders",
+            "path": "src/app.ts",
+            "contains": "app.use(API_PREFIX, apiRouter);"
+          }
+        ]
+      }
+    },
+    {
+      "type": "screen",
+      "repo": "ex/web",
+      "route": "/orders/:orderId",
+      "chain": [
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/orders.ts",
+          "contains": "import { requireAuth } from \"../middleware/auth\";"
+        },
+        {
+          "repo": "ex/web",
+          "path": "src/services/orders.ts",
+          "contains": "return apiGet(orderUrl(orderId));"
+        },
+        {
+          "repo": "ex/web",
+          "path": "src/screens/OrderScreen.tsx",
+          "contains": "import { fetchOrder } from \"@/services/orders\";"
+        },
+        {
+          "repo": "ex/web",
+          "path": "src/routes.tsx",
+          "contains": "import OrderScreen from \"./screens/OrderScreen\";"
+        },
+        {
+          "repo": "ex/web",
+          "path": "src/routes.tsx",
+          "contains": "<Route path=\"/orders/:orderId\" element={<OrderScreen />} />"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/api/v1/orders",
+      "why": "it does not name requireAuth"
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/api/v1/orders/{id}/lines",
+      "why": "it does not name requireAuth"
+    },
+    {
+      "type": "screen",
+      "repo": "ex/web",
+      "route": "/orders",
+      "why": "OrdersScreen calls the list"
+    }
+  ],
+  "not_established": []
+}

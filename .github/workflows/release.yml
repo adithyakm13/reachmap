@@ -1,0 +1,92 @@
+name: Release build
+
+# Builds the frontend, the wheel and the sdist for a tag `v*` (or by hand), keeps them as workflow artifacts and installs the wheel into a
+# clean environment on each supported Python. It never publishes anything: no upload to PyPI or any index, no GitHub release, no secret.
+# The owner publishes from the artifacts, see docs/releasing.md.
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Build the frontend
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run build
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Packaging tools (development tools only, never imported by the package)
+        run: python -m pip install setuptools build
+      - name: The tag names the version in the package
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          version=$(python -c 'import re; print(re.search(r"__version__ = \"([^\"]+)\"", open("reachmap/__init__.py").read()).group(1))')
+          test "$TAG" = "v$version" || { echo "tag $TAG does not match version $version"; exit 1; }
+      - name: Build the sdist and the wheel
+        run: python -m build
+      - name: The wheel holds the workspace and nothing it should not
+        run: |
+          python -m zipfile -l dist/reachmap-*.whl | tee wheel.txt
+          grep -q "reachmap/runner/static/index.html" wheel.txt
+          grep -q "reachmap/runner/static/assets/.*\.js" wheel.txt
+          grep -q "reachmap/runner/static/assets/.*\.css" wheel.txt
+          grep -q "reachmap/runner/static/THIRD_PARTY_LICENSES.txt" wheel.txt
+          grep -q "licenses/LICENSE" wheel.txt
+          if grep -E "tests/|fixtures|node_modules|\.claude|briefs|screenshots|\.map( |$)|\.tsx?( |$)" wheel.txt; then echo "unexpected files in the wheel"; exit 1; fi
+          unzip -p dist/reachmap-*.whl 'reachmap-*.dist-info/METADATA' > metadata.txt
+          if grep -q "^Requires-Dist" metadata.txt; then echo "the wheel declares a dependency"; exit 1; fi
+          tar tzf dist/reachmap-*.tar.gz | tee sdist.txt
+          if grep -E "/tests/|fixtures|node_modules|\.claude|briefs|screenshots" sdist.txt; then echo "unexpected files in the sdist"; exit 1; fi
+          grep -q "frontend/dist/THIRD_PARTY_LICENSES.txt" sdist.txt
+          for name in CHANGELOG.md SECURITY.md CONTRIBUTING.md; do grep -q "/$name\$" sdist.txt || { echo "$name is missing from the sdist"; exit 1; }; done
+      - name: Keep the build
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          if-no-files-found: error
+          retention-days: 30
+
+  install:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+      - name: Configure git for fixtures
+        run: |
+          git config --global user.name "CI"
+          git config --global user.email "ci@example.invalid"
+          git config --global init.defaultBranch main
+      - name: Install the wheel into a clean environment and run the commands
+        run: python tests/release/check_install.py --wheel dist/reachmap-*.whl --python python

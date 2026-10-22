@@ -1,0 +1,11 @@
+workspace = "acme"
+
+[repos."acme/web"]
+host = "github"
+language = "typescript"
+roles = ["frontend"]
+
+[[edges]]
+kind = "http"
+from = "acme/web"
+to = "acme/api"

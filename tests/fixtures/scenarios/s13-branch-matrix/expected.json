@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "id": "s13-branch-matrix",
+  "repo": "acme/api",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s13-branch-matrix"
+  },
+  "explains": "The change rewrites round_total in services/billing/app/services/totals.py: the import gains ROUND_HALF_UP and the return line becomes amount.quantize(Decimal(\"0.01\"), rounding=ROUND_HALF_UP). The same two lines were already committed to release/1.x (\"Round invoice totals half up\") and cherry-picked to release/1.2, but main never received them. Branch matrix over the configured branches main and release/*: release/1.x tip contains every added line, so present; release/1.2 tip contains every added line, so present; main (the base) still has the old return round(amount, 2) and none of the added lines, so pre_change. Version numbers say nothing here: release/1.2 is the older line and still has the fix, so the files are read at each branch tip.",
+  "complete_for": [
+    "changed_symbol",
+    "branch_state"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/api",
+      "path": "services/billing/app/services/totals.py",
+      "symbol": "round_total"
+    },
+    {
+      "type": "caller",
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/invoices.py",
+      "symbol": "get_invoice",
+      "evidence": [
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/routers/invoices.py",
+          "contains": "from app.services.totals import round_total"
+        }
+      ]
+    },
+    {
+      "type": "branch_state",
+      "repo": "acme/api",
+      "branch": "main",
+      "state": "pre_change"
+    },
+    {
+      "type": "branch_state",
+      "repo": "acme/api",
+      "branch": "release/1.x",
+      "state": "present"
+    },
+    {
+      "type": "branch_state",
+      "repo": "acme/api",
+      "branch": "release/1.2",
+      "state": "present"
+    }
+  ],
+  "must_exclude": [],
+  "not_established": [
+    {
+      "kind": "edge_unfollowed",
+      "subject": "edge:event:acme/api:acme/worker",
+      "blocking": false
+    }
+  ]
+}

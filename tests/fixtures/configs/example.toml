@@ -1,0 +1,89 @@
+# Workspace for the Acme product. One [repos."..."] table per repository,
+# one [[edges]] entry per link between them.
+workspace = "acme"
+ticket_pattern = '\[([A-Z][A-Z0-9]+-\d+)\]'
+
+[limits]
+hops = 3             # edges followed past the changed repo
+hub_importers = 50   # never walk through a file imported more often than this
+distinct_max = 10    # a name defined more often than this is not distinctive
+timeout_s = 900
+
+# ---------------------------------------------------------------- repositories
+
+[repos."acme/web"]
+host = "github"                      # github | gitlab | bitbucket | git
+language = "typescript"
+roles = ["frontend"]
+branches = ["main", "release/*"]
+aliases = { from = "tsconfig.json" }
+entry_points = { kind = "react-router", routes_glob = "src/modules/*/routes.tsx" }
+http_client = { kind = "endpoints-file", path = "src/api/endpoints.ts" }
+tests = { markers = ["__tests__/", ".test.", ".spec."], command = "npx jest {paths}" }
+
+[repos."acme/api"]
+host = "gitlab"                      # hosts can differ per repo
+language = "python"
+roles = ["backend"]
+branches = ["main", "release/*"]
+service_marker = "pyproject.toml"
+entry_points = { kind = "fastapi" }
+tests = { markers = ["tests/", "test_"], command = "pytest {paths}" }
+
+[repos."acme/worker"]
+host = "gitlab"
+language = "python"
+roles = ["backend"]
+entry_points = { kind = "celery" }
+
+[repos."acme/contracts"]
+host = "github"
+language = "python"
+roles = ["contract"]
+contract = { kind = "pydantic", root = "contracts/models", versions = "git-tags", tag_prefix = "v" }
+
+# ---------------------------------------------------------------- edges
+
+[[edges]]
+kind = "http"
+from = "acme/web"
+to = "acme/api"
+
+[[edges]]
+kind = "package"
+producer = "acme/contracts"
+consumer = "acme/api"
+manifest = "requirements.txt"
+pin_pattern = '^acme-contracts==(.+)$'
+import_marker = "acme_contracts"
+
+[[edges]]
+kind = "package"
+producer = "acme/contracts"
+consumer = "acme/worker"
+manifest = "requirements.txt"
+pin_pattern = '^acme-contracts==(.+)$'
+import_marker = "acme_contracts"
+
+[[edges]]
+kind = "event"
+from = "acme/api"
+to = "acme/worker"
+topics_glob = "**/topics.py"
+
+# ---------------------------------------------------------------- tests and context
+
+[[test_sources]]
+kind = "qase"
+project = "ACME"
+token_env = "QASE_API_TOKEN"         # the variable's name, never the token
+
+[[test_sources.areas]]
+name = "Billing"
+route_prefixes = ["/billing"]
+modules = ["billing"]
+suites = [12]                        # Qase suite ids, descendants included
+
+[[context]]
+kind = "jira-snapshot"
+path = "${ACME_JIRA_SNAPSHOT}"       # unset variable means "not configured"

@@ -1,0 +1,167 @@
+/* Cited lines of source: a block with the repository and path, the line number, and the verbatim line coloured by token. The token classes
+   are those of Prism (`token keyword`, ...) that prism-react-renderer puts on each span; the colours are variables, redefined for the dark theme. */
+
+:root {
+  --rm-tok-comment: #6b7280;
+  --rm-tok-keyword: #6d28d9;
+  --rm-tok-string: #0f766e;
+  --rm-tok-number: #b45309;
+  --rm-tok-function: #1d4ed8;
+  --rm-tok-class: #b91c1c;
+  --rm-tok-operator: #4b5563;
+  --rm-tok-punct: #6b7280;
+}
+
+:root[data-mantine-color-scheme="dark"] {
+  --rm-tok-comment: #7d8590;
+  --rm-tok-keyword: #b8a4f8;
+  --rm-tok-string: #7fd6c4;
+  --rm-tok-number: #f0b36a;
+  --rm-tok-function: #8ab4f8;
+  --rm-tok-class: #f2a1a1;
+  --rm-tok-operator: #a8afb8;
+  --rm-tok-punct: #8b929c;
+}
+
+.rm-evidence-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rm-evidence {
+  border: 1px solid var(--rm-line);
+  border-radius: var(--mantine-radius-md);
+  overflow: hidden;
+  background: var(--mantine-color-body);
+}
+
+.rm-evidence-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 12px;
+  padding: 5px 10px;
+  background: var(--rm-subtle);
+  border-bottom: 1px solid var(--rm-line);
+  font-size: var(--mantine-font-size-xs);
+}
+.rm-evidence-where {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+.rm-evidence-head code {
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 0.75rem;
+  overflow-wrap: break-word;
+}
+
+.rm-evidence-body {
+  display: flex;
+  align-items: stretch;
+  background: var(--rm-code-bg);
+}
+.rm-evidence-no {
+  flex: none;
+  min-width: 3.2em;
+  padding: 8px 8px 8px 10px;
+  text-align: right;
+  color: var(--mantine-color-dimmed);
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 0.75rem;
+  line-height: 1.6;
+  user-select: none;
+  border-right: 1px solid var(--rm-line);
+}
+.rm-evidence-code {
+  margin: 0;
+  padding: 8px 12px;
+  overflow-x: auto;
+  flex: 1;
+  min-width: 0;
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 0.78125rem;
+  line-height: 1.6;
+  white-space: pre;
+  tab-size: 4;
+}
+.rm-evidence-code code {
+  font-family: inherit;
+  font-size: inherit;
+  background: none;
+  padding: 0;
+}
+
+.rm-code-text .token.comment,
+.rm-code-text .token.prolog,
+.rm-code-text .token.doctype,
+.rm-code-text .token.cdata {
+  color: var(--rm-tok-comment);
+  font-style: italic;
+}
+.rm-code-text .token.keyword,
+.rm-code-text .token.atrule,
+.rm-code-text .token.selector,
+.rm-code-text .token.important,
+.rm-code-text .token.boolean {
+  color: var(--rm-tok-keyword);
+}
+.rm-code-text .token.string,
+.rm-code-text .token.char,
+.rm-code-text .token.attr-value,
+.rm-code-text .token.template-string,
+.rm-code-text .token.regex {
+  color: var(--rm-tok-string);
+}
+.rm-code-text .token.number,
+.rm-code-text .token.constant,
+.rm-code-text .token.symbol {
+  color: var(--rm-tok-number);
+}
+.rm-code-text .token.function,
+.rm-code-text .token.method,
+.rm-code-text .token.decorator {
+  color: var(--rm-tok-function);
+}
+.rm-code-text .token.class-name,
+.rm-code-text .token.builtin,
+.rm-code-text .token.tag {
+  color: var(--rm-tok-class);
+}
+.rm-code-text .token.operator,
+.rm-code-text .token.entity,
+.rm-code-text .token.url {
+  color: var(--rm-tok-operator);
+}
+.rm-code-text .token.punctuation {
+  color: var(--rm-tok-punct);
+}
+
+/* a bare code span of the page (a path, a name) */
+.rm-main code,
+.rm-drawer code {
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 0.8125em;
+  background: transparent;
+  overflow-wrap: break-word;
+}
+.rm-main pre,
+.rm-drawer pre {
+  margin: 4px 0;
+  padding: 8px 12px;
+  overflow-x: auto;
+  background: var(--rm-code-bg);
+  border: 1px solid var(--rm-line);
+  border-radius: var(--mantine-radius-sm);
+  font-size: 0.78125rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+.rm-evidence-code {
+  white-space: pre;
+  overflow-wrap: normal;
+  border: 0;
+  background: none;
+}

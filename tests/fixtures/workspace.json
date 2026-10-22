@@ -1,0 +1,73 @@
+{
+  "schema": 1,
+  "workspace": "acme",
+  "limits": {"hops": 3, "hub_importers": 50, "distinct_max": 3, "timeout_s": 900},
+  "repos": {
+    "acme/web": {
+      "slug": "acme-web",
+      "host": "git",
+      "language": "typescript",
+      "roles": ["frontend"],
+      "branches": ["main", "release/*"],
+      "aliases": {"from": "tsconfig.json"},
+      "entry_points": {"kind": "react-router", "routes_glob": "src/modules/*/routes.tsx"},
+      "http_client": {"kind": "endpoints-file", "path": "src/api/endpoints.ts"},
+      "tests": {"markers": ["__tests__/", ".test.", ".spec."]}
+    },
+    "acme/api": {
+      "slug": "acme-api",
+      "host": "git",
+      "language": "python",
+      "roles": ["backend"],
+      "branches": ["main", "release/*"],
+      "service_marker": "pyproject.toml",
+      "library_roots": ["libs/common"],
+      "entry_points": {"kind": "fastapi"},
+      "tests": {"markers": ["tests/", "test_"]}
+    },
+    "acme/contracts": {
+      "slug": "acme-contracts",
+      "host": "git",
+      "language": "python",
+      "roles": ["contract"],
+      "branches": ["main"],
+      "contract": {
+        "kind": "pydantic",
+        "root": "contracts/models",
+        "package": "acme_contracts",
+        "versions": "git-tags",
+        "tag_prefix": "v"
+      }
+    },
+    "acme/worker": {
+      "slug": "acme-worker",
+      "host": "git",
+      "language": "python",
+      "roles": ["backend"],
+      "branches": ["main"],
+      "entry_points": {"kind": "celery"}
+    }
+  },
+  "edges": [
+    {"kind": "http", "from": "acme/web", "to": "acme/api"},
+    {
+      "kind": "package",
+      "producer": "acme/contracts",
+      "consumer": "acme/api",
+      "manifest": "requirements.txt",
+      "pin_pattern": "^acme-contracts==(.+)$",
+      "import_marker": "acme_contracts"
+    },
+    {
+      "kind": "package",
+      "producer": "acme/contracts",
+      "consumer": "acme/worker",
+      "manifest": "requirements.txt",
+      "pin_pattern": "^acme-contracts==(.+)$",
+      "import_marker": "acme_contracts"
+    },
+    {"kind": "contract", "producer": "acme/contracts", "consumer": "acme/api"},
+    {"kind": "contract", "producer": "acme/contracts", "consumer": "acme/worker"},
+    {"kind": "event", "from": "acme/api", "to": "acme/worker", "topics_glob": "**/topics.py"}
+  ]
+}

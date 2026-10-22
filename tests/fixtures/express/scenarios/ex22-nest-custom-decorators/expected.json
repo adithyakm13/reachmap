@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "id": "ex22-nest-custom-decorators",
+  "repo": "ex/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex22-nest-custom-decorators"
+  },
+  "explains": "ping in src/custom/custom.controller.ts is louder. The file decorates its class with Controller and its method with Get, but both come from ./decorators, a file of the repository, not from @nestjs/common (the file does import something else from there, Param): the words Controller and Get say nothing by themselves, only the import of them does. No route is claimed (GET /api/custom/ping is not a route of this service) and nothing is said to be unmounted: the class is not a controller.",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "screen",
+    "http_edge",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "ex/ledger",
+      "path": "src/custom/custom.controller.ts",
+      "symbol": "CustomController"
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "ex/ledger",
+      "method": "GET",
+      "path": "/api/custom/ping",
+      "why": "the decorators are not the ones of @nestjs/common"
+    },
+    {
+      "type": "route",
+      "repo": "ex/ledger",
+      "method": "GET",
+      "path": "/custom/ping",
+      "why": "the decorators are not the ones of @nestjs/common"
+    }
+  ],
+  "not_established": []
+}

@@ -1,0 +1,11 @@
+{
+  "id": "s22-added-handler",
+  "repo": "acme/api",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s22-added-handler"
+  },
+  "commit_message": "Add an invoice PDF endpoint",
+  "notes": "A new handler whose parameter line is textually identical to the lines of its siblings."
+}

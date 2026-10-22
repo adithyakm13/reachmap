@@ -1,0 +1,11 @@
+{
+  "id": "nx06-module-level-handler",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx06-module-level-handler"
+  },
+  "commit_message": "Warm the orders cache under another label",
+  "notes": "A statement that runs when the route file loads reaches every method of it."
+}

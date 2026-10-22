@@ -1,0 +1,2665 @@
+{
+ "schema": 1,
+ "tool": {
+  "name": "reachmap",
+  "version": "0.1.0"
+ },
+ "run": {
+  "started_at": "2026-01-02T03:04:05Z",
+  "elapsed_s": 1.5
+ },
+ "inputs": {
+  "repo": "acme/api",
+  "change": {
+   "compare": "main...scenario/s13-branch-matrix"
+  },
+  "as_of": null,
+  "formats": [
+   "json"
+  ],
+  "config": {
+   "workspace": "acme",
+   "path_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  }
+ },
+ "counts": {
+  "areas": 8,
+  "must_test": 4,
+  "sample": 2,
+  "candidates": 2,
+  "findings": 4,
+  "exclusions": 2,
+  "records": 1,
+  "blocking_records": 0,
+  "blocking_suggestion_records": 0
+ },
+ "change": {
+  "as_of": null,
+  "base_sha": "558daf4a8324a61dd995a0306e4df353788b703c",
+  "change_request": null,
+  "file_count": 1,
+  "files": [
+   {
+    "added": 2,
+    "binary": false,
+    "content_available": true,
+    "old_path": null,
+    "path": "services/billing/app/services/totals.py",
+    "removed": 2,
+    "role": "source",
+    "similarity": null,
+    "status": "modified"
+   }
+  ],
+  "head_sha": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+  "how": {
+   "base": "ref main",
+   "head": "ref scenario/s13-branch-matrix",
+   "pre_change": "merge base of main and scenario/s13-branch-matrix"
+  },
+  "kind": "compare",
+  "pre_change_sha": "558daf4a8324a61dd995a0306e4df353788b703c",
+  "remote": "acme/api",
+  "rename_detection_skipped": false,
+  "repo": "acme/api",
+  "resolved": true,
+  "spec": {
+   "compare": "main...scenario/s13-branch-matrix"
+  }
+ },
+ "ref": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+ "branches": [
+  {
+   "branch": "main",
+   "commit": "558daf4a8324a61dd995a0306e4df353788b703c",
+   "state": "pre_change",
+   "added_lines_found": 0,
+   "evidence": [
+    {
+     "repo": "acme/api",
+     "path": "services/billing/app/services/totals.py",
+     "line": 1,
+     "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+     "detail": "from decimal import Decimal"
+    },
+    {
+     "repo": "acme/api",
+     "path": "services/billing/app/services/totals.py",
+     "line": 6,
+     "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+     "detail": "    return round(amount, 2)"
+    }
+   ],
+   "detail": "services/billing/app/services/totals.py: pre_change (0 of 2 added lines found, 2 of 2 removed lines still there)"
+  },
+  {
+   "branch": "release/1.2",
+   "commit": "dc4de41ba3ee5623f63484fefa6d1da38bab5049",
+   "state": "present",
+   "added_lines_found": 2,
+   "evidence": [
+    {
+     "repo": "acme/api",
+     "path": "services/billing/app/services/totals.py",
+     "line": 1,
+     "ref": "dc4de41ba3ee5623f63484fefa6d1da38bab5049",
+     "detail": "from decimal import ROUND_HALF_UP, Decimal"
+    },
+    {
+     "repo": "acme/api",
+     "path": "services/billing/app/services/totals.py",
+     "line": 6,
+     "ref": "dc4de41ba3ee5623f63484fefa6d1da38bab5049",
+     "detail": "    return amount.quantize(Decimal(\"0.01\"), rounding=ROUND_HALF_UP)"
+    }
+   ],
+   "detail": "services/billing/app/services/totals.py: present (2 of 2 added lines found, 0 of 2 removed lines still there)"
+  },
+  {
+   "branch": "release/1.x",
+   "commit": "49ed920ecfd3f00bf9dfe0af283a363e592e4905",
+   "state": "present",
+   "added_lines_found": 2,
+   "evidence": [
+    {
+     "repo": "acme/api",
+     "path": "services/billing/app/services/totals.py",
+     "line": 1,
+     "ref": "49ed920ecfd3f00bf9dfe0af283a363e592e4905",
+     "detail": "from decimal import ROUND_HALF_UP, Decimal"
+    },
+    {
+     "repo": "acme/api",
+     "path": "services/billing/app/services/totals.py",
+     "line": 6,
+     "ref": "49ed920ecfd3f00bf9dfe0af283a363e592e4905",
+     "detail": "    return amount.quantize(Decimal(\"0.01\"), rounding=ROUND_HALF_UP)"
+    }
+   ],
+   "detail": "services/billing/app/services/totals.py: present (2 of 2 added lines found, 0 of 2 removed lines still there)"
+  }
+ ],
+ "findings": [
+  {
+   "kind": "direct",
+   "title": "The change reaches the API route GET /api/billing/invoices/{invoice_id} in acme/api",
+   "workflow": "billing",
+   "risk": "medium",
+   "confidence": "high",
+   "confidence_basis": "import-backed: 5 cited line(s) from the change to GET /api/billing/invoices/{invoice_id}",
+   "evidence": [
+    {
+     "repo": "acme/api",
+     "path": "services/billing/app/services/totals.py",
+     "line": 4,
+     "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+     "detail": "def round_total(amount: Decimal) -> Decimal:",
+     "claim": "def:round_total"
+    },
+    {
+     "repo": "acme/api",
+     "path": "services/billing/app/routers/invoices.py",
+     "line": 6,
+     "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+     "detail": "from app.services.totals import round_total",
+     "claim": "import:services/billing/app/services/totals.py:round_total"
+    },
+    {
+     "repo": "acme/api",
+     "path": "services/billing/app/routers/invoices.py",
+     "line": 29,
+     "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+     "detail": "@router.get(\"/{invoice_id}\")",
+     "claim": "route:GET /api/billing/invoices/{invoice_id}:services/billing/app/routers/invoices.py"
+    },
+    {
+     "repo": "acme/api",
+     "path": "services/billing/app/routers/billing.py",
+     "line": 7,
+     "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+     "detail": "billing_router.include_router(invoices_router, prefix=\"/invoices\")"
+    },
+    {
+     "repo": "acme/api",
+     "path": "services/billing/app/api.py",
+     "line": 6,
+     "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+     "detail": "api_router.include_router(billing_router, prefix=\"/billing\")"
+    },
+    {
+     "repo": "acme/api",
+     "path": "services/billing/app/main.py",
+     "line": 6,
+     "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+     "detail": "app.include_router(api_router, prefix=\"/api\")"
+    }
+   ],
+   "identity": [
+    "direct",
+    "acme/api",
+    "api_route",
+    "GET /api/billing/invoices/{invoice_id}"
+   ],
+   "is_exclusion": false,
+   "id": "f-76177a5906263c44",
+   "fingerprint": "aed2a921b528131a801a9d40441c280b46eba81d6202ae783331edca94cff589"
+  },
+  {
+   "kind": "cross-repo",
+   "title": "The change in acme/api reaches the screen /billing/invoices/:invoiceId in acme/web, through 2 chains; also mounted at 1 other route(s)",
+   "workflow": "billing",
+   "risk": "medium",
+   "confidence": "high",
+   "confidence_basis": "import-backed: 6 cited line(s) from the change to /billing/invoices/:invoiceId; http edge: the URL fits the route exactly",
+   "evidence": [
+    {
+     "repo": "acme/api",
+     "path": "services/billing/app/services/totals.py",
+     "line": 4,
+     "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+     "detail": "def round_total(amount: Decimal) -> Decimal:",
+     "claim": "def:round_total"
+    },
+    {
+     "repo": "acme/api",
+     "path": "services/billing/app/routers/invoices.py",
+     "line": 6,
+     "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+     "detail": "from app.services.totals import round_total",
+     "claim": "import:services/billing/app/services/totals.py:round_total"
+    },
+    {
+     "repo": "acme/api",
+     "path": "services/billing/app/routers/invoices.py",
+     "line": 40,
+     "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+     "detail": "    total = round_total(Decimal(invoice.amount_cents) / 100)"
+    },
+    {
+     "repo": "acme/web",
+     "path": "src/modules/billing/api.ts",
+     "line": 33,
+     "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+     "detail": "  return apiGet<Invoice>(invoiceUrl(invoiceId));"
+    },
+    {
+     "repo": "acme/web",
+     "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
+     "line": 6,
+     "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+     "detail": "import { fetchAuditLog, fetchInvoice } from \"../api\";",
+     "claim": "import:src/modules/billing/api.ts:fetchAuditLog,fetchInvoice"
+    },
+    {
+     "repo": "acme/web",
+     "path": "src/modules/billing/routes.tsx",
+     "line": 3,
+     "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+     "detail": "import InvoiceDetailPage from \"./pages/InvoiceDetailPage\";",
+     "claim": "import:src/modules/billing/pages/InvoiceDetailPage.tsx:*"
+    },
+    {
+     "repo": "acme/web",
+     "path": "src/modules/billing/routes.tsx",
+     "line": 10,
+     "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+     "detail": "    <Route path=\"/billing/invoices/:invoiceId\" element={<InvoiceDetailPage />} />",
+     "claim": "route:/billing/invoices/:invoiceId:src/modules/billing/pages/InvoiceDetailPage.tsx"
+    }
+   ],
+   "identity": [
+    "cross-repo",
+    "acme/web",
+    "screen",
+    "/billing/invoices/:invoiceId"
+   ],
+   "is_exclusion": false,
+   "id": "f-25a05e8452bb5fc8",
+   "fingerprint": "8ed24e93ed3ad916d19ecb6e69c75a1ec2682c16650a737b00a33fcaeb9f5c96"
+  },
+  {
+   "kind": "exclusion",
+   "title": "src/modules/billing/pages/InvoiceListPage.tsx is not reached through src/modules/billing/api.ts: it imports only names the change does not touch",
+   "workflow": "",
+   "risk": "low",
+   "confidence": "high",
+   "confidence_basis": "import-backed: the importer's own import line names only other exports",
+   "evidence": [
+    {
+     "repo": "acme/web",
+     "path": "src/modules/billing/pages/InvoiceListPage.tsx",
+     "line": 7,
+     "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+     "detail": "import { fetchInvoices } from \"../api\";",
+     "claim": "import:src/modules/billing/api.ts:fetchInvoices"
+    },
+    {
+     "repo": "acme/web",
+     "path": "src/modules/billing/pages/InvoiceListPage.tsx",
+     "line": 8,
+     "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+     "detail": "import type { Invoice } from \"../api\";",
+     "claim": "import:src/modules/billing/api.ts:Invoice"
+    },
+    {
+     "repo": "acme/web",
+     "path": "src/modules/billing/api.ts",
+     "line": 32,
+     "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+     "detail": "export function fetchInvoice(invoiceId: string): Promise<Invoice> {"
+    }
+   ],
+   "identity": [
+    "exclusion",
+    "acme/web",
+    "src/modules/billing/api.ts",
+    "src/modules/billing/pages/InvoiceListPage.tsx",
+    "named_export_narrowing"
+   ],
+   "is_exclusion": true,
+   "id": "f-60f74911034ba232",
+   "fingerprint": "6dea9fb8fd5020487714315f52de910a2823d80a55d05b30fe94beda9d958364"
+  },
+  {
+   "kind": "exclusion",
+   "title": "src/modules/billing/pages/SettlementsPage.tsx is not reached through src/modules/billing/api.ts: it imports only names the change does not touch",
+   "workflow": "",
+   "risk": "low",
+   "confidence": "high",
+   "confidence_basis": "import-backed: the importer's own import line names only other exports",
+   "evidence": [
+    {
+     "repo": "acme/web",
+     "path": "src/modules/billing/pages/SettlementsPage.tsx",
+     "line": 4,
+     "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+     "detail": "import { fetchSettlementSummary } from \"../api\";",
+     "claim": "import:src/modules/billing/api.ts:fetchSettlementSummary"
+    },
+    {
+     "repo": "acme/web",
+     "path": "src/modules/billing/pages/SettlementsPage.tsx",
+     "line": 5,
+     "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+     "detail": "import type { SettlementSummary } from \"../api\";",
+     "claim": "import:src/modules/billing/api.ts:SettlementSummary"
+    },
+    {
+     "repo": "acme/web",
+     "path": "src/modules/billing/api.ts",
+     "line": 32,
+     "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+     "detail": "export function fetchInvoice(invoiceId: string): Promise<Invoice> {"
+    }
+   ],
+   "identity": [
+    "exclusion",
+    "acme/web",
+    "src/modules/billing/api.ts",
+    "src/modules/billing/pages/SettlementsPage.tsx",
+    "named_export_narrowing"
+   ],
+   "is_exclusion": true,
+   "id": "f-3b0bed56092a56e9",
+   "fingerprint": "9dedb192a022971fb76b7487b198d75e036828ba8bd262bcafc815de6e337541"
+  }
+ ],
+ "areas": [
+  {
+   "label": "GET /api/billing/invoices/{invoice_id}",
+   "kind": "api_route",
+   "repo": "acme/api",
+   "module": "billing",
+   "route_line": {
+    "repo": "acme/api",
+    "path": "services/billing/app/routers/invoices.py",
+    "line": 29,
+    "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+    "detail": "@router.get(\"/{invoice_id}\")",
+    "claim": "route:GET /api/billing/invoices/{invoice_id}:services/billing/app/routers/invoices.py"
+   },
+   "chains": [
+    [
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/invoices.py",
+      "line": 6,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "from app.services.totals import round_total",
+      "claim": "import:services/billing/app/services/totals.py:round_total"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/invoices.py",
+      "line": 29,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "@router.get(\"/{invoice_id}\")",
+      "claim": "route:GET /api/billing/invoices/{invoice_id}:services/billing/app/routers/invoices.py"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/billing.py",
+      "line": 7,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "billing_router.include_router(invoices_router, prefix=\"/invoices\")"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/api.py",
+      "line": 6,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "api_router.include_router(billing_router, prefix=\"/billing\")"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/main.py",
+      "line": 6,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "app.include_router(api_router, prefix=\"/api\")"
+     }
+    ]
+   ],
+   "also_mounted": [],
+   "priority": "must_test",
+   "by_name": false,
+   "id": "a-3b9ba40cce191361",
+   "fingerprint": "75b8dda3541c1feb8dae66a1da7ddb3d8a6e1fef6f4b2c2db47e0d370f149cd3"
+  },
+  {
+   "label": "/billing/invoices/:invoiceId",
+   "kind": "screen",
+   "repo": "acme/web",
+   "module": "billing",
+   "route_line": {
+    "repo": "acme/web",
+    "path": "src/modules/billing/routes.tsx",
+    "line": 10,
+    "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+    "detail": "    <Route path=\"/billing/invoices/:invoiceId\" element={<InvoiceDetailPage />} />",
+    "claim": "route:/billing/invoices/:invoiceId:src/modules/billing/pages/InvoiceDetailPage.tsx"
+   },
+   "chains": [
+    [
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/invoices.py",
+      "line": 6,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "from app.services.totals import round_total",
+      "claim": "import:services/billing/app/services/totals.py:round_total"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/invoices.py",
+      "line": 40,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "    total = round_total(Decimal(invoice.amount_cents) / 100)"
+     },
+     {
+      "repo": "acme/web",
+      "path": "src/modules/billing/api.ts",
+      "line": 33,
+      "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+      "detail": "  return apiGet<Invoice>(invoiceUrl(invoiceId));"
+     },
+     {
+      "repo": "acme/web",
+      "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
+      "line": 6,
+      "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+      "detail": "import { fetchAuditLog, fetchInvoice } from \"../api\";",
+      "claim": "import:src/modules/billing/api.ts:fetchAuditLog,fetchInvoice"
+     },
+     {
+      "repo": "acme/web",
+      "path": "src/modules/billing/routes.tsx",
+      "line": 3,
+      "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+      "detail": "import InvoiceDetailPage from \"./pages/InvoiceDetailPage\";",
+      "claim": "import:src/modules/billing/pages/InvoiceDetailPage.tsx:*"
+     },
+     {
+      "repo": "acme/web",
+      "path": "src/modules/billing/routes.tsx",
+      "line": 10,
+      "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+      "detail": "    <Route path=\"/billing/invoices/:invoiceId\" element={<InvoiceDetailPage />} />",
+      "claim": "route:/billing/invoices/:invoiceId:src/modules/billing/pages/InvoiceDetailPage.tsx"
+     }
+    ],
+    [
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/invoices.py",
+      "line": 6,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "from app.services.totals import round_total",
+      "claim": "import:services/billing/app/services/totals.py:round_total"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/invoices.py",
+      "line": 40,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "    total = round_total(Decimal(invoice.amount_cents) / 100)"
+     },
+     {
+      "repo": "acme/web",
+      "path": "src/modules/billing/api.ts",
+      "line": 33,
+      "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+      "detail": "  return apiGet<Invoice>(invoiceUrl(invoiceId));"
+     },
+     {
+      "repo": "acme/web",
+      "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
+      "line": 6,
+      "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+      "detail": "import { fetchAuditLog, fetchInvoice } from \"../api\";",
+      "claim": "import:src/modules/billing/api.ts:fetchAuditLog,fetchInvoice"
+     },
+     {
+      "repo": "acme/web",
+      "path": "src/modules/cases/routes.tsx",
+      "line": 3,
+      "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+      "detail": "import InvoiceDetailPage from \"@/modules/billing/pages/InvoiceDetailPage\";",
+      "claim": "import:src/modules/billing/pages/InvoiceDetailPage.tsx:*"
+     },
+     {
+      "repo": "acme/web",
+      "path": "src/modules/cases/routes.tsx",
+      "line": 11,
+      "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+      "detail": "    <Route path=\"/cases/:caseId/invoices/:invoiceId\" element={<InvoiceDetailPage />} />",
+      "claim": "route:/cases/:caseId/invoices/:invoiceId:src/modules/billing/pages/InvoiceDetailPage.tsx"
+     }
+    ]
+   ],
+   "also_mounted": [
+    "/cases/:caseId/invoices/:invoiceId"
+   ],
+   "priority": "must_test",
+   "by_name": false,
+   "id": "a-fc27dabae232b46b",
+   "fingerprint": "47921d9d61e063439ca4978636b65ad2d74d018f591cd0a263543c9bdbdd9815"
+  },
+  {
+   "label": "/zz/last",
+   "kind": "screen",
+   "repo": "acme/zeta",
+   "module": "billing",
+   "route_line": {
+    "repo": "acme/api",
+    "path": "services/billing/app/routers/invoices.py",
+    "line": 29,
+    "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+    "detail": "@router.get(\"/{invoice_id}\")",
+    "claim": "route:GET /api/billing/invoices/{invoice_id}:services/billing/app/routers/invoices.py"
+   },
+   "chains": [
+    [
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/invoices.py",
+      "line": 6,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "from app.services.totals import round_total",
+      "claim": "import:services/billing/app/services/totals.py:round_total"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/invoices.py",
+      "line": 29,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "@router.get(\"/{invoice_id}\")",
+      "claim": "route:GET /api/billing/invoices/{invoice_id}:services/billing/app/routers/invoices.py"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/billing.py",
+      "line": 7,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "billing_router.include_router(invoices_router, prefix=\"/invoices\")"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/api.py",
+      "line": 6,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "api_router.include_router(billing_router, prefix=\"/billing\")"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/main.py",
+      "line": 6,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "app.include_router(api_router, prefix=\"/api\")"
+     }
+    ]
+   ],
+   "also_mounted": [],
+   "priority": "must_test",
+   "by_name": false,
+   "id": "a-0000000000000001",
+   "fingerprint": "ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc2"
+  },
+  {
+   "label": "GET /a/first",
+   "kind": "api_route",
+   "repo": "acme/api",
+   "module": "billing",
+   "route_line": {
+    "repo": "acme/api",
+    "path": "services/billing/app/routers/invoices.py",
+    "line": 29,
+    "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+    "detail": "@router.get(\"/{invoice_id}\")",
+    "claim": "route:GET /api/billing/invoices/{invoice_id}:services/billing/app/routers/invoices.py"
+   },
+   "chains": [
+    [
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/invoices.py",
+      "line": 6,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "from app.services.totals import round_total",
+      "claim": "import:services/billing/app/services/totals.py:round_total"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/invoices.py",
+      "line": 29,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "@router.get(\"/{invoice_id}\")",
+      "claim": "route:GET /api/billing/invoices/{invoice_id}:services/billing/app/routers/invoices.py"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/billing.py",
+      "line": 7,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "billing_router.include_router(invoices_router, prefix=\"/invoices\")"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/api.py",
+      "line": 6,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "api_router.include_router(billing_router, prefix=\"/billing\")"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/main.py",
+      "line": 6,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "app.include_router(api_router, prefix=\"/api\")"
+     }
+    ]
+   ],
+   "also_mounted": [],
+   "priority": "must_test",
+   "by_name": false,
+   "id": "a-0000000000000003",
+   "fingerprint": "0000000000000000000000000000000000000000000000000000000000000003"
+  },
+  {
+   "label": "/s/sample-b",
+   "kind": "screen",
+   "repo": "acme/web",
+   "module": "billing",
+   "route_line": {
+    "repo": "acme/api",
+    "path": "services/billing/app/routers/invoices.py",
+    "line": 29,
+    "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+    "detail": "@router.get(\"/{invoice_id}\")",
+    "claim": "route:GET /api/billing/invoices/{invoice_id}:services/billing/app/routers/invoices.py"
+   },
+   "chains": [
+    [
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/invoices.py",
+      "line": 6,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "from app.services.totals import round_total",
+      "claim": "import:services/billing/app/services/totals.py:round_total"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/invoices.py",
+      "line": 29,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "@router.get(\"/{invoice_id}\")",
+      "claim": "route:GET /api/billing/invoices/{invoice_id}:services/billing/app/routers/invoices.py"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/billing.py",
+      "line": 7,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "billing_router.include_router(invoices_router, prefix=\"/invoices\")"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/api.py",
+      "line": 6,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "api_router.include_router(billing_router, prefix=\"/billing\")"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/main.py",
+      "line": 6,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "app.include_router(api_router, prefix=\"/api\")"
+     }
+    ]
+   ],
+   "also_mounted": [],
+   "priority": "sample",
+   "by_name": false,
+   "id": "a-0000000000000004",
+   "fingerprint": "0000000000000000000000000000000000000000000000000000000000000004"
+  },
+  {
+   "label": "/s/sample-a",
+   "kind": "screen",
+   "repo": "acme/web",
+   "module": "billing",
+   "route_line": {
+    "repo": "acme/api",
+    "path": "services/billing/app/routers/invoices.py",
+    "line": 29,
+    "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+    "detail": "@router.get(\"/{invoice_id}\")",
+    "claim": "route:GET /api/billing/invoices/{invoice_id}:services/billing/app/routers/invoices.py"
+   },
+   "chains": [
+    [
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/invoices.py",
+      "line": 6,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "from app.services.totals import round_total",
+      "claim": "import:services/billing/app/services/totals.py:round_total"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/invoices.py",
+      "line": 29,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "@router.get(\"/{invoice_id}\")",
+      "claim": "route:GET /api/billing/invoices/{invoice_id}:services/billing/app/routers/invoices.py"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/billing.py",
+      "line": 7,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "billing_router.include_router(invoices_router, prefix=\"/invoices\")"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/api.py",
+      "line": 6,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "api_router.include_router(billing_router, prefix=\"/billing\")"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/main.py",
+      "line": 6,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "app.include_router(api_router, prefix=\"/api\")"
+     }
+    ]
+   ],
+   "also_mounted": [],
+   "priority": "sample",
+   "by_name": false,
+   "id": "a-0000000000000005",
+   "fingerprint": "0000000000000000000000000000000000000000000000000000000000000005"
+  },
+  {
+   "label": "/c/candidate-b",
+   "kind": "screen",
+   "repo": "acme/web",
+   "module": "billing",
+   "route_line": {
+    "repo": "acme/api",
+    "path": "services/billing/app/routers/invoices.py",
+    "line": 29,
+    "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+    "detail": "@router.get(\"/{invoice_id}\")",
+    "claim": "route:GET /api/billing/invoices/{invoice_id}:services/billing/app/routers/invoices.py"
+   },
+   "chains": [
+    [
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/invoices.py",
+      "line": 6,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "from app.services.totals import round_total",
+      "claim": "import:services/billing/app/services/totals.py:round_total"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/invoices.py",
+      "line": 29,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "@router.get(\"/{invoice_id}\")",
+      "claim": "route:GET /api/billing/invoices/{invoice_id}:services/billing/app/routers/invoices.py"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/billing.py",
+      "line": 7,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "billing_router.include_router(invoices_router, prefix=\"/invoices\")"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/api.py",
+      "line": 6,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "api_router.include_router(billing_router, prefix=\"/billing\")"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/main.py",
+      "line": 6,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "app.include_router(api_router, prefix=\"/api\")"
+     }
+    ]
+   ],
+   "also_mounted": [],
+   "priority": "candidate",
+   "by_name": true,
+   "id": "a-0000000000000006",
+   "fingerprint": "0000000000000000000000000000000000000000000000000000000000000006"
+  },
+  {
+   "label": "/c/candidate-a",
+   "kind": "screen",
+   "repo": "acme/web",
+   "module": "billing",
+   "route_line": {
+    "repo": "acme/api",
+    "path": "services/billing/app/routers/invoices.py",
+    "line": 29,
+    "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+    "detail": "@router.get(\"/{invoice_id}\")",
+    "claim": "route:GET /api/billing/invoices/{invoice_id}:services/billing/app/routers/invoices.py"
+   },
+   "chains": [
+    [
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/invoices.py",
+      "line": 6,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "from app.services.totals import round_total",
+      "claim": "import:services/billing/app/services/totals.py:round_total"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/invoices.py",
+      "line": 29,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "@router.get(\"/{invoice_id}\")",
+      "claim": "route:GET /api/billing/invoices/{invoice_id}:services/billing/app/routers/invoices.py"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/billing.py",
+      "line": 7,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "billing_router.include_router(invoices_router, prefix=\"/invoices\")"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/api.py",
+      "line": 6,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "api_router.include_router(billing_router, prefix=\"/billing\")"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/main.py",
+      "line": 6,
+      "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+      "detail": "app.include_router(api_router, prefix=\"/api\")"
+     }
+    ]
+   ],
+   "also_mounted": [],
+   "priority": "candidate",
+   "by_name": true,
+   "id": "a-0000000000000007",
+   "fingerprint": "0000000000000000000000000000000000000000000000000000000000000007"
+  }
+ ],
+ "propagations": [
+  {
+   "complete": false,
+   "consumers": [],
+   "contract_candidates": [],
+   "contract_changes": [],
+   "contract_reads": [],
+   "hops": [
+    {
+     "candidate": false,
+     "chain": [
+      {
+       "claim": "import:services/billing/app/services/totals.py:round_total",
+       "detail": "from app.services.totals import round_total",
+       "line": 6,
+       "path": "services/billing/app/routers/invoices.py",
+       "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+       "repo": "acme/api"
+      },
+      {
+       "detail": "    total = round_total(Decimal(invoice.amount_cents) / 100)",
+       "line": 40,
+       "path": "services/billing/app/routers/invoices.py",
+       "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+       "repo": "acme/api"
+      },
+      {
+       "detail": "  return apiGet<Invoice>(invoiceUrl(invoiceId));",
+       "line": 33,
+       "path": "src/modules/billing/api.ts",
+       "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+       "repo": "acme/web"
+      }
+     ],
+     "complete": true,
+     "declared": [
+      "acme/web",
+      "acme/api"
+     ],
+     "depth": 1,
+     "detail": "",
+     "direction": "reverse",
+     "from_repo": "acme/api",
+     "kind": "http",
+     "note": "",
+     "pins": [
+      {
+       "ref": "main",
+       "repo": "acme/web",
+       "role": "primary",
+       "sha": "353a7494acd0a6cf22ad375e590e3b232027d427"
+      }
+     ],
+     "reasons": [],
+     "seeds": [
+      {
+       "evidence": [
+        {
+         "detail": "  return apiGet<Invoice>(invoiceUrl(invoiceId));",
+         "line": 33,
+         "path": "src/modules/billing/api.ts",
+         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "repo": "acme/web"
+        }
+       ],
+       "lines": [
+        33
+       ],
+       "path": "src/modules/billing/api.ts",
+       "repo": "acme/web",
+       "sha": "353a7494acd0a6cf22ad375e590e3b232027d427"
+      }
+     ],
+     "source_evidence": [
+      {
+       "claim": "route:GET /api/billing/invoices/{invoice_id}:services/billing/app/routers/invoices.py",
+       "detail": "@router.get(\"/{invoice_id}\")",
+       "line": 29,
+       "path": "services/billing/app/routers/invoices.py",
+       "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+       "repo": "acme/api"
+      },
+      {
+       "detail": "billing_router.include_router(invoices_router, prefix=\"/invoices\")",
+       "line": 7,
+       "path": "services/billing/app/routers/billing.py",
+       "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+       "repo": "acme/api"
+      },
+      {
+       "detail": "api_router.include_router(billing_router, prefix=\"/billing\")",
+       "line": 6,
+       "path": "services/billing/app/api.py",
+       "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+       "repo": "acme/api"
+      },
+      {
+       "detail": "app.include_router(api_router, prefix=\"/api\")",
+       "line": 6,
+       "path": "services/billing/app/main.py",
+       "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+       "repo": "acme/api"
+      }
+     ],
+     "target_evidence": [
+      {
+       "detail": "  return apiGet<Invoice>(invoiceUrl(invoiceId));",
+       "line": 33,
+       "path": "src/modules/billing/api.ts",
+       "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+       "repo": "acme/web"
+      },
+      {
+       "detail": "export const invoiceUrl = (invoiceId: string) => `/api/billing/invoices/${invoiceId}`;",
+       "line": 4,
+       "path": "src/api/endpoints.ts",
+       "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+       "repo": "acme/web"
+      }
+     ],
+     "to_repo": "acme/web"
+    }
+   ],
+   "http_edges": [
+    {
+     "ambiguous_with": [],
+     "candidate": false,
+     "client": {
+      "detail": "  return apiGet<Invoice>(invoiceUrl(invoiceId));",
+      "line": 33,
+      "path": "src/modules/billing/api.ts",
+      "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+      "repo": "acme/web"
+     },
+     "client_repo": "acme/web",
+     "direction": "to_client",
+     "fallback": false,
+     "kind": "exact",
+     "method": "GET",
+     "note": "",
+     "rematched": null,
+     "removed": false,
+     "route": {
+      "evidence": [
+       {
+        "claim": "route:GET /api/billing/invoices/{invoice_id}:services/billing/app/routers/invoices.py",
+        "detail": "@router.get(\"/{invoice_id}\")",
+        "line": 29,
+        "path": "services/billing/app/routers/invoices.py",
+        "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+        "repo": "acme/api"
+       },
+       {
+        "detail": "billing_router.include_router(invoices_router, prefix=\"/invoices\")",
+        "line": 7,
+        "path": "services/billing/app/routers/billing.py",
+        "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+        "repo": "acme/api"
+       },
+       {
+        "detail": "api_router.include_router(billing_router, prefix=\"/billing\")",
+        "line": 6,
+        "path": "services/billing/app/api.py",
+        "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+        "repo": "acme/api"
+       },
+       {
+        "detail": "app.include_router(api_router, prefix=\"/api\")",
+        "line": 6,
+        "path": "services/billing/app/main.py",
+        "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+        "repo": "acme/api"
+       }
+      ],
+      "file": "services/billing/app/routers/invoices.py",
+      "handler": "get_invoice",
+      "kind": "api_route",
+      "method": "GET",
+      "module": "billing",
+      "partial": false,
+      "path": "/api/billing/invoices/{invoice_id}",
+      "repo": "acme/api",
+      "target": "services/billing/app/routers/invoices.py"
+     },
+     "server_repo": "acme/api",
+     "url": "/api/billing/invoices/{}",
+     "via": [
+      {
+       "detail": "export const invoiceUrl = (invoiceId: string) => `/api/billing/invoices/${invoiceId}`;",
+       "line": 4,
+       "path": "src/api/endpoints.ts",
+       "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+       "repo": "acme/web"
+      }
+     ]
+    }
+   ],
+   "passes": [
+    {
+     "analysis": {
+      "files": [
+       {
+        "path": "services/billing/app/services/totals.py",
+        "repo": "acme/api",
+        "role": "source",
+        "status": "modified"
+       }
+      ],
+      "impacts": [
+       {
+        "callers": [
+         {
+          "call_sites": [
+           {
+            "args": [
+             "Decimal(invoice.amount_cents) / 100"
+            ],
+            "caller_symbol": "get_invoice",
+            "evidence": {
+             "detail": "    total = round_total(Decimal(invoice.amount_cents) / 100)",
+             "line": 40,
+             "path": "services/billing/app/routers/invoices.py",
+             "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+             "repo": "acme/api"
+            },
+            "form": "call",
+            "import_evidence": {
+             "claim": "import:services/billing/app/services/totals.py:round_total",
+             "detail": "from app.services.totals import round_total",
+             "line": 6,
+             "path": "services/billing/app/routers/invoices.py",
+             "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+             "repo": "acme/api"
+            },
+            "line": 40,
+            "path": "services/billing/app/routers/invoices.py",
+            "repo": "acme/api",
+            "symbol": "round_total"
+           }
+          ],
+          "evidence": [
+           {
+            "claim": "import:services/billing/app/services/totals.py:round_total",
+            "detail": "from app.services.totals import round_total",
+            "line": 6,
+            "path": "services/billing/app/routers/invoices.py",
+            "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+            "repo": "acme/api"
+           },
+           {
+            "detail": "    total = round_total(Decimal(invoice.amount_cents) / 100)",
+            "line": 40,
+            "path": "services/billing/app/routers/invoices.py",
+            "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+            "repo": "acme/api"
+           }
+          ],
+          "path": "services/billing/app/routers/invoices.py",
+          "reason": null,
+          "repo": "acme/api",
+          "symbol": "get_invoice"
+         }
+        ],
+        "exclusions": [],
+        "hub": false,
+        "importer_count": 1,
+        "importer_reasons": [],
+        "importers": [
+         {
+          "bindings": [
+           {
+            "imported": "round_total",
+            "line": 6,
+            "local": "round_total",
+            "type_only": false
+           }
+          ],
+          "evidence": {
+           "claim": "import:services/billing/app/services/totals.py:round_total",
+           "detail": "from app.services.totals import round_total",
+           "line": 6,
+           "path": "services/billing/app/routers/invoices.py",
+           "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+           "repo": "acme/api"
+          },
+          "importer_path": "services/billing/app/routers/invoices.py",
+          "kind": "import",
+          "names": [
+           "round_total"
+          ],
+          "specifier": "app.services.totals",
+          "target": "services/billing/app/services/totals.py",
+          "type_only": false
+         }
+        ],
+        "importers_complete": true,
+        "names_unreadable": [],
+        "narrowed": false,
+        "not_distinctive": [],
+        "path": "services/billing/app/services/totals.py",
+        "reached_names": null,
+        "repo": "acme/api",
+        "role": "source",
+        "status": "modified",
+        "symbols": [
+         {
+          "added_lines": [
+           6
+          ],
+          "change": "modified",
+          "end": 6,
+          "evidence": [
+           {
+            "detail": "    return amount.quantize(Decimal(\"0.01\"), rounding=ROUND_HALF_UP)",
+            "line": 6,
+            "path": "services/billing/app/services/totals.py",
+            "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+            "repo": "acme/api"
+           },
+           {
+            "detail": "    return round(amount, 2)",
+            "line": 6,
+            "path": "services/billing/app/services/totals.py",
+            "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+            "repo": "acme/api"
+           }
+          ],
+          "export_names": [
+           "round_total"
+          ],
+          "exported": true,
+          "guards": [],
+          "kind": "function",
+          "name": "round_total",
+          "nested": [],
+          "path": "services/billing/app/services/totals.py",
+          "removed_lines": [
+           6
+          ],
+          "repo": "acme/api",
+          "side": "after",
+          "start": 4
+         },
+         {
+          "added_lines": [
+           1
+          ],
+          "change": "modified",
+          "end": 1,
+          "evidence": [
+           {
+            "detail": "from decimal import ROUND_HALF_UP, Decimal",
+            "line": 1,
+            "path": "services/billing/app/services/totals.py",
+            "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+            "repo": "acme/api"
+           },
+           {
+            "detail": "from decimal import Decimal",
+            "line": 1,
+            "path": "services/billing/app/services/totals.py",
+            "ref": "558daf4a8324a61dd995a0306e4df353788b703c",
+            "repo": "acme/api"
+           }
+          ],
+          "export_names": [],
+          "exported": false,
+          "guards": [],
+          "kind": "module",
+          "name": "<module>",
+          "nested": [],
+          "path": "services/billing/app/services/totals.py",
+          "removed_lines": [
+           1
+          ],
+          "repo": "acme/api",
+          "side": "after",
+          "start": 1
+         }
+        ],
+        "unit_tests": []
+       }
+      ],
+      "repo": "acme/api"
+     },
+     "candidate": false,
+     "depth": 0,
+     "hop": null,
+     "prefix": [],
+     "reach": {
+      "complete": true,
+      "reached": [
+       {
+        "area": {
+         "also_mounted": [],
+         "by_name": false,
+         "chains": [
+          [
+           {
+            "claim": "import:services/billing/app/services/totals.py:round_total",
+            "detail": "from app.services.totals import round_total",
+            "line": 6,
+            "path": "services/billing/app/routers/invoices.py",
+            "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+            "repo": "acme/api"
+           },
+           {
+            "claim": "route:GET /api/billing/invoices/{invoice_id}:services/billing/app/routers/invoices.py",
+            "detail": "@router.get(\"/{invoice_id}\")",
+            "line": 29,
+            "path": "services/billing/app/routers/invoices.py",
+            "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+            "repo": "acme/api"
+           },
+           {
+            "detail": "billing_router.include_router(invoices_router, prefix=\"/invoices\")",
+            "line": 7,
+            "path": "services/billing/app/routers/billing.py",
+            "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+            "repo": "acme/api"
+           },
+           {
+            "detail": "api_router.include_router(billing_router, prefix=\"/billing\")",
+            "line": 6,
+            "path": "services/billing/app/api.py",
+            "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+            "repo": "acme/api"
+           },
+           {
+            "detail": "app.include_router(api_router, prefix=\"/api\")",
+            "line": 6,
+            "path": "services/billing/app/main.py",
+            "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+            "repo": "acme/api"
+           }
+          ]
+         ],
+         "kind": "api_route",
+         "label": "GET /api/billing/invoices/{invoice_id}",
+         "module": "billing",
+         "priority": "must_test",
+         "repo": "acme/api",
+         "route_line": {
+          "claim": "route:GET /api/billing/invoices/{invoice_id}:services/billing/app/routers/invoices.py",
+          "detail": "@router.get(\"/{invoice_id}\")",
+          "line": 29,
+          "path": "services/billing/app/routers/invoices.py",
+          "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+          "repo": "acme/api"
+         }
+        },
+        "complete": true,
+        "reasons": [],
+        "routes": [
+         {
+          "evidence": [
+           {
+            "claim": "route:GET /api/billing/invoices/{invoice_id}:services/billing/app/routers/invoices.py",
+            "detail": "@router.get(\"/{invoice_id}\")",
+            "line": 29,
+            "path": "services/billing/app/routers/invoices.py",
+            "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+            "repo": "acme/api"
+           },
+           {
+            "detail": "billing_router.include_router(invoices_router, prefix=\"/invoices\")",
+            "line": 7,
+            "path": "services/billing/app/routers/billing.py",
+            "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+            "repo": "acme/api"
+           },
+           {
+            "detail": "api_router.include_router(billing_router, prefix=\"/billing\")",
+            "line": 6,
+            "path": "services/billing/app/api.py",
+            "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+            "repo": "acme/api"
+           },
+           {
+            "detail": "app.include_router(api_router, prefix=\"/api\")",
+            "line": 6,
+            "path": "services/billing/app/main.py",
+            "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+            "repo": "acme/api"
+           }
+          ],
+          "file": "services/billing/app/routers/invoices.py",
+          "handler": "get_invoice",
+          "kind": "api_route",
+          "method": "GET",
+          "module": "billing",
+          "partial": false,
+          "path": "/api/billing/invoices/{invoice_id}",
+          "repo": "acme/api",
+          "target": "services/billing/app/routers/invoices.py"
+         }
+        ]
+       }
+      ],
+      "reasons": []
+     },
+     "repo": "acme/api",
+     "seed": null,
+     "sha": "8869159a63913fd8dbd220ee27e9bcac2d03cc33"
+    },
+    {
+     "analysis": {
+      "files": [
+       {
+        "path": "src/modules/billing/api.ts",
+        "repo": "acme/web",
+        "role": "source",
+        "status": "modified"
+       }
+      ],
+      "impacts": [
+       {
+        "callers": [
+         {
+          "call_sites": [
+           {
+            "args": [
+             "invoiceId"
+            ],
+            "caller_symbol": "InvoiceDetailPage",
+            "evidence": {
+             "detail": "    fetchInvoice(invoiceId).then(setInvoice);",
+             "line": 15,
+             "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
+             "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+             "repo": "acme/web"
+            },
+            "form": "call",
+            "import_evidence": {
+             "claim": "import:src/modules/billing/api.ts:fetchAuditLog,fetchInvoice",
+             "detail": "import { fetchAuditLog, fetchInvoice } from \"../api\";",
+             "line": 6,
+             "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
+             "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+             "repo": "acme/web"
+            },
+            "line": 15,
+            "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
+            "repo": "acme/web",
+            "symbol": "fetchInvoice"
+           }
+          ],
+          "evidence": [
+           {
+            "claim": "import:src/modules/billing/api.ts:fetchAuditLog,fetchInvoice",
+            "detail": "import { fetchAuditLog, fetchInvoice } from \"../api\";",
+            "line": 6,
+            "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
+            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "repo": "acme/web"
+           },
+           {
+            "claim": "import:src/modules/billing/api.ts:AuditEntry,Invoice",
+            "detail": "import type { AuditEntry, Invoice } from \"../api\";",
+            "line": 7,
+            "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
+            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "repo": "acme/web"
+           },
+           {
+            "detail": "    fetchInvoice(invoiceId).then(setInvoice);",
+            "line": 15,
+            "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
+            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "repo": "acme/web"
+           }
+          ],
+          "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
+          "reason": null,
+          "repo": "acme/web",
+          "symbol": "InvoiceDetailPage"
+         }
+        ],
+        "exclusions": [
+         {
+          "evidence": [
+           {
+            "claim": "import:src/modules/billing/api.ts:fetchInvoices",
+            "detail": "import { fetchInvoices } from \"../api\";",
+            "line": 7,
+            "path": "src/modules/billing/pages/InvoiceListPage.tsx",
+            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "repo": "acme/web"
+           },
+           {
+            "claim": "import:src/modules/billing/api.ts:Invoice",
+            "detail": "import type { Invoice } from \"../api\";",
+            "line": 8,
+            "path": "src/modules/billing/pages/InvoiceListPage.tsx",
+            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "repo": "acme/web"
+           },
+           {
+            "detail": "export function fetchInvoice(invoiceId: string): Promise<Invoice> {",
+            "line": 32,
+            "path": "src/modules/billing/api.ts",
+            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "repo": "acme/web"
+           }
+          ],
+          "reason": "named_export_narrowing",
+          "subject_path": "src/modules/billing/pages/InvoiceListPage.tsx"
+         },
+         {
+          "evidence": [
+           {
+            "claim": "import:src/modules/billing/api.ts:fetchSettlementSummary",
+            "detail": "import { fetchSettlementSummary } from \"../api\";",
+            "line": 4,
+            "path": "src/modules/billing/pages/SettlementsPage.tsx",
+            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "repo": "acme/web"
+           },
+           {
+            "claim": "import:src/modules/billing/api.ts:SettlementSummary",
+            "detail": "import type { SettlementSummary } from \"../api\";",
+            "line": 5,
+            "path": "src/modules/billing/pages/SettlementsPage.tsx",
+            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "repo": "acme/web"
+           },
+           {
+            "detail": "export function fetchInvoice(invoiceId: string): Promise<Invoice> {",
+            "line": 32,
+            "path": "src/modules/billing/api.ts",
+            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "repo": "acme/web"
+           }
+          ],
+          "reason": "named_export_narrowing",
+          "subject_path": "src/modules/billing/pages/SettlementsPage.tsx"
+         }
+        ],
+        "hub": false,
+        "importer_count": 3,
+        "importer_reasons": [],
+        "importers": [
+         {
+          "bindings": [
+           {
+            "imported": "fetchAuditLog",
+            "line": 0,
+            "local": "fetchAuditLog",
+            "type_only": false
+           },
+           {
+            "imported": "fetchInvoice",
+            "line": 0,
+            "local": "fetchInvoice",
+            "type_only": false
+           }
+          ],
+          "evidence": {
+           "claim": "import:src/modules/billing/api.ts:fetchAuditLog,fetchInvoice",
+           "detail": "import { fetchAuditLog, fetchInvoice } from \"../api\";",
+           "line": 6,
+           "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
+           "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+           "repo": "acme/web"
+          },
+          "importer_path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
+          "kind": "import",
+          "names": [
+           "fetchAuditLog",
+           "fetchInvoice"
+          ],
+          "specifier": "../api",
+          "target": "src/modules/billing/api.ts",
+          "type_only": false
+         },
+         {
+          "bindings": [
+           {
+            "imported": "AuditEntry",
+            "line": 0,
+            "local": "AuditEntry",
+            "type_only": true
+           },
+           {
+            "imported": "Invoice",
+            "line": 0,
+            "local": "Invoice",
+            "type_only": true
+           }
+          ],
+          "evidence": {
+           "claim": "import:src/modules/billing/api.ts:AuditEntry,Invoice",
+           "detail": "import type { AuditEntry, Invoice } from \"../api\";",
+           "line": 7,
+           "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
+           "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+           "repo": "acme/web"
+          },
+          "importer_path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
+          "kind": "import",
+          "names": [
+           "AuditEntry",
+           "Invoice"
+          ],
+          "specifier": "../api",
+          "target": "src/modules/billing/api.ts",
+          "type_only": true
+         },
+         {
+          "bindings": [
+           {
+            "imported": "fetchInvoices",
+            "line": 0,
+            "local": "fetchInvoices",
+            "type_only": false
+           }
+          ],
+          "evidence": {
+           "claim": "import:src/modules/billing/api.ts:fetchInvoices",
+           "detail": "import { fetchInvoices } from \"../api\";",
+           "line": 7,
+           "path": "src/modules/billing/pages/InvoiceListPage.tsx",
+           "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+           "repo": "acme/web"
+          },
+          "importer_path": "src/modules/billing/pages/InvoiceListPage.tsx",
+          "kind": "import",
+          "names": [
+           "fetchInvoices"
+          ],
+          "specifier": "../api",
+          "target": "src/modules/billing/api.ts",
+          "type_only": false
+         },
+         {
+          "bindings": [
+           {
+            "imported": "Invoice",
+            "line": 0,
+            "local": "Invoice",
+            "type_only": true
+           }
+          ],
+          "evidence": {
+           "claim": "import:src/modules/billing/api.ts:Invoice",
+           "detail": "import type { Invoice } from \"../api\";",
+           "line": 8,
+           "path": "src/modules/billing/pages/InvoiceListPage.tsx",
+           "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+           "repo": "acme/web"
+          },
+          "importer_path": "src/modules/billing/pages/InvoiceListPage.tsx",
+          "kind": "import",
+          "names": [
+           "Invoice"
+          ],
+          "specifier": "../api",
+          "target": "src/modules/billing/api.ts",
+          "type_only": true
+         },
+         {
+          "bindings": [
+           {
+            "imported": "fetchSettlementSummary",
+            "line": 0,
+            "local": "fetchSettlementSummary",
+            "type_only": false
+           }
+          ],
+          "evidence": {
+           "claim": "import:src/modules/billing/api.ts:fetchSettlementSummary",
+           "detail": "import { fetchSettlementSummary } from \"../api\";",
+           "line": 4,
+           "path": "src/modules/billing/pages/SettlementsPage.tsx",
+           "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+           "repo": "acme/web"
+          },
+          "importer_path": "src/modules/billing/pages/SettlementsPage.tsx",
+          "kind": "import",
+          "names": [
+           "fetchSettlementSummary"
+          ],
+          "specifier": "../api",
+          "target": "src/modules/billing/api.ts",
+          "type_only": false
+         },
+         {
+          "bindings": [
+           {
+            "imported": "SettlementSummary",
+            "line": 0,
+            "local": "SettlementSummary",
+            "type_only": true
+           }
+          ],
+          "evidence": {
+           "claim": "import:src/modules/billing/api.ts:SettlementSummary",
+           "detail": "import type { SettlementSummary } from \"../api\";",
+           "line": 5,
+           "path": "src/modules/billing/pages/SettlementsPage.tsx",
+           "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+           "repo": "acme/web"
+          },
+          "importer_path": "src/modules/billing/pages/SettlementsPage.tsx",
+          "kind": "import",
+          "names": [
+           "SettlementSummary"
+          ],
+          "specifier": "../api",
+          "target": "src/modules/billing/api.ts",
+          "type_only": true
+         }
+        ],
+        "importers_complete": true,
+        "names_unreadable": [],
+        "narrowed": true,
+        "not_distinctive": [],
+        "path": "src/modules/billing/api.ts",
+        "reached_names": [
+         "fetchInvoice"
+        ],
+        "repo": "acme/web",
+        "role": "source",
+        "status": "modified",
+        "symbols": [
+         {
+          "added_lines": [
+           33
+          ],
+          "change": "modified",
+          "end": 34,
+          "evidence": [
+           {
+            "detail": "  return apiGet<Invoice>(invoiceUrl(invoiceId));",
+            "line": 33,
+            "path": "src/modules/billing/api.ts",
+            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "repo": "acme/web"
+           }
+          ],
+          "export_names": [
+           "fetchInvoice"
+          ],
+          "exported": true,
+          "guards": [],
+          "kind": "function",
+          "name": "fetchInvoice",
+          "nested": [],
+          "path": "src/modules/billing/api.ts",
+          "removed_lines": [],
+          "repo": "acme/web",
+          "side": "after",
+          "start": 32
+         }
+        ],
+        "unit_tests": []
+       }
+      ],
+      "repo": "acme/web"
+     },
+     "candidate": false,
+     "depth": 1,
+     "hop": 0,
+     "prefix": [
+      {
+       "claim": "import:services/billing/app/services/totals.py:round_total",
+       "detail": "from app.services.totals import round_total",
+       "line": 6,
+       "path": "services/billing/app/routers/invoices.py",
+       "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+       "repo": "acme/api"
+      },
+      {
+       "detail": "    total = round_total(Decimal(invoice.amount_cents) / 100)",
+       "line": 40,
+       "path": "services/billing/app/routers/invoices.py",
+       "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+       "repo": "acme/api"
+      },
+      {
+       "detail": "  return apiGet<Invoice>(invoiceUrl(invoiceId));",
+       "line": 33,
+       "path": "src/modules/billing/api.ts",
+       "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+       "repo": "acme/web"
+      }
+     ],
+     "reach": {
+      "complete": true,
+      "reached": [
+       {
+        "area": {
+         "also_mounted": [
+          "/cases/:caseId/invoices/:invoiceId"
+         ],
+         "by_name": false,
+         "chains": [
+          [
+           {
+            "claim": "import:src/modules/billing/api.ts:fetchAuditLog,fetchInvoice",
+            "detail": "import { fetchAuditLog, fetchInvoice } from \"../api\";",
+            "line": 6,
+            "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
+            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "repo": "acme/web"
+           },
+           {
+            "claim": "import:src/modules/billing/pages/InvoiceDetailPage.tsx:*",
+            "detail": "import InvoiceDetailPage from \"./pages/InvoiceDetailPage\";",
+            "line": 3,
+            "path": "src/modules/billing/routes.tsx",
+            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "repo": "acme/web"
+           },
+           {
+            "claim": "route:/billing/invoices/:invoiceId:src/modules/billing/pages/InvoiceDetailPage.tsx",
+            "detail": "    <Route path=\"/billing/invoices/:invoiceId\" element={<InvoiceDetailPage />} />",
+            "line": 10,
+            "path": "src/modules/billing/routes.tsx",
+            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "repo": "acme/web"
+           }
+          ],
+          [
+           {
+            "claim": "import:src/modules/billing/api.ts:fetchAuditLog,fetchInvoice",
+            "detail": "import { fetchAuditLog, fetchInvoice } from \"../api\";",
+            "line": 6,
+            "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
+            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "repo": "acme/web"
+           },
+           {
+            "claim": "import:src/modules/billing/pages/InvoiceDetailPage.tsx:*",
+            "detail": "import InvoiceDetailPage from \"@/modules/billing/pages/InvoiceDetailPage\";",
+            "line": 3,
+            "path": "src/modules/cases/routes.tsx",
+            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "repo": "acme/web"
+           },
+           {
+            "claim": "route:/cases/:caseId/invoices/:invoiceId:src/modules/billing/pages/InvoiceDetailPage.tsx",
+            "detail": "    <Route path=\"/cases/:caseId/invoices/:invoiceId\" element={<InvoiceDetailPage />} />",
+            "line": 11,
+            "path": "src/modules/cases/routes.tsx",
+            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "repo": "acme/web"
+           }
+          ]
+         ],
+         "kind": "screen",
+         "label": "/billing/invoices/:invoiceId",
+         "module": "billing",
+         "priority": "must_test",
+         "repo": "acme/web",
+         "route_line": {
+          "claim": "route:/billing/invoices/:invoiceId:src/modules/billing/pages/InvoiceDetailPage.tsx",
+          "detail": "    <Route path=\"/billing/invoices/:invoiceId\" element={<InvoiceDetailPage />} />",
+          "line": 10,
+          "path": "src/modules/billing/routes.tsx",
+          "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+          "repo": "acme/web"
+         }
+        },
+        "complete": true,
+        "reasons": [],
+        "routes": [
+         {
+          "evidence": [
+           {
+            "claim": "import:src/modules/billing/pages/InvoiceDetailPage.tsx:*",
+            "detail": "import InvoiceDetailPage from \"./pages/InvoiceDetailPage\";",
+            "line": 3,
+            "path": "src/modules/billing/routes.tsx",
+            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "repo": "acme/web"
+           },
+           {
+            "claim": "route:/billing/invoices/:invoiceId:src/modules/billing/pages/InvoiceDetailPage.tsx",
+            "detail": "    <Route path=\"/billing/invoices/:invoiceId\" element={<InvoiceDetailPage />} />",
+            "line": 10,
+            "path": "src/modules/billing/routes.tsx",
+            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "repo": "acme/web"
+           }
+          ],
+          "file": "src/modules/billing/routes.tsx",
+          "handler": "InvoiceDetailPage",
+          "kind": "screen",
+          "method": "",
+          "module": "billing",
+          "partial": false,
+          "path": "/billing/invoices/:invoiceId",
+          "repo": "acme/web",
+          "target": "src/modules/billing/pages/InvoiceDetailPage.tsx"
+         },
+         {
+          "evidence": [
+           {
+            "claim": "import:src/modules/billing/pages/InvoiceDetailPage.tsx:*",
+            "detail": "import InvoiceDetailPage from \"@/modules/billing/pages/InvoiceDetailPage\";",
+            "line": 3,
+            "path": "src/modules/cases/routes.tsx",
+            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "repo": "acme/web"
+           },
+           {
+            "claim": "route:/cases/:caseId/invoices/:invoiceId:src/modules/billing/pages/InvoiceDetailPage.tsx",
+            "detail": "    <Route path=\"/cases/:caseId/invoices/:invoiceId\" element={<InvoiceDetailPage />} />",
+            "line": 11,
+            "path": "src/modules/cases/routes.tsx",
+            "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+            "repo": "acme/web"
+           }
+          ],
+          "file": "src/modules/cases/routes.tsx",
+          "handler": "InvoiceDetailPage",
+          "kind": "screen",
+          "method": "",
+          "module": "cases",
+          "partial": false,
+          "path": "/cases/:caseId/invoices/:invoiceId",
+          "repo": "acme/web",
+          "target": "src/modules/billing/pages/InvoiceDetailPage.tsx"
+         }
+        ]
+       }
+      ],
+      "reasons": []
+     },
+     "repo": "acme/web",
+     "seed": {
+      "evidence": [
+       {
+        "detail": "  return apiGet<Invoice>(invoiceUrl(invoiceId));",
+        "line": 33,
+        "path": "src/modules/billing/api.ts",
+        "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+        "repo": "acme/web"
+       }
+      ],
+      "lines": [
+       33
+      ],
+      "path": "src/modules/billing/api.ts",
+      "repo": "acme/web",
+      "sha": "353a7494acd0a6cf22ad375e590e3b232027d427"
+     },
+     "sha": "353a7494acd0a6cf22ad375e590e3b232027d427"
+    }
+   ],
+   "reached": [
+    {
+     "area": {
+      "also_mounted": [],
+      "by_name": false,
+      "chains": [
+       [
+        {
+         "claim": "import:services/billing/app/services/totals.py:round_total",
+         "detail": "from app.services.totals import round_total",
+         "line": 6,
+         "path": "services/billing/app/routers/invoices.py",
+         "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+         "repo": "acme/api"
+        },
+        {
+         "claim": "route:GET /api/billing/invoices/{invoice_id}:services/billing/app/routers/invoices.py",
+         "detail": "@router.get(\"/{invoice_id}\")",
+         "line": 29,
+         "path": "services/billing/app/routers/invoices.py",
+         "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+         "repo": "acme/api"
+        },
+        {
+         "detail": "billing_router.include_router(invoices_router, prefix=\"/invoices\")",
+         "line": 7,
+         "path": "services/billing/app/routers/billing.py",
+         "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+         "repo": "acme/api"
+        },
+        {
+         "detail": "api_router.include_router(billing_router, prefix=\"/billing\")",
+         "line": 6,
+         "path": "services/billing/app/api.py",
+         "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+         "repo": "acme/api"
+        },
+        {
+         "detail": "app.include_router(api_router, prefix=\"/api\")",
+         "line": 6,
+         "path": "services/billing/app/main.py",
+         "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+         "repo": "acme/api"
+        }
+       ]
+      ],
+      "kind": "api_route",
+      "label": "GET /api/billing/invoices/{invoice_id}",
+      "module": "billing",
+      "priority": "must_test",
+      "repo": "acme/api",
+      "route_line": {
+       "claim": "route:GET /api/billing/invoices/{invoice_id}:services/billing/app/routers/invoices.py",
+       "detail": "@router.get(\"/{invoice_id}\")",
+       "line": 29,
+       "path": "services/billing/app/routers/invoices.py",
+       "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+       "repo": "acme/api"
+      }
+     },
+     "complete": true,
+     "reasons": [],
+     "routes": [
+      {
+       "evidence": [
+        {
+         "claim": "route:GET /api/billing/invoices/{invoice_id}:services/billing/app/routers/invoices.py",
+         "detail": "@router.get(\"/{invoice_id}\")",
+         "line": 29,
+         "path": "services/billing/app/routers/invoices.py",
+         "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+         "repo": "acme/api"
+        },
+        {
+         "detail": "billing_router.include_router(invoices_router, prefix=\"/invoices\")",
+         "line": 7,
+         "path": "services/billing/app/routers/billing.py",
+         "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+         "repo": "acme/api"
+        },
+        {
+         "detail": "api_router.include_router(billing_router, prefix=\"/billing\")",
+         "line": 6,
+         "path": "services/billing/app/api.py",
+         "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+         "repo": "acme/api"
+        },
+        {
+         "detail": "app.include_router(api_router, prefix=\"/api\")",
+         "line": 6,
+         "path": "services/billing/app/main.py",
+         "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+         "repo": "acme/api"
+        }
+       ],
+       "file": "services/billing/app/routers/invoices.py",
+       "handler": "get_invoice",
+       "kind": "api_route",
+       "method": "GET",
+       "module": "billing",
+       "partial": false,
+       "path": "/api/billing/invoices/{invoice_id}",
+       "repo": "acme/api",
+       "target": "services/billing/app/routers/invoices.py"
+      }
+     ]
+    },
+    {
+     "area": {
+      "also_mounted": [
+       "/cases/:caseId/invoices/:invoiceId"
+      ],
+      "by_name": false,
+      "chains": [
+       [
+        {
+         "claim": "import:services/billing/app/services/totals.py:round_total",
+         "detail": "from app.services.totals import round_total",
+         "line": 6,
+         "path": "services/billing/app/routers/invoices.py",
+         "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+         "repo": "acme/api"
+        },
+        {
+         "detail": "    total = round_total(Decimal(invoice.amount_cents) / 100)",
+         "line": 40,
+         "path": "services/billing/app/routers/invoices.py",
+         "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+         "repo": "acme/api"
+        },
+        {
+         "detail": "  return apiGet<Invoice>(invoiceUrl(invoiceId));",
+         "line": 33,
+         "path": "src/modules/billing/api.ts",
+         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "repo": "acme/web"
+        },
+        {
+         "claim": "import:src/modules/billing/api.ts:fetchAuditLog,fetchInvoice",
+         "detail": "import { fetchAuditLog, fetchInvoice } from \"../api\";",
+         "line": 6,
+         "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
+         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "repo": "acme/web"
+        },
+        {
+         "claim": "import:src/modules/billing/pages/InvoiceDetailPage.tsx:*",
+         "detail": "import InvoiceDetailPage from \"./pages/InvoiceDetailPage\";",
+         "line": 3,
+         "path": "src/modules/billing/routes.tsx",
+         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "repo": "acme/web"
+        },
+        {
+         "claim": "route:/billing/invoices/:invoiceId:src/modules/billing/pages/InvoiceDetailPage.tsx",
+         "detail": "    <Route path=\"/billing/invoices/:invoiceId\" element={<InvoiceDetailPage />} />",
+         "line": 10,
+         "path": "src/modules/billing/routes.tsx",
+         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "repo": "acme/web"
+        }
+       ],
+       [
+        {
+         "claim": "import:services/billing/app/services/totals.py:round_total",
+         "detail": "from app.services.totals import round_total",
+         "line": 6,
+         "path": "services/billing/app/routers/invoices.py",
+         "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+         "repo": "acme/api"
+        },
+        {
+         "detail": "    total = round_total(Decimal(invoice.amount_cents) / 100)",
+         "line": 40,
+         "path": "services/billing/app/routers/invoices.py",
+         "ref": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+         "repo": "acme/api"
+        },
+        {
+         "detail": "  return apiGet<Invoice>(invoiceUrl(invoiceId));",
+         "line": 33,
+         "path": "src/modules/billing/api.ts",
+         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "repo": "acme/web"
+        },
+        {
+         "claim": "import:src/modules/billing/api.ts:fetchAuditLog,fetchInvoice",
+         "detail": "import { fetchAuditLog, fetchInvoice } from \"../api\";",
+         "line": 6,
+         "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
+         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "repo": "acme/web"
+        },
+        {
+         "claim": "import:src/modules/billing/pages/InvoiceDetailPage.tsx:*",
+         "detail": "import InvoiceDetailPage from \"@/modules/billing/pages/InvoiceDetailPage\";",
+         "line": 3,
+         "path": "src/modules/cases/routes.tsx",
+         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "repo": "acme/web"
+        },
+        {
+         "claim": "route:/cases/:caseId/invoices/:invoiceId:src/modules/billing/pages/InvoiceDetailPage.tsx",
+         "detail": "    <Route path=\"/cases/:caseId/invoices/:invoiceId\" element={<InvoiceDetailPage />} />",
+         "line": 11,
+         "path": "src/modules/cases/routes.tsx",
+         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "repo": "acme/web"
+        }
+       ]
+      ],
+      "kind": "screen",
+      "label": "/billing/invoices/:invoiceId",
+      "module": "billing",
+      "priority": "must_test",
+      "repo": "acme/web",
+      "route_line": {
+       "claim": "route:/billing/invoices/:invoiceId:src/modules/billing/pages/InvoiceDetailPage.tsx",
+       "detail": "    <Route path=\"/billing/invoices/:invoiceId\" element={<InvoiceDetailPage />} />",
+       "line": 10,
+       "path": "src/modules/billing/routes.tsx",
+       "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+       "repo": "acme/web"
+      }
+     },
+     "complete": true,
+     "reasons": [],
+     "routes": [
+      {
+       "evidence": [
+        {
+         "claim": "import:src/modules/billing/pages/InvoiceDetailPage.tsx:*",
+         "detail": "import InvoiceDetailPage from \"./pages/InvoiceDetailPage\";",
+         "line": 3,
+         "path": "src/modules/billing/routes.tsx",
+         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "repo": "acme/web"
+        },
+        {
+         "claim": "route:/billing/invoices/:invoiceId:src/modules/billing/pages/InvoiceDetailPage.tsx",
+         "detail": "    <Route path=\"/billing/invoices/:invoiceId\" element={<InvoiceDetailPage />} />",
+         "line": 10,
+         "path": "src/modules/billing/routes.tsx",
+         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "repo": "acme/web"
+        }
+       ],
+       "file": "src/modules/billing/routes.tsx",
+       "handler": "InvoiceDetailPage",
+       "kind": "screen",
+       "method": "",
+       "module": "billing",
+       "partial": false,
+       "path": "/billing/invoices/:invoiceId",
+       "repo": "acme/web",
+       "target": "src/modules/billing/pages/InvoiceDetailPage.tsx"
+      },
+      {
+       "evidence": [
+        {
+         "claim": "import:src/modules/billing/pages/InvoiceDetailPage.tsx:*",
+         "detail": "import InvoiceDetailPage from \"@/modules/billing/pages/InvoiceDetailPage\";",
+         "line": 3,
+         "path": "src/modules/cases/routes.tsx",
+         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "repo": "acme/web"
+        },
+        {
+         "claim": "route:/cases/:caseId/invoices/:invoiceId:src/modules/billing/pages/InvoiceDetailPage.tsx",
+         "detail": "    <Route path=\"/cases/:caseId/invoices/:invoiceId\" element={<InvoiceDetailPage />} />",
+         "line": 11,
+         "path": "src/modules/cases/routes.tsx",
+         "ref": "353a7494acd0a6cf22ad375e590e3b232027d427",
+         "repo": "acme/web"
+        }
+       ],
+       "file": "src/modules/cases/routes.tsx",
+       "handler": "InvoiceDetailPage",
+       "kind": "screen",
+       "method": "",
+       "module": "cases",
+       "partial": false,
+       "path": "/cases/:caseId/invoices/:invoiceId",
+       "repo": "acme/web",
+       "target": "src/modules/billing/pages/InvoiceDetailPage.tsx"
+      }
+     ]
+    }
+   ],
+   "reasons": [
+    "edge:event:acme/api:acme/worker was not followed: no adapter for the kind 'event'"
+   ],
+   "repo": "acme/api",
+   "unfollowed": [
+    "edge:event:acme/api:acme/worker"
+   ],
+   "unit_test_commands": [],
+   "unit_tests": [],
+   "unread_entry_points": []
+  }
+ ],
+ "backend_calls": [],
+ "suggestions": [],
+ "mapped_tests": [],
+ "incompleteness": [
+  {
+   "kind": "edge_unfollowed",
+   "subject": "edge:event:acme/api:acme/worker",
+   "not_established": "What lies past edge:event:acme/api:acme/worker was not established, because no adapter follows that kind of edge yet",
+   "detail": "the change reached code at one end of an edge of the kind 'event' that no adapter follows yet",
+   "blocks_selection": false,
+   "scope": "selection",
+   "blocks_suggestions": false
+  }
+ ],
+ "notes": [],
+ "revision": 1,
+ "status": "completed",
+ "schema_minor": 2,
+ "review": {
+  "key": {
+   "workspace": "acme",
+   "repo": "acme/api",
+   "change": "compare:main...scenario/s13-branch-matrix",
+   "slug": "acme--acme-api--compare-main-scenario-s13-branch-matrix--66590b96"
+  },
+  "revision": 2,
+  "previous": {
+   "number": 1,
+   "file": "x.json",
+   "head_sha": "8869159a63913fd8dbd220ee27e9bcac2d03cc33"
+  },
+  "decisions": {
+   "current": [],
+   "stale": [],
+   "orphaned": [],
+   "undecided": {
+    "areas": [
+     "a-3b9ba40cce191361",
+     "a-fc27dabae232b46b"
+    ],
+    "findings": [
+     "f-76177a5906263c44",
+     "f-25a05e8452bb5fc8",
+     "f-60f74911034ba232",
+     "f-3b0bed56092a56e9"
+    ]
+   },
+   "records": [],
+   "as_of": "2026-01-02T03:04:05Z"
+  },
+  "as_of": "2026-01-02T03:04:05Z"
+ },
+ "model_notes": {
+  "notes": [
+   {
+    "id": "n-0000000000000001",
+    "kind": "observation",
+    "state": "stale",
+    "revision": 1,
+    "head_sha": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+    "report": "rep-r1",
+    "target_id": "a-3b9ba40cce191361",
+    "target_label": "GET /api/billing/invoices/{invoice_id}",
+    "text": "The invoice route also builds the settlements view; worth a look.",
+    "client": {
+     "name": "claude-desktop",
+     "version": "1.4.0"
+    },
+    "created_at": "2026-01-02T03:04:05Z",
+    "verification": null,
+    "proposal": null,
+    "viewed": 2
+   },
+   {
+    "id": "n-0000000000000002",
+    "kind": "question",
+    "state": "stale",
+    "revision": 1,
+    "head_sha": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+    "report": "rep-r1",
+    "target_id": "a-0000000000000001",
+    "target_label": "/zz/last",
+    "text": "Is this screen still reached from the menu?",
+    "client": {
+     "name": "claude-desktop",
+     "version": "1.4.0"
+    },
+    "created_at": "2026-01-02T03:04:05Z",
+    "verification": null,
+    "proposal": null,
+    "viewed": 2
+   },
+   {
+    "id": "n-0000000000000003",
+    "kind": "proposed_test",
+    "state": "orphaned",
+    "revision": 1,
+    "head_sha": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+    "report": "rep-r1",
+    "target_id": "a-0000000000000002",
+    "target_label": "GET /m/middle",
+    "text": "Open /s/sample-a with an invoice that has no lines.",
+    "client": {
+     "name": "claude-desktop",
+     "version": "1.4.0"
+    },
+    "created_at": "2026-01-02T03:04:05Z",
+    "verification": null,
+    "proposal": null,
+    "viewed": 2
+   },
+   {
+    "id": "n-0000000000000004",
+    "kind": "observation",
+    "state": "stale",
+    "revision": 1,
+    "head_sha": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+    "report": "rep-r1",
+    "target_id": "f-76177a5906263c44",
+    "target_label": "The change reaches the API route GET /api/billing/invoices/{invoice_id} in acme/api",
+    "text": "The route handler rounds twice.",
+    "client": {
+     "name": "claude-desktop",
+     "version": "1.4.0"
+    },
+    "created_at": "2026-01-02T03:04:05Z",
+    "verification": null,
+    "proposal": null,
+    "viewed": 2
+   },
+   {
+    "id": "n-0000000000000005",
+    "kind": "observation",
+    "state": "orphaned",
+    "revision": 1,
+    "head_sha": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+    "report": "rep-r1",
+    "target_id": "f-5a16e8faeac8c3a6",
+    "target_label": "The change is on release/1.2, release/1.x and not on main",
+    "text": "The release branch may need the same change.",
+    "client": {
+     "name": "claude-desktop",
+     "version": "1.4.0"
+    },
+    "created_at": "2026-01-02T03:04:05Z",
+    "verification": null,
+    "proposal": null,
+    "viewed": 2
+   },
+   {
+    "id": "n-0000000000000006",
+    "kind": "observation",
+    "state": "stale",
+    "revision": 1,
+    "head_sha": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+    "report": "rep-r1",
+    "target_id": null,
+    "target_label": null,
+    "text": "Nothing here touches the money format.",
+    "client": {
+     "name": "claude-desktop",
+     "version": "1.4.0"
+    },
+    "created_at": "2026-01-02T03:04:05Z",
+    "verification": null,
+    "proposal": null,
+    "viewed": 2
+   },
+   {
+    "id": "n-0000000000000007",
+    "kind": "observation",
+    "state": "current",
+    "revision": 2,
+    "head_sha": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "report": "rep-r2",
+    "target_id": "a-3b9ba40cce191361",
+    "target_label": "GET /api/billing/invoices/{invoice_id}",
+    "text": "Both screens call the same route; the second one passes the id as text.",
+    "client": {
+     "name": "cursor",
+     "version": ""
+    },
+    "created_at": "2026-01-02T03:04:05Z",
+    "verification": null,
+    "proposal": null,
+    "viewed": 2
+   },
+   {
+    "id": "n-0000000000000008",
+    "kind": "question",
+    "state": "current",
+    "revision": 2,
+    "head_sha": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "report": "rep-r2",
+    "target_id": "f-25a05e8452bb5fc8",
+    "target_label": "The change in acme/api reaches the screen /billing/invoices/:invoiceId in acme/web, through 2 chains; also mounted at 1 other route(s)",
+    "text": "Why is this finding not high confidence?",
+    "client": {
+     "name": "cursor",
+     "version": ""
+    },
+    "created_at": "2026-01-02T03:04:05Z",
+    "verification": null,
+    "proposal": null,
+    "viewed": 2
+   },
+   {
+    "id": "n-0000000000000009",
+    "kind": "observation",
+    "state": "current",
+    "revision": 2,
+    "head_sha": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "report": "rep-r2",
+    "target_id": null,
+    "target_label": null,
+    "text": "The change is small; the risk is in the callers.",
+    "client": {
+     "name": "cursor",
+     "version": ""
+    },
+    "created_at": "2026-01-02T03:04:05Z",
+    "verification": null,
+    "proposal": null,
+    "viewed": 2
+   },
+   {
+    "id": "n-000000000000000a",
+    "kind": "proposed_test",
+    "state": "current",
+    "revision": 2,
+    "head_sha": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "report": "rep-r2",
+    "target_id": "a-fc27dabae232b46b",
+    "target_label": "/billing/invoices/:invoiceId",
+    "text": "Reload the invoice screen after a refund.\nCheck the total.",
+    "client": {
+     "name": "claude-desktop",
+     "version": "1.4.0"
+    },
+    "created_at": "2026-01-02T03:04:05Z",
+    "verification": null,
+    "proposal": null,
+    "viewed": 2
+   },
+   {
+    "id": "n-000000000000000b",
+    "kind": "proposed_file",
+    "state": "current",
+    "revision": 2,
+    "head_sha": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "report": "rep-r2",
+    "target_id": null,
+    "target_label": null,
+    "text": "acme/api:src/billing/rounding.py (round_total)",
+    "client": {
+     "name": "claude-desktop",
+     "version": "1.4.0"
+    },
+    "created_at": "2026-01-02T03:04:05Z",
+    "verification": {
+     "status": "verified",
+     "reason": "verified",
+     "read": "found",
+     "sha": "8869159a63913fd8dbd220ee27e9bcac2d03cc33",
+     "symbol": "round_total",
+     "lines": [
+      1
+     ],
+     "detail": null
+    },
+    "proposal": {
+     "repo": "acme/api",
+     "path": "src/billing/rounding.py",
+     "symbol": "round_total"
+    },
+    "viewed": 2
+   },
+   {
+    "id": "n-000000000000000c",
+    "kind": "proposed_file",
+    "state": "current",
+    "revision": 2,
+    "head_sha": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "report": "rep-r2",
+    "target_id": null,
+    "target_label": null,
+    "text": "acme/api:src/billing/missing.py (round_total)",
+    "client": {
+     "name": "claude-desktop",
+     "version": "1.4.0"
+    },
+    "created_at": "2026-01-02T03:04:05Z",
+    "verification": {
+     "status": "not_verified",
+     "reason": "file_absent",
+     "read": "absent",
+     "sha": null,
+     "symbol": null,
+     "lines": [],
+     "detail": null
+    },
+    "proposal": {
+     "repo": "acme/api",
+     "path": "src/billing/missing.py",
+     "symbol": "round_total"
+    },
+    "viewed": 2
+   },
+   {
+    "id": "n-000000000000000d",
+    "kind": "proposed_file",
+    "state": "current",
+    "revision": 2,
+    "head_sha": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "report": "rep-r2",
+    "target_id": null,
+    "target_label": null,
+    "text": "acme/api:src/billing/locked.py (round_total)",
+    "client": {
+     "name": "claude-desktop",
+     "version": "1.4.0"
+    },
+    "created_at": "2026-01-02T03:04:05Z",
+    "verification": {
+     "status": "not_verified",
+     "reason": "file_unreadable",
+     "read": "unreadable",
+     "sha": null,
+     "symbol": null,
+     "lines": [],
+     "detail": "the fetch timed out"
+    },
+    "proposal": {
+     "repo": "acme/api",
+     "path": "src/billing/locked.py",
+     "symbol": "round_total"
+    },
+    "viewed": 2
+   },
+   {
+    "id": "n-000000000000000e",
+    "kind": "proposed_file",
+    "state": "current",
+    "revision": 2,
+    "head_sha": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "report": "rep-r2",
+    "target_id": null,
+    "target_label": null,
+    "text": "acme/api:src/billing/other.py (not_a_changed_name)",
+    "client": {
+     "name": "claude-desktop",
+     "version": "1.4.0"
+    },
+    "created_at": "2026-01-02T03:04:05Z",
+    "verification": {
+     "status": "not_verified",
+     "reason": "symbol_not_changed",
+     "read": "not_attempted",
+     "sha": null,
+     "symbol": null,
+     "lines": [],
+     "detail": null
+    },
+    "proposal": {
+     "repo": "acme/api",
+     "path": "src/billing/other.py",
+     "symbol": "not_a_changed_name"
+    },
+    "viewed": 2
+   },
+   {
+    "id": "n-000000000000000f",
+    "kind": "proposed_file",
+    "state": "current",
+    "revision": 2,
+    "head_sha": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "report": "rep-r2",
+    "target_id": null,
+    "target_label": null,
+    "text": "acme/api:src/billing/none.py (round_total)",
+    "client": {
+     "name": "cursor",
+     "version": ""
+    },
+    "created_at": "2026-01-02T03:04:05Z",
+    "verification": {
+     "status": "not_verified",
+     "reason": "no_config",
+     "read": "not_attempted",
+     "sha": null,
+     "symbol": null,
+     "lines": [],
+     "detail": null
+    },
+    "proposal": {
+     "repo": "acme/api",
+     "path": "src/billing/none.py",
+     "symbol": "round_total"
+    },
+    "viewed": 2
+   }
+  ],
+  "records": [],
+  "as_of": "2026-01-02T03:04:05Z"
+ }
+}

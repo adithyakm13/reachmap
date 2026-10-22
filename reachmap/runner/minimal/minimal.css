@@ -1,0 +1,4 @@
+body { font-family: system-ui, sans-serif; margin: 2rem auto; max-width: 52rem; padding: 0 1rem; color: #1b1b1b; background: #fff; }
+li { margin: 0.35rem 0; }
+button { font: inherit; margin-left: 0.5rem; }
+code { font-family: ui-monospace, monospace; }

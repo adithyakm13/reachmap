@@ -1,0 +1,11 @@
+{
+  "id": "dj03-class-view-method",
+  "repo": "acme/portal",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/dj03-class-view-method"
+  },
+  "commit_message": "Acknowledge the voided invoice",
+  "notes": "Body change in the post method of a class view mounted with as_view()."
+}

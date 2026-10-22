@@ -1,0 +1,11 @@
+{
+  "id": "sb18-kotlin-function",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb18-kotlin-function"
+  },
+  "commit_message": "titleCase trims first",
+  "notes": "A Kotlin top-level function is imported by name and reaches the handler that calls it."
+}

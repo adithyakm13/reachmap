@@ -1,0 +1,11 @@
+{
+  "id": "nx13-removed-route",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx13-removed-route"
+  },
+  "commit_message": "Remove the legacy status API",
+  "notes": "A removed Pages Router API route (ANY) that a client still calls."
+}

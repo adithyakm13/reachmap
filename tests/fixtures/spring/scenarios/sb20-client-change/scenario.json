@@ -1,0 +1,11 @@
+{
+  "id": "sb20-client-change",
+  "repo": "acme/ledger-web",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb20-client-change"
+  },
+  "commit_message": "fetchTotal unwraps the answer",
+  "notes": "A change in the client reaches the Spring route its call names and the modules the handler runs."
+}

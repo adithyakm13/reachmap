@@ -1,0 +1,11 @@
+{
+  "id": "s18-limit-comment",
+  "repo": "acme/contracts",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s18-limit-comment"
+  },
+  "commit_message": "Raise the default schedule limit",
+  "notes": "limit is defined once; consumers only mention the word in a comment."
+}

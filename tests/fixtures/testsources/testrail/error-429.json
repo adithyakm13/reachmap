@@ -1,0 +1,11 @@
+{
+  "note": "Synthetic: invented for the tests, shaped like the TestRail API v2 (paginated lists with _links.next, TestRail 6.7 and later). Not a recording of any real instance.",
+  "status": 429,
+  "headers": {
+    "Content-Type": "application/json",
+    "Retry-After": "45"
+  },
+  "body": {
+    "error": "Too many requests."
+  }
+}

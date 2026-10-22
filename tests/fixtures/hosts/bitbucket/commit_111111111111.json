@@ -1,0 +1,23 @@
+{
+  "status": 200,
+  "headers": {
+    "Content-Type": "application/json; charset=utf-8",
+    "X-Request-Id": "9f3c1a2b-7d4e-4f10-8a61-0b2c3d4e5f60"
+  },
+  "body": {
+    "type": "commit",
+    "hash": "1111111111111111111111111111111111111111",
+    "date": "2023-11-14T23:13:20+00:00",
+    "message": "A commit\n",
+    "author": {
+      "type": "author",
+      "raw": "Fixture Author <fixtures@example.invalid>"
+    },
+    "parents": [],
+    "links": {
+      "self": {
+        "href": "https://api.bitbucket.org/2.0/repositories/acme/web/commit/1111111111111111111111111111111111111111"
+      }
+    }
+  }
+}

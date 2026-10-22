@@ -1,0 +1,11 @@
+{
+  "id": "oa10-web-spec-copy-broken",
+  "repo": "acme/ledger-web",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/oa10-web-spec-copy-broken"
+  },
+  "commit_message": "Regenerate the client",
+  "notes": "api/openapi.json holds a truncated download; InvoiceDetailPage changes in the same commit."
+}

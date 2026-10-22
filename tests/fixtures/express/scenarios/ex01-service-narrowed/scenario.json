@@ -1,0 +1,11 @@
+{
+  "id": "ex01-service-narrowed",
+  "repo": "ex/orders",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex01-service-narrowed"
+  },
+  "commit_message": "findOrder falls back to the first order",
+  "notes": "An imported service function reaches the handler that uses it, the router that wires the handler and the mounts above, and not the handlers of other names."
+}

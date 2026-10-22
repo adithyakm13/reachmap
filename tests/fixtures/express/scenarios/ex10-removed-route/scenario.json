@@ -1,0 +1,11 @@
+{
+  "id": "ex10-removed-route",
+  "repo": "ex/orders",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex10-removed-route"
+  },
+  "commit_message": "Drop the customer orders route",
+  "notes": "A removed route that the client still calls: a finding with high risk and low confidence, and the client followed to its screen."
+}

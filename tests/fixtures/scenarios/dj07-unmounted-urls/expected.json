@@ -1,0 +1,72 @@
+{
+  "schema": 1,
+  "id": "dj07-unmounted-urls",
+  "repo": "acme/portal",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/dj07-unmounted-urls"
+  },
+  "explains": "export in billing/legacy_views.py changes. billing/legacy_urls.py maps it (path(\"export/\", legacy_views.export)), but no URLconf includes billing.legacy_urls: the only line that looks like an include is commented out in billing/urls.py, and a comment is not an include. config/urls.py does not name it, and nothing else does. So the view has no URL: no route is claimed, not even a guessed /billing/legacy/export, and the report says that the URLconf is unmounted, naming it. The web client has no URL for it.",
+  "complete_for": [
+    "changed_symbol",
+    "caller",
+    "route",
+    "http_edge",
+    "screen"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/portal",
+      "path": "billing/legacy_views.py",
+      "symbol": "export"
+    },
+    {
+      "type": "caller",
+      "repo": "acme/portal",
+      "path": "billing/legacy_urls.py",
+      "symbol": "urlpatterns",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/legacy_urls.py",
+          "contains": "from . import legacy_views"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "billing/legacy_urls.py",
+          "contains": "legacy_views.export"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "ANY",
+      "path": "/billing/legacy/export",
+      "why": "no include mounts the URLconf of the view",
+      "comment": {
+        "repo": "acme/portal",
+        "path": "billing/urls.py",
+        "contains": "# path(\"legacy/\", include(\"billing.legacy_urls\")),"
+      }
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "ANY",
+      "path": "/legacy/export",
+      "why": "no include mounts the URLconf of the view"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "urlconf_unmounted",
+      "subject": "billing/legacy_urls.py:urlpatterns",
+      "blocking": false
+    }
+  ]
+}

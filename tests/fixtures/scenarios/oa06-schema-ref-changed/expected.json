@@ -1,0 +1,524 @@
+{
+  "schema": 1,
+  "id": "oa06-schema-ref-changed",
+  "repo": "acme/ledger-api",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/oa06-schema-ref-changed"
+  },
+  "explains": "Only api/openapi.json changes: the schema components.schemas.Money now requires currency. An operation changes when any schema it reaches through $ref changes, however far: listInvoices (an array of Invoice), createInvoice (NewInvoice has a Money total, and returns an Invoice), getInvoice (Invoice has a Money total) and getCustomer (Customer lists Invoices, Invoice has a Customer: the two schemas refer to each other, so the closure is taken with a visited set and ends) all reach Money; voidInvoice (only a path parameter, an empty 204 and the NotFound response, which holds Problem), downloadStatement, get and list reach no schema that changed. Four operations change: four routes, four operation-changed findings, and through the generated client of the web app four screens (the pages of listInvoices, createInvoice, getInvoice and getCustomer).",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "http_edge",
+    "screen",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "route",
+      "repo": "acme/ledger-api",
+      "method": "GET",
+      "path": "/v1/invoices",
+      "evidence": [
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"get\": {"
+        },
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"/invoices\": {"
+        },
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"url\": \"https://ledger.example.invalid/v1\""
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger-api",
+      "method": "POST",
+      "path": "/v1/invoices",
+      "evidence": [
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"post\": {"
+        },
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"/invoices\": {"
+        },
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"url\": \"https://ledger.example.invalid/v1\""
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger-api",
+      "method": "GET",
+      "path": "/v1/invoices/{invoiceId}",
+      "evidence": [
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"get\": {"
+        },
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"/invoices/{invoiceId}\": {"
+        },
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"url\": \"https://ledger.example.invalid/v1\""
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger-api",
+      "method": "GET",
+      "path": "/v1/customers/{customerId}",
+      "evidence": [
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"get\": {"
+        },
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"/customers/{customerId}\": {"
+        },
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"url\": \"https://ledger.example.invalid/v1\""
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/ledger-web",
+        "path": "src/modules/invoices/api.ts",
+        "contains": "return listInvoices();"
+      },
+      "via": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"get\": {"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"/invoices\": {"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"url\": \"https://ledger.example.invalid/v1\""
+        }
+      ],
+      "to": {
+        "repo": "acme/ledger-api",
+        "method": "GET",
+        "path": "/v1/invoices",
+        "evidence": [
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"get\": {"
+          },
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"/invoices\": {"
+          },
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"url\": \"https://ledger.example.invalid/v1\""
+          }
+        ]
+      }
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/ledger-web",
+        "path": "src/modules/invoices/pages/NewInvoicePage.tsx",
+        "contains": "createInvoice({ customerId"
+      },
+      "via": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"post\": {"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"/invoices\": {"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"url\": \"https://ledger.example.invalid/v1\""
+        }
+      ],
+      "to": {
+        "repo": "acme/ledger-api",
+        "method": "POST",
+        "path": "/v1/invoices",
+        "evidence": [
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"post\": {"
+          },
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"/invoices\": {"
+          },
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"url\": \"https://ledger.example.invalid/v1\""
+          }
+        ]
+      }
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/ledger-web",
+        "path": "src/modules/invoices/api.ts",
+        "contains": "return getInvoice(invoiceId);"
+      },
+      "via": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"get\": {"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"/invoices/{invoiceId}\": {"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"url\": \"https://ledger.example.invalid/v1\""
+        }
+      ],
+      "to": {
+        "repo": "acme/ledger-api",
+        "method": "GET",
+        "path": "/v1/invoices/{invoiceId}",
+        "evidence": [
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"get\": {"
+          },
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"/invoices/{invoiceId}\": {"
+          },
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"url\": \"https://ledger.example.invalid/v1\""
+          }
+        ]
+      }
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/ledger-web",
+        "path": "src/modules/customers/pages/CustomerPage.tsx",
+        "contains": "getCustomer(\"cus-1\")"
+      },
+      "via": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"get\": {"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"/customers/{customerId}\": {"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"url\": \"https://ledger.example.invalid/v1\""
+        }
+      ],
+      "to": {
+        "repo": "acme/ledger-api",
+        "method": "GET",
+        "path": "/v1/customers/{customerId}",
+        "evidence": [
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"get\": {"
+          },
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"/customers/{customerId}\": {"
+          },
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"url\": \"https://ledger.example.invalid/v1\""
+          }
+        ]
+      }
+    },
+    {
+      "type": "screen",
+      "repo": "acme/ledger-web",
+      "route": "/invoices",
+      "chain": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/invoices/api.ts",
+          "contains": "return listInvoices();"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/invoices/pages/InvoiceListPage.tsx",
+          "contains": "import { fetchInvoices } from \"../api\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/invoices/routes.tsx",
+          "contains": "import InvoiceListPage from \"./pages/InvoiceListPage\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/invoices/routes.tsx",
+          "contains": "<Route path=\"/invoices\" element={<InvoiceListPage />} />"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "acme/ledger-web",
+      "route": "/invoices/new",
+      "chain": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/invoices/pages/NewInvoicePage.tsx",
+          "contains": "createInvoice({ customerId"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/invoices/routes.tsx",
+          "contains": "import NewInvoicePage from \"./pages/NewInvoicePage\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/invoices/routes.tsx",
+          "contains": "<Route path=\"/invoices/new\" element={<NewInvoicePage />} />"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "acme/ledger-web",
+      "route": "/invoices/:invoiceId",
+      "chain": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/invoices/api.ts",
+          "contains": "return getInvoice(invoiceId);"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/invoices/pages/InvoiceDetailPage.tsx",
+          "contains": "import { fetchInvoice } from \"../api\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/invoices/routes.tsx",
+          "contains": "import InvoiceDetailPage from \"./pages/InvoiceDetailPage\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/invoices/routes.tsx",
+          "contains": "<Route path=\"/invoices/:invoiceId\" element={<InvoiceDetailPage />} />"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "acme/ledger-web",
+      "route": "/customers/:customerId",
+      "chain": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/customers/pages/CustomerPage.tsx",
+          "contains": "getCustomer(\"cus-1\")"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/customers/routes.tsx",
+          "contains": "import CustomerPage from \"./pages/CustomerPage\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/customers/routes.tsx",
+          "contains": "<Route path=\"/customers/:customerId\" element={<CustomerPage />} />"
+        }
+      ]
+    },
+    {
+      "type": "finding",
+      "kind": "operation-changed",
+      "risk": "medium",
+      "confidence": "high",
+      "evidence": [
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"get\": {",
+          "at": "base"
+        },
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"get\": {"
+        }
+      ]
+    },
+    {
+      "type": "finding",
+      "kind": "operation-changed",
+      "risk": "medium",
+      "confidence": "high",
+      "evidence": [
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"post\": {",
+          "at": "base"
+        },
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"post\": {"
+        }
+      ]
+    },
+    {
+      "type": "finding",
+      "kind": "operation-changed",
+      "risk": "medium",
+      "confidence": "high",
+      "evidence": [
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"get\": {",
+          "at": "base"
+        },
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"get\": {"
+        }
+      ]
+    },
+    {
+      "type": "finding",
+      "kind": "operation-changed",
+      "risk": "medium",
+      "confidence": "high",
+      "evidence": [
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"get\": {",
+          "at": "base"
+        },
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"get\": {"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "acme/ledger-api",
+      "method": "DELETE",
+      "path": "/v1/invoices/{invoiceId}",
+      "why": "voidInvoice reaches no schema that changed"
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger-api",
+      "method": "GET",
+      "path": "/v1/statements/{statementId}/download",
+      "why": "downloadStatement reaches no schema"
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger-api",
+      "method": "GET",
+      "path": "/v1/ping",
+      "why": "get reaches no schema"
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger-api",
+      "method": "GET",
+      "path": "/v1/reports",
+      "why": "list reaches no schema"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "not_distinctive",
+      "subject": "acme/ledger-web:downloadStatement",
+      "blocking": false,
+      "definitions": 4
+    },
+    {
+      "kind": "not_distinctive",
+      "subject": "acme/ledger-web:get",
+      "blocking": false,
+      "definitions": 2
+    },
+    {
+      "kind": "not_distinctive",
+      "subject": "acme/ledger-web:list",
+      "blocking": false,
+      "definitions": 1
+    }
+  ]
+}

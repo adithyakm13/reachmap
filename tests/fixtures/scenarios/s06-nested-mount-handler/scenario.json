@@ -1,0 +1,11 @@
+{
+  "id": "s06-nested-mount-handler",
+  "repo": "acme/api",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s06-nested-mount-handler"
+  },
+  "commit_message": "Answer 410 for voided invoices",
+  "notes": "Body change in GET /{invoice_id} of the invoices router, mounted three levels deep."
+}

@@ -1,0 +1,11 @@
+{
+  "id": "ex11-added-route",
+  "repo": "ex/orders",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex11-added-route"
+  },
+  "commit_message": "Export the orders",
+  "notes": "A new route statement is a route, and one no client calls is said."
+}

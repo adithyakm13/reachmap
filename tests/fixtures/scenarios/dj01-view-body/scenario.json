@@ -1,0 +1,11 @@
+{
+  "id": "dj01-view-body",
+  "repo": "acme/portal",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/dj01-view-body"
+  },
+  "commit_message": "Count the invoices in the list view",
+  "notes": "Body change in the invoice list view, a function view with no method restriction."
+}

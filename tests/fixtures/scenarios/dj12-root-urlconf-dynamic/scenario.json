@@ -1,0 +1,11 @@
+{
+  "id": "dj12-root-urlconf-dynamic",
+  "repo": "acme/portal",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/dj12-root-urlconf-dynamic"
+  },
+  "commit_message": "Read the root URLconf from the environment",
+  "notes": "ROOT_URLCONF stops being a literal: which routes the project has is not known."
+}

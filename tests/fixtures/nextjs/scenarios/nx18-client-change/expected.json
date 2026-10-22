@@ -1,0 +1,120 @@
+{
+  "schema": 1,
+  "id": "nx18-client-change",
+  "repo": "nx/mobile",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx18-client-change"
+  },
+  "explains": "fetchOrder in nx/mobile src/services/orders.ts trims the id before it builds the URL. OrderScreen imports fetchOrder (and cancelOrder), so it is a caller, mounted at /orders/:orderId; OrdersScreen imports only fetchOrders and is excluded. The changed call is a client call: apiGet(ORDER_URL(orderId.trim())) is a GET to /api/orders/ followed by a parameter, and the server's primary branch has the App Router route GET /api/orders/{id} in src/app/api/orders/[id]/route.ts (the folder [id] is the parameter), which the parameter segment fits. The http edge goes from the client line to that route, cited at its method export. The DELETE route of the same file is not what the changed call names.",
+  "complete_for": [
+    "changed_symbol",
+    "caller",
+    "screen",
+    "http_edge"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "nx/mobile",
+      "path": "src/services/orders.ts",
+      "symbol": "fetchOrder"
+    },
+    {
+      "type": "caller",
+      "repo": "nx/mobile",
+      "path": "src/screens/OrderScreen.tsx",
+      "symbol": "OrderScreen",
+      "evidence": [
+        {
+          "repo": "nx/mobile",
+          "path": "src/screens/OrderScreen.tsx",
+          "contains": "import { fetchOrder, cancelOrder } from \"@/services/orders\";"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/mobile",
+      "route": "/orders/:orderId",
+      "chain": [
+        {
+          "repo": "nx/mobile",
+          "path": "src/screens/OrderScreen.tsx",
+          "contains": "import { fetchOrder, cancelOrder } from \"@/services/orders\";"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/routes.tsx",
+          "contains": "import OrderScreen from \"./screens/OrderScreen\";"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/routes.tsx",
+          "contains": "<Route path=\"/orders/:orderId\" element={<OrderScreen />} />"
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "nx/mobile",
+        "path": "src/services/orders.ts",
+        "contains": "return apiGet(ORDER_URL(orderId.trim()));"
+      },
+      "via": [
+        {
+          "repo": "nx/mobile",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const ORDER_URL = (orderId: string) => `/api/orders/${orderId}`;"
+        }
+      ],
+      "to": {
+        "repo": "nx/shop",
+        "method": "GET",
+        "path": "/api/orders/{id}",
+        "evidence": [
+          {
+            "repo": "nx/shop",
+            "path": "src/app/api/orders/[id]/route.ts",
+            "contains": "export async function GET("
+          }
+        ]
+      }
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "caller",
+      "repo": "nx/mobile",
+      "path": "src/screens/OrdersScreen.tsx",
+      "why": "it imports fetchOrders only",
+      "evidence": [
+        {
+          "repo": "nx/mobile",
+          "path": "src/screens/OrdersScreen.tsx",
+          "contains": "import { fetchOrders } from \"@/services/orders\";"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/services/orders.ts",
+          "contains": "export function fetchOrder"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/mobile",
+      "route": "/orders",
+      "why": "OrdersScreen imports fetchOrders only"
+    },
+    {
+      "type": "screen",
+      "repo": "nx/mobile",
+      "route": "/status",
+      "why": "its screen does not use the order services"
+    }
+  ],
+  "not_established": []
+}

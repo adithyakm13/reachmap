@@ -1,0 +1,11 @@
+{
+  "id": "s09-decorator-line",
+  "repo": "acme/api",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s09-decorator-line"
+  },
+  "commit_message": "Retry the nightly settlement job five times",
+  "notes": "Argument of a multi-line decorator at column 0."
+}

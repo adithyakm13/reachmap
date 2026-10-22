@@ -1,0 +1,160 @@
+{
+  "schema": 1,
+  "id": "s21-hop-cap",
+  "repo": "acme/contracts",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s21-hop-cap"
+  },
+  "explains": "The change is the one in s11 (Invoice.settlement_reference becomes required) but the workspace is limited to hops = 1. The first edges past acme/contracts are the package and contract edges to acme/api and acme/worker, which are allowed: api reads the field in settlement.py and the worker reads it in settlement_sync.py, and the api route that reaches the read is resolved inside the api (GET /api/billing/settlements/summary, composed from /api + /billing + /settlements + /summary). Both consumers pin below the unreleased change, so exposure comes on adoption. The http edge between acme/web and acme/api (declared from acme/web to acme/api, followed here from the api side) is the second edge, beyond the cap, so the web screen /billing/settlements is not listed and the report records hop_cap naming the edge. A cap is a stated limit, not a failed read, so it is not blocking, but it must be said: the missing screen is not an absence.",
+  "complete_for": [
+    "changed_symbol",
+    "contract_read",
+    "route",
+    "http_edge",
+    "screen",
+    "consumer"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/contracts",
+      "path": "contracts/models/invoice.py",
+      "symbol": "Invoice.settlement_reference"
+    },
+    {
+      "type": "contract_read",
+      "repo": "acme/api",
+      "path": "services/billing/app/services/settlement.py",
+      "symbol": "reference_for",
+      "evidence": [
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/services/settlement.py",
+          "contains": "from acme_contracts.models.invoice import Invoice"
+        },
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/services/settlement.py",
+          "contains": "if invoice.settlement_reference is None:"
+        }
+      ]
+    },
+    {
+      "type": "contract_read",
+      "repo": "acme/worker",
+      "path": "worker/tasks/settlement_sync.py",
+      "symbol": "sync_invoice",
+      "evidence": [
+        {
+          "repo": "acme/worker",
+          "path": "worker/tasks/settlement_sync.py",
+          "contains": "from acme_contracts.models.invoice import Invoice"
+        },
+        {
+          "repo": "acme/worker",
+          "path": "worker/tasks/settlement_sync.py",
+          "contains": "return invoice.settlement_reference or f\"pending-{invoice.id}\""
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/api",
+      "method": "GET",
+      "path": "/api/billing/settlements/summary",
+      "evidence": [
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/routers/settlements.py",
+          "contains": "@router.get(\"/summary\")"
+        },
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/routers/billing.py",
+          "contains": "billing_router.include_router(settlements_router, prefix=\"/settlements\")"
+        },
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/api.py",
+          "contains": "api_router.include_router(billing_router, prefix=\"/billing\")"
+        },
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/main.py",
+          "contains": "app.include_router(api_router, prefix=\"/api\")"
+        }
+      ]
+    },
+    {
+      "type": "consumer",
+      "repo": "acme/api",
+      "branch": "main",
+      "pin": "1.10.0",
+      "adoption": "on_adoption",
+      "evidence": [
+        {
+          "repo": "acme/api",
+          "path": "requirements.txt",
+          "contains": "acme-contracts==1.10.0",
+          "branch": "main"
+        }
+      ]
+    },
+    {
+      "type": "consumer",
+      "repo": "acme/worker",
+      "branch": "main",
+      "pin": "1.9.0",
+      "adoption": "on_adoption",
+      "evidence": [
+        {
+          "repo": "acme/worker",
+          "path": "requirements.txt",
+          "contains": "acme-contracts==1.9.0",
+          "branch": "main"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/web",
+        "path": "src/modules/billing/api.ts",
+        "contains": "apiGet<SettlementSummary>(SETTLEMENT_SUMMARY_URL)"
+      },
+      "to": {
+        "repo": "acme/api",
+        "method": "GET",
+        "path": "/api/billing/settlements/summary"
+      },
+      "why": "the second edge, beyond limits.hops = 1"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/web",
+      "route": "/billing/settlements",
+      "why": "beyond limits.hops = 1; recorded as hop_cap, not as an absence"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "hop_cap",
+      "subject": "edge:http:acme/web:acme/api",
+      "blocking": false
+    },
+    {
+      "kind": "edge_unfollowed",
+      "subject": "edge:event:acme/api:acme/worker",
+      "blocking": false
+    },
+    {
+      "kind": "entry_points_unread",
+      "subject": "acme/worker",
+      "blocking": false
+    }
+  ]
+}

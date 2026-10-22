@@ -1,0 +1,7 @@
+{
+  "status": 200,
+  "headers": {
+    "Content-Type": "text/html"
+  },
+  "body_text": "<html><title>GitLab is loading</title></html>"
+}

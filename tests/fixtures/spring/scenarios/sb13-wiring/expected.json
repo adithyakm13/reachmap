@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "id": "sb13-wiring",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb13-wiring"
+  },
+  "explains": "WebConfig, a @Configuration class with a @Bean method that builds the Cache, changes. The beans, the advice, the filters, the interceptors and the security configuration of an application decide what every route does and are not followed by import: nothing imports WebConfig and Spring builds what it declares. The run says so with a blocking config_not_followed for the file, claims no route, and is not complete. It does not read an empty list of routes as no route.",
+  "complete_for": [
+    "caller",
+    "route",
+    "screen",
+    "http_edge"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/ledger",
+      "path": "src/main/java/com/acme/ledger/config/WebConfig.java",
+      "symbol": "WebConfig.cache",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/config/WebConfig.java",
+          "contains": "Cache cache = new Cache();"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/ledger/v1/status",
+      "why": "the wiring is not followed: no route is claimed from it"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "config_not_followed",
+      "subject": "src/main/java/com/acme/ledger/config/WebConfig.java",
+      "blocking": true
+    }
+  ]
+}

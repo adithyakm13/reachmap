@@ -1,0 +1,69 @@
+{
+  "schema": 1,
+  "id": "nx14-added-route",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx14-added-route"
+  },
+  "explains": "src/app/api/invoices/route.ts is added with one exported method, GET: the route GET /api/invoices, cited at the method export. The client repository calls no URL that fits it, so the new route is said: added_route_uncalled, low risk and medium confidence, evidence at the new method line. The added GET is the fifth definition of the name GET in the repository, more than distinct_max, so the name is recorded as not distinctive and links nothing.",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "finding",
+    "http_edge"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "nx/shop",
+      "path": "src/app/api/invoices/route.ts",
+      "symbol": "GET",
+      "change": "added"
+    },
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "GET",
+      "path": "/api/invoices",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/api/invoices/route.ts",
+          "contains": "export async function GET()"
+        }
+      ]
+    },
+    {
+      "type": "finding",
+      "kind": "added_route_uncalled",
+      "risk": "low",
+      "confidence": "medium",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/api/invoices/route.ts",
+          "contains": "export async function GET()"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "GET",
+      "path": "/api/orders",
+      "why": "an existing route, not touched"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "not_distinctive",
+      "subject": "GET",
+      "definitions": 5,
+      "blocking": false
+    }
+  ]
+}

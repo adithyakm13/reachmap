@@ -1,0 +1,53 @@
+{
+  "status": 200,
+  "headers": {
+    "Content-Type": "application/json; charset=utf-8",
+    "X-Request-Id": "9f3c1a2b-7d4e-4f10-8a61-0b2c3d4e5f60"
+  },
+  "body": {
+    "pagelen": 100,
+    "values": [
+      {
+        "type": "diffstat",
+        "status": "added",
+        "lines_removed": 0,
+        "lines_added": 10,
+        "old": null,
+        "new": {
+          "path": "src/export/Button.tsx",
+          "type": "commit_file",
+          "escaped_path": "src/export/Button.tsx"
+        }
+      },
+      {
+        "type": "diffstat",
+        "status": "added",
+        "lines_removed": 0,
+        "lines_added": 10,
+        "old": null,
+        "new": {
+          "path": "src/export/index.ts",
+          "type": "commit_file",
+          "escaped_path": "src/export/index.ts"
+        }
+      },
+      {
+        "type": "diffstat",
+        "status": "modified",
+        "lines_removed": 0,
+        "lines_added": 10,
+        "old": {
+          "path": "src/routes.tsx",
+          "type": "commit_file"
+        },
+        "new": {
+          "path": "src/routes.tsx",
+          "type": "commit_file",
+          "escaped_path": "src/routes.tsx"
+        }
+      }
+    ],
+    "page": 1,
+    "size": 3
+  }
+}

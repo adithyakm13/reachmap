@@ -1,0 +1,11 @@
+{
+  "id": "dj10-route-added",
+  "repo": "acme/portal",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/dj10-route-added"
+  },
+  "commit_message": "Add the invoice export",
+  "notes": "A new view and its route; no client names its URL yet."
+}

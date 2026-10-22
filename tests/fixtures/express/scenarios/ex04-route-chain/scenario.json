@@ -1,0 +1,11 @@
+{
+  "id": "ex04-route-chain",
+  "repo": "ex/orders",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex04-route-chain"
+  },
+  "commit_message": "Added lines carry a flag",
+  "notes": "One call of a router.route(path).get(...).post(...) chain: only the method whose handler changed."
+}

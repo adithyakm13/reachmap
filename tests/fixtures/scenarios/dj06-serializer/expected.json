@@ -1,0 +1,208 @@
+{
+  "schema": 1,
+  "id": "dj06-serializer",
+  "repo": "acme/portal",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/dj06-serializer"
+  },
+  "explains": "CustomerSerializer.Meta.fields in billing/serializers.py changes. billing/api.py imports CustomerSerializer and InvoiceSerializer from that module, and the change reaches only the first name, so InvoiceViewSet, which names InvoiceSerializer, is not reached. CustomerViewSet names it in a class attribute (serializer_class), which every method of the viewset uses, so the whole class is reached: it is a ModelViewSet, so the router makes the list route (GET and POST) and the detail route (GET, PUT, PATCH and DELETE) for it. The evidence of each route is the register line of customers, the include of the router and the include in config/urls.py (the path comes from the registered prefix and the default lookup, pk). No client of the web repository calls these routes.",
+  "complete_for": [
+    "changed_symbol",
+    "caller",
+    "route",
+    "http_edge",
+    "screen"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/portal",
+      "path": "billing/serializers.py",
+      "symbol": "CustomerSerializer.Meta.fields"
+    },
+    {
+      "type": "caller",
+      "repo": "acme/portal",
+      "path": "billing/api.py",
+      "symbol": "CustomerViewSet",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/api.py",
+          "contains": "from .serializers import CustomerSerializer, InvoiceSerializer"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "GET",
+      "path": "/api/v1/customers",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/api_urls.py",
+          "contains": "router.register(r\"customers\", api.CustomerViewSet)"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "billing/api_urls.py",
+          "contains": "path(\"\", include(router.urls)),"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "config/urls.py",
+          "contains": "path(\"api/v1/\", include(\"billing.api_urls\")),"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "POST",
+      "path": "/api/v1/customers",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/api_urls.py",
+          "contains": "router.register(r\"customers\", api.CustomerViewSet)"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "billing/api_urls.py",
+          "contains": "path(\"\", include(router.urls)),"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "config/urls.py",
+          "contains": "path(\"api/v1/\", include(\"billing.api_urls\")),"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "GET",
+      "path": "/api/v1/customers/{pk}",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/api_urls.py",
+          "contains": "router.register(r\"customers\", api.CustomerViewSet)"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "billing/api_urls.py",
+          "contains": "path(\"\", include(router.urls)),"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "config/urls.py",
+          "contains": "path(\"api/v1/\", include(\"billing.api_urls\")),"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "PUT",
+      "path": "/api/v1/customers/{pk}",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/api_urls.py",
+          "contains": "router.register(r\"customers\", api.CustomerViewSet)"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "billing/api_urls.py",
+          "contains": "path(\"\", include(router.urls)),"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "config/urls.py",
+          "contains": "path(\"api/v1/\", include(\"billing.api_urls\")),"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "PATCH",
+      "path": "/api/v1/customers/{pk}",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/api_urls.py",
+          "contains": "router.register(r\"customers\", api.CustomerViewSet)"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "billing/api_urls.py",
+          "contains": "path(\"\", include(router.urls)),"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "config/urls.py",
+          "contains": "path(\"api/v1/\", include(\"billing.api_urls\")),"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "DELETE",
+      "path": "/api/v1/customers/{pk}",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/api_urls.py",
+          "contains": "router.register(r\"customers\", api.CustomerViewSet)"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "billing/api_urls.py",
+          "contains": "path(\"\", include(router.urls)),"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "config/urls.py",
+          "contains": "path(\"api/v1/\", include(\"billing.api_urls\")),"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "GET",
+      "path": "/api/v1/invoices",
+      "why": "the viewset that names InvoiceSerializer is not reached"
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "GET",
+      "path": "/api/v1/invoices/overdue",
+      "why": "the viewset that names InvoiceSerializer is not reached"
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "POST",
+      "path": "/api/v1/invoices/{pk}/void",
+      "why": "the viewset that names InvoiceSerializer is not reached"
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "GET",
+      "path": "/api/v1",
+      "why": "the API root view of the router"
+    }
+  ],
+  "not_established": []
+}

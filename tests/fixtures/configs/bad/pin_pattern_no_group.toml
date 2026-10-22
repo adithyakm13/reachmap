@@ -1,0 +1,19 @@
+workspace = "acme"
+
+[repos."acme/contracts"]
+host = "github"
+language = "python"
+roles = ["contract"]
+
+[repos."acme/api"]
+host = "github"
+language = "python"
+roles = ["backend"]
+
+[[edges]]
+kind = "package"
+producer = "acme/contracts"
+consumer = "acme/api"
+manifest = "requirements.txt"
+pin_pattern = '^acme-contracts==.+$'
+import_marker = "acme_contracts"

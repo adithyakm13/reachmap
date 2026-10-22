@@ -1,0 +1,129 @@
+{
+  "schema": 1,
+  "id": "nx02-layout-fanout",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx02-layout-fanout"
+  },
+  "explains": "The class of the div in src/app/(shop)/layout.tsx changes (inside ShopLayout). A layout wraps every page below its folder, and nothing in a file says so: the nesting is the folder tree. Below src/app/(shop)/ there are three pages, cart, products and products/[slug], so the change reaches the screens /cart, /products and /products/:slug. The chain runs from the changed line to the line of the layout that renders its children (the main element that holds {children}) and on to the page's default export. Pages of another route group (about, in (marketing)), the home page, the dashboard, the feed, the docs and the whole Pages Router are not below the folder and are not reached. Three screens are eight or fewer, so they are must test (priority by count). Nothing imports the layout, so there is no caller.",
+  "complete_for": [
+    "changed_symbol",
+    "caller",
+    "screen"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "nx/shop",
+      "path": "src/app/(shop)/layout.tsx",
+      "symbol": "ShopLayout"
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/cart",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/layout.tsx",
+          "contains": "<div className=\"shop shop-wide\">"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/layout.tsx",
+          "contains": "<main>{children}</main>"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/cart/page.tsx",
+          "contains": "export default function CartPage"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/products",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/layout.tsx",
+          "contains": "<div className=\"shop shop-wide\">"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/layout.tsx",
+          "contains": "<main>{children}</main>"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/products/page.tsx",
+          "contains": "export default function ProductsPage"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/products/:slug",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/layout.tsx",
+          "contains": "<div className=\"shop shop-wide\">"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/layout.tsx",
+          "contains": "<main>{children}</main>"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/products/[slug]/page.tsx",
+          "contains": "export default function ProductPage"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/about",
+      "why": "another route group: src/app/(marketing) is not below src/app/(shop)"
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/",
+      "why": "the home page is above the folder of the layout"
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/dashboard",
+      "why": "not below the folder of the layout"
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/feed",
+      "why": "not below the folder of the layout"
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/docs/*",
+      "why": "not below the folder of the layout"
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/legacy",
+      "why": "a Pages Router page: no App Router layout wraps it"
+    }
+  ],
+  "not_established": []
+}

@@ -1,0 +1,11 @@
+{
+  "id": "ex15-nest-injected-property",
+  "repo": "ex/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex15-nest-injected-property"
+  },
+  "commit_message": "AuditLog records the time",
+  "notes": "A change reaches the methods that use the injected property, not the other methods of the controller."
+}

@@ -1,0 +1,9 @@
+{
+  "steps": [
+    {
+      "dir": "01-service",
+      "branch": "main",
+      "message": "Ledger service: NestJS modules, controllers and services"
+    }
+  ]
+}

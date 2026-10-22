@@ -1,0 +1,11 @@
+{
+  "id": "ex19-nest-module-change",
+  "repo": "ex/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex19-nest-module-change"
+  },
+  "commit_message": "The ledger module provides a limit",
+  "notes": "A change to a module reaches the routes of the controllers it lists."
+}

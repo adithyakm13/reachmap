@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "id": "nx11-slot-and-intercepting",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx11-slot-and-intercepting"
+  },
+  "explains": "PhotoCard.tsx and Chart.tsx each get a new attribute. PhotoCard is imported by feed/page.tsx (/feed), photos/[id]/page.tsx (/photos/:id) and the intercepting page feed/@modal/(..)photos/[id]/page.tsx. A folder that starts with @ is a parallel slot and is not part of the URL; (..) intercepts the route one level up, so the intercepting page answers /photos/:id as well (the slot @modal does not count as a level, so (..) goes from feed to the root). Both pages of /photos/:id are one screen: the page of photos/[id] first, then the intercepting page with a chain of its own, and the intercepting route is partial (shown in place of the other only on some navigations; route_intercepted, not blocking). Chart is imported by dashboard/page.tsx and by the slot page dashboard/@analytics/page.tsx, which both answer /dashboard: one screen with two chains, the folder's own page first. Nothing else imports the two components, so /dashboard/settings and the rest are not reached.",
+  "complete_for": [
+    "changed_symbol",
+    "caller",
+    "screen"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "nx/shop",
+      "path": "src/components/PhotoCard.tsx",
+      "symbol": "PhotoCard"
+    },
+    {
+      "type": "changed_symbol",
+      "repo": "nx/shop",
+      "path": "src/components/Chart.tsx",
+      "symbol": "Chart"
+    },
+    {
+      "type": "caller",
+      "repo": "nx/shop",
+      "path": "src/app/feed/page.tsx",
+      "symbol": "FeedPage",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/feed/page.tsx",
+          "contains": "import PhotoCard from \"@/components/PhotoCard\";"
+        }
+      ]
+    },
+    {
+      "type": "caller",
+      "repo": "nx/shop",
+      "path": "src/app/photos/[id]/page.tsx",
+      "symbol": "PhotoPage",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/photos/[id]/page.tsx",
+          "contains": "import PhotoCard from \"@/components/PhotoCard\";"
+        }
+      ]
+    },
+    {
+      "type": "caller",
+      "repo": "nx/shop",
+      "path": "src/app/feed/@modal/(..)photos/[id]/page.tsx",
+      "symbol": "PhotoModal",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/feed/@modal/(..)photos/[id]/page.tsx",
+          "contains": "import PhotoCard from \"@/components/PhotoCard\";"
+        }
+      ]
+    },
+    {
+      "type": "caller",
+      "repo": "nx/shop",
+      "path": "src/app/dashboard/page.tsx",
+      "symbol": "DashboardPage",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/dashboard/page.tsx",
+          "contains": "import Chart from \"@/components/Chart\";"
+        }
+      ]
+    },
+    {
+      "type": "caller",
+      "repo": "nx/shop",
+      "path": "src/app/dashboard/@analytics/page.tsx",
+      "symbol": "AnalyticsSlot",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/dashboard/@analytics/page.tsx",
+          "contains": "import Chart from \"@/components/Chart\";"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/feed",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/feed/page.tsx",
+          "contains": "import PhotoCard from \"@/components/PhotoCard\";"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/feed/page.tsx",
+          "contains": "export default function FeedPage"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/photos/:id",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/photos/[id]/page.tsx",
+          "contains": "import PhotoCard from \"@/components/PhotoCard\";"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/photos/[id]/page.tsx",
+          "contains": "export default function PhotoPage"
+        }
+      ],
+      "also_mounted_evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/feed/@modal/(..)photos/[id]/page.tsx",
+          "contains": "import PhotoCard from \"@/components/PhotoCard\";"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/feed/@modal/(..)photos/[id]/page.tsx",
+          "contains": "export default function PhotoModal"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/dashboard",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/dashboard/page.tsx",
+          "contains": "import Chart from \"@/components/Chart\";"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/dashboard/page.tsx",
+          "contains": "export default function DashboardPage"
+        }
+      ],
+      "also_mounted_evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/dashboard/@analytics/page.tsx",
+          "contains": "import Chart from \"@/components/Chart\";"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/dashboard/@analytics/page.tsx",
+          "contains": "export default function AnalyticsSlot"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/dashboard/settings",
+      "why": "its page imports neither component"
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/cart",
+      "why": "its page imports neither component"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "route_intercepted",
+      "subject": "src/app/feed/@modal/(..)photos/[id]/page.tsx",
+      "blocking": false
+    }
+  ]
+}

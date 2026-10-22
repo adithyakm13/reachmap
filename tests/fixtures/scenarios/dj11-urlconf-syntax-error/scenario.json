@@ -1,0 +1,11 @@
+{
+  "id": "dj11-urlconf-syntax-error",
+  "repo": "acme/portal",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/dj11-urlconf-syntax-error"
+  },
+  "commit_message": "Start a new invoice route",
+  "notes": "A URLconf that no longer parses: nothing is claimed from it, and the run says so."
+}

@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "id": "s02-hub-cutoff",
+  "repo": "acme/web",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s02-hub-cutoff"
+  },
+  "explains": "src/lib/format.ts is imported by 57 files: 55 generated components under src/widgets/ (odd numbers by @/lib/format, even numbers by ../lib/format) plus InvoiceListPage and CaseListPage. 57 is above hub_importers = 50, so the file is a hub. The walk must not pass through it: it records hub_cutoff for src/lib/format.ts (not blocking, the cut is a stated limit and not a failed read) and lists no importer. Consequently no widget is listed as a screen (none is mounted by any route anyway) and the two real pages that import the hub are not reached through it either, so /billing/invoices and /cases are not claimed from this change. The changed symbol itself (truncate) is still reported.",
+  "complete_for": [
+    "changed_symbol",
+    "screen"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/web",
+      "path": "src/lib/format.ts",
+      "symbol": "truncate"
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "caller",
+      "repo": "acme/web",
+      "path_prefix": "src/widgets/",
+      "why": "the 55 widgets import the hub; the walk stops at the hub (hub_cutoff), so none is walked, listed as a caller or listed as a screen"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/web",
+      "route": "/billing/invoices",
+      "why": "not walked: it is reachable only by passing through the hub, and the walk stops there (hub_cutoff); it is neither claimed nor established as unreached"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/web",
+      "route": "/cases",
+      "why": "not walked: it is reachable only by passing through the hub, and the walk stops there (hub_cutoff); it is neither claimed nor established as unreached"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "hub_cutoff",
+      "subject": "src/lib/format.ts",
+      "blocking": false,
+      "importers": 57
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "s08-nested-same-name",
+  "repo": "acme/api",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s08-nested-same-name"
+  },
+  "commit_message": "Skip voided settlements when loading one",
+  "notes": "Body of the nested _load in get_settlement; get_invoice has its own _load."
+}

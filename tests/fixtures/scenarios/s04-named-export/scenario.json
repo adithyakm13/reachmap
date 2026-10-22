@@ -1,0 +1,11 @@
+{
+  "id": "s04-named-export",
+  "repo": "acme/web",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s04-named-export"
+  },
+  "commit_message": "Accept ISO dates in parseLegacyDate",
+  "notes": "parseLegacyDate changes, formatDate does not."
+}

@@ -1,0 +1,156 @@
+{
+  "schema": 1,
+  "id": "s03-guarded-call",
+  "repo": "acme/web",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s03-guarded-call"
+  },
+  "explains": "The change is one line inside the if (mode === \"legacy\") block of formatAmount in src/lib/money.ts. Three files import formatAmount. SettlementsPage calls it with the literal \"legacy\", which enters the guarded branch, so it is affected. InvoiceListPage passes the variable mode (state initialised to \"modern\" but changeable by the Switch format button), which cannot be decided statically, so undecidable means affected. InvoiceDetailPage passes the literal \"modern\", which can never enter the legacy branch, so that call site is excluded and the exclusion cites the guard line and the call line. That page is the one screen mounted twice, so both /billing/invoices/:invoiceId and /cases/:caseId/invoices/:invoiceId are excluded. Affected screens: /billing/settlements and /billing/invoices.",
+  "complete_for": [
+    "changed_symbol",
+    "caller",
+    "screen"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/web",
+      "path": "src/lib/money.ts",
+      "symbol": "formatAmount",
+      "evidence": [
+        {
+          "repo": "acme/web",
+          "path": "src/lib/money.ts",
+          "contains": "if (mode === \"legacy\") {"
+        }
+      ]
+    },
+    {
+      "type": "caller",
+      "repo": "acme/web",
+      "path": "src/modules/billing/pages/SettlementsPage.tsx",
+      "symbol": "SettlementsPage",
+      "reason": "literal_legacy",
+      "evidence": [
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/pages/SettlementsPage.tsx",
+          "contains": "import { formatAmount } from \"@/lib/money\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/pages/SettlementsPage.tsx",
+          "contains": "formatAmount(summary.total_cents / 100, \"legacy\")"
+        }
+      ]
+    },
+    {
+      "type": "caller",
+      "repo": "acme/web",
+      "path": "src/modules/billing/pages/InvoiceListPage.tsx",
+      "symbol": "InvoiceListPage",
+      "reason": "undecidable",
+      "evidence": [
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/pages/InvoiceListPage.tsx",
+          "contains": "import { formatAmount } from \"@/lib/money\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/pages/InvoiceListPage.tsx",
+          "contains": "formatAmount(invoice.amount_cents / 100, mode)"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "acme/web",
+      "route": "/billing/settlements",
+      "chain": [
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/pages/SettlementsPage.tsx",
+          "contains": "import { formatAmount } from \"@/lib/money\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/routes.tsx",
+          "contains": "import SettlementsPage from \"./pages/SettlementsPage\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/routes.tsx",
+          "contains": "<Route path=\"/billing/settlements\" element={<SettlementsPage />} />"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "acme/web",
+      "route": "/billing/invoices",
+      "chain": [
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/pages/InvoiceListPage.tsx",
+          "contains": "import { formatAmount } from \"@/lib/money\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/routes.tsx",
+          "contains": "import InvoiceListPage from \"./pages/InvoiceListPage\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/routes.tsx",
+          "contains": "<Route path=\"/billing/invoices\" element={<InvoiceListPage />} />"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "caller",
+      "repo": "acme/web",
+      "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
+      "symbol": "InvoiceDetailPage",
+      "why": "the call passes the literal \"modern\" and the change sits under the mode === \"legacy\" guard, which that call cannot enter",
+      "evidence": [
+        {
+          "repo": "acme/web",
+          "path": "src/lib/money.ts",
+          "contains": "if (mode === \"legacy\") {"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
+          "contains": "formatAmount(invoice.amount_cents / 100, \"modern\")"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "acme/web",
+      "route": "/billing/invoices/:invoiceId",
+      "also_mounted": [
+        "/cases/:caseId/invoices/:invoiceId"
+      ],
+      "also_mounted_evidence": [
+        {
+          "repo": "acme/web",
+          "path": "src/modules/cases/routes.tsx",
+          "contains": "import InvoiceDetailPage from \"@/modules/billing/pages/InvoiceDetailPage\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/cases/routes.tsx",
+          "contains": "<Route path=\"/cases/:caseId/invoices/:invoiceId\" element={<InvoiceDetailPage />} />"
+        }
+      ],
+      "why": "its only call to formatAmount is excluded by the guard"
+    }
+  ],
+  "not_established": []
+}

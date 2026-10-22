@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "id": "s16-no-merge-base",
+  "repo": "acme/web",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s16-no-merge-base"
+  },
+  "explains": "The head branch scenario/s16-no-merge-base is an orphan: its history shares no commit with main, so git merge-base finds nothing and there is no pre-change version of any file to compare against. The only honest result is the incompleteness pre_change_unavailable, blocking, naming the head ref. Everything that needs the pre-change file is therefore not computed: a client URL constant that exists on main but not at the head (the head endpoints.ts has no AUDIT_LOG_URL and no SETTLEMENT_SUMMARY_URL; these are constants of the web client, the routes themselves live in acme/api, which this change does not touch) must not be reported as a removed route still called, and parseLegacyDate (exported on main, absent at the head) must not be reported as a removed symbol or used for named-export narrowing. Comparing the two trees as if they were a change would produce 90 changed files and invented removals. The rewritten tree also has no file that matches the configured routes_glob (src/modules/*/routes.tsx), and with no pre-change version it cannot be said that one was deleted, so that is the blocking routes_unmatched: no screen is claimed, and none is said to be absent.",
+  "complete_for": [],
+  "must_find": [],
+  "must_exclude": [
+    {
+      "type": "finding",
+      "kind": "removed_route_still_called",
+      "why": "removed routes are computed against the pre-change version, which does not exist"
+    },
+    {
+      "type": "changed_symbol",
+      "repo": "acme/web",
+      "path": "src/lib/dates.ts",
+      "symbol": "parseLegacyDate",
+      "change": "removed",
+      "why": "parseLegacyDate is missing at the head only because the history is unrelated; narrowing and removals are not computed"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "pre_change_unavailable",
+      "subject": "scenario/s16-no-merge-base",
+      "blocking": true
+    },
+    {
+      "kind": "routes_unmatched",
+      "subject": "acme/web:src/modules/*/routes.tsx",
+      "blocking": true
+    }
+  ]
+}

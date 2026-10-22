@@ -1,0 +1,11 @@
+{
+  "id": "sb05-same-package",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb05-same-package"
+  },
+  "commit_message": "Helper.describe names the mode",
+  "notes": "A class of the same package is used without an import and still reaches the route."
+}

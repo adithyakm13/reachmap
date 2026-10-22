@@ -1,0 +1,11 @@
+{
+  "id": "ex18-nest-unregistered",
+  "repo": "ex/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex18-nest-unregistered"
+  },
+  "commit_message": "The audit trail is a list",
+  "notes": "A controller no module lists is not mounted."
+}

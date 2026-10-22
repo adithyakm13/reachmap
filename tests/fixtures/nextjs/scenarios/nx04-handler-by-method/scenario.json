@@ -1,0 +1,11 @@
+{
+  "id": "nx04-handler-by-method",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx04-handler-by-method"
+  },
+  "commit_message": "listOrders hides cancelled orders",
+  "notes": "An imported function reaches the method that uses it, the page that uses it, and not the handler of another name."
+}

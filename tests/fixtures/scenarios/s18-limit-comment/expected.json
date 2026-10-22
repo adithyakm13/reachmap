@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "id": "s18-limit-comment",
+  "repo": "acme/contracts",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s18-limit-comment"
+  },
+  "explains": "Schedule.limit changes its default (limit: int = 100 becomes limit: int = 250). The name limit is defined once in the models, so by the definition-count cap it is distinctive and consumers' code is searched for it. In acme/api and acme/worker the word limit never appears in code; its only occurrence is the English comment 'respect the provider rate limit between batches' in worker/tasks/settlement_sync.py. A comment is not a read of the field, so no consumer line is claimed. The absence is established (every consumer file was read), so there is no incompleteness record.",
+  "complete_for": [
+    "changed_symbol",
+    "contract_read"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/contracts",
+      "path": "contracts/models/schedule.py",
+      "symbol": "Schedule.limit"
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "contract_read",
+      "repo": "acme/worker",
+      "path": "worker/tasks/settlement_sync.py",
+      "why": "the word limit appears only in a comment",
+      "comment": {
+        "repo": "acme/worker",
+        "path": "worker/tasks/settlement_sync.py",
+        "contains": "respect the provider rate limit between batches"
+      }
+    }
+  ],
+  "not_established": []
+}

@@ -1,0 +1,11 @@
+{
+  "id": "s19-generic-name",
+  "repo": "acme/web",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s19-generic-name"
+  },
+  "commit_message": "Hide cases without a label in the legacy table",
+  "notes": "mapStateToProps is defined in four files; only the one in CaseTable.tsx changes."
+}

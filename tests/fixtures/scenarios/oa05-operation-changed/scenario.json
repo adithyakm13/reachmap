@@ -1,0 +1,11 @@
+{
+  "id": "oa05-operation-changed",
+  "repo": "acme/ledger-api",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/oa05-operation-changed"
+  },
+  "commit_message": "Require expand on the invoice lookup",
+  "notes": "getInvoice declares a required query parameter; the handler is untouched."
+}

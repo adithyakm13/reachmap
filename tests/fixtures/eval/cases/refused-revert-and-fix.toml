@@ -1,0 +1,16 @@
+# Refused: the witness of c08 reverts the original and, in a second commit, edits a file outside it. It touches more than the original's files, but
+# it still undoes the diff, so what it adds beside the revert is not evidence of reach.
+
+[[case]]
+id = "c03-case-table"
+repo = "acme/web"
+merged_at = "2023-11-15T16:13:20Z"
+original = { compare = "main...scenario/s19-generic-name" }
+witness = { compare = "main...eval/w03-schedule-report" }
+
+[[case]]
+id = "c08-badge-reverted-and-fixed"
+repo = "acme/web"
+merged_at = "2023-11-15T09:13:20Z"
+original = { compare = "main...scenario/s01-shared-component" }
+witness = { range = "scenario/s01-shared-component..eval/w07-revert-and-fix" }

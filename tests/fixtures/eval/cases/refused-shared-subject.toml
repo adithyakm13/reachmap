@@ -1,0 +1,15 @@
+# Refused: one original, two witnesses. The same change would be a subject twice (context section 9, independence on both axes).
+
+[[case]]
+id = "c01-shared-badge"
+repo = "acme/web"
+merged_at = "2023-11-15T09:13:20Z"
+original = { compare = "main...scenario/s01-shared-component" }
+witness = { range = "scenario/s01-shared-component..eval/w01-invoice-list-column" }
+
+[[case]]
+id = "c06-shared-badge-schedule"
+repo = "acme/web"
+merged_at = "2023-11-15T09:13:20Z"
+original = { range = "main..scenario/s01-shared-component" }
+witness = { compare = "main...eval/w03-schedule-report" }

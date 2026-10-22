@@ -1,0 +1,11 @@
+{
+  "id": "ex13-generic-names",
+  "repo": "ex/orders",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex13-generic-names"
+  },
+  "commit_message": "get wraps the customer",
+  "notes": "A generic word: get is defined in five files, so it links nothing by name; the reach is by import and by the member the route spells."
+}

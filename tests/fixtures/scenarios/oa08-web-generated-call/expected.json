@@ -1,0 +1,235 @@
+{
+  "schema": 1,
+  "id": "oa08-web-generated-call",
+  "repo": "acme/ledger-web",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/oa08-web-generated-call"
+  },
+  "explains": "fetchInvoice in src/modules/invoices/api.ts changes (it now trims the id). It calls getInvoice of the generated client, an operation of the web copy of the spec: GET /invoices/{invoiceId} under the server base path /v1, so the URL is /v1/invoices/{invoiceId} and the method is the spec's, GET, whatever the call looks like. The server's route table (the api spec at its main branch) has that route, served by get_invoice in app/handlers/invoices.py, which imports app/services/ledger.py: the module its handler runs. InvoiceDetailPage imports fetchInvoice, so the whole page declaration is reached and its other call, voidInvoice (a DELETE of the same path), is reached too and fits DELETE /v1/invoices/{invoiceId}. The page is mounted at /invoices/:invoiceId. InvoiceListPage imports fetchInvoices only. The test InvoiceDetailPage.test.tsx imports the generated getInvoice, not the changed file: it is not a unit test of this change and a test is not a caller. The generic names and downloadStatement are dropped and recorded.",
+  "complete_for": [
+    "changed_symbol",
+    "changed_file",
+    "http_edge",
+    "screen",
+    "unit_test",
+    "backend_call"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/ledger-web",
+      "path": "src/modules/invoices/api.ts",
+      "symbol": "fetchInvoice"
+    },
+    {
+      "type": "changed_file",
+      "repo": "acme/ledger-web",
+      "path": "src/modules/invoices/api.ts",
+      "role": "source"
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/ledger-web",
+        "path": "src/modules/invoices/api.ts",
+        "contains": "return getInvoice(invoiceId.trim());"
+      },
+      "via": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"get\": {"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"/invoices/{invoiceId}\": {"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"url\": \"https://ledger.example.invalid/v1\""
+        }
+      ],
+      "to": {
+        "repo": "acme/ledger-api",
+        "method": "GET",
+        "path": "/v1/invoices/{invoiceId}",
+        "evidence": [
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"get\": {"
+          },
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"/invoices/{invoiceId}\": {"
+          },
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"url\": \"https://ledger.example.invalid/v1\""
+          }
+        ]
+      }
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/ledger-web",
+        "path": "src/modules/invoices/pages/InvoiceDetailPage.tsx",
+        "contains": "voidInvoice(\"inv-1\")"
+      },
+      "via": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"delete\": {"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"/invoices/{invoiceId}\": {"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"url\": \"https://ledger.example.invalid/v1\""
+        }
+      ],
+      "to": {
+        "repo": "acme/ledger-api",
+        "method": "DELETE",
+        "path": "/v1/invoices/{invoiceId}",
+        "evidence": [
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"delete\": {"
+          },
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"/invoices/{invoiceId}\": {"
+          },
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"url\": \"https://ledger.example.invalid/v1\""
+          }
+        ]
+      }
+    },
+    {
+      "type": "backend_call",
+      "from": {
+        "repo": "acme/ledger-web",
+        "path": "src/modules/invoices/api.ts",
+        "contains": "return getInvoice(invoiceId.trim());"
+      },
+      "route": {
+        "method": "GET",
+        "path": "/v1/invoices/{invoiceId}"
+      },
+      "handler": "app/handlers/invoices.py",
+      "modules": [
+        {
+          "path": "app/services/ledger.py",
+          "depth": 1
+        }
+      ]
+    },
+    {
+      "type": "backend_call",
+      "from": {
+        "repo": "acme/ledger-web",
+        "path": "src/modules/invoices/pages/InvoiceDetailPage.tsx",
+        "contains": "voidInvoice(\"inv-1\")"
+      },
+      "route": {
+        "method": "DELETE",
+        "path": "/v1/invoices/{invoiceId}"
+      },
+      "handler": "app/handlers/invoices.py",
+      "modules": [
+        {
+          "path": "app/services/ledger.py",
+          "depth": 1
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "acme/ledger-web",
+      "route": "/invoices/:invoiceId",
+      "chain": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/invoices/pages/InvoiceDetailPage.tsx",
+          "contains": "import { fetchInvoice } from \"../api\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/invoices/routes.tsx",
+          "contains": "import InvoiceDetailPage from \"./pages/InvoiceDetailPage\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/invoices/routes.tsx",
+          "contains": "<Route path=\"/invoices/:invoiceId\" element={<InvoiceDetailPage />} />"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "screen",
+      "repo": "acme/ledger-web",
+      "route": "/invoices",
+      "why": "InvoiceListPage imports fetchInvoices only, a function the change does not reach"
+    },
+    {
+      "type": "unit_test",
+      "repo": "acme/ledger-web",
+      "path": "src/modules/invoices/pages/InvoiceDetailPage.test.tsx",
+      "why": "it imports the generated getInvoice, not the changed file"
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/ledger-web",
+        "path": "src/modules/invoices/api.ts",
+        "contains": "return listInvoices();"
+      },
+      "to": {
+        "repo": "acme/ledger-api",
+        "method": "GET",
+        "path": "/v1/invoices"
+      },
+      "why": "fetchInvoices is not the changed function and nothing the change reaches uses it"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "not_distinctive",
+      "subject": "downloadStatement",
+      "blocking": false,
+      "definitions": 4
+    },
+    {
+      "kind": "not_distinctive",
+      "subject": "get",
+      "blocking": false,
+      "definitions": 2
+    },
+    {
+      "kind": "not_distinctive",
+      "subject": "list",
+      "blocking": false,
+      "definitions": 1
+    }
+  ]
+}

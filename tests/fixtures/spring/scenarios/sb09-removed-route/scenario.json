@@ -1,0 +1,11 @@
+{
+  "id": "sb09-removed-route",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb09-removed-route"
+  },
+  "commit_message": "GET /invoices/{id} is removed",
+  "notes": "A handler is removed while the client still calls its URL."
+}

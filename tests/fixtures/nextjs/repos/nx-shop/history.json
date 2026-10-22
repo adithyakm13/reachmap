@@ -1,0 +1,24 @@
+{
+  "steps": [
+    {
+      "dir": "01-scaffold",
+      "branch": "main",
+      "message": "Scaffold the shop: config, lib, components"
+    },
+    {
+      "dir": "02-app",
+      "branch": "main",
+      "message": "App Router: layouts and pages"
+    },
+    {
+      "dir": "03-pages",
+      "branch": "main",
+      "message": "Pages Router: legacy pages"
+    },
+    {
+      "dir": "04-api",
+      "branch": "main",
+      "message": "API routes and middleware"
+    }
+  ]
+}

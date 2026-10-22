@@ -1,0 +1,258 @@
+{
+  "schema": 1,
+  "id": "s11-contract-field",
+  "repo": "acme/contracts",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s11-contract-field"
+  },
+  "explains": "Invoice.settlement_reference changes from settlement_reference: str | None = None to settlement_reference: str (optional becomes required). The name settlement_reference is defined in two models (Invoice and Settlement), which is within distinct_max = 3, so it is distinctive and may be searched for in consumers' code (not in comments). Consumers import the package (import marker acme_contracts): acme/api pins acme-contracts==1.10.0 on main and acme/worker pins acme-contracts==1.9.0 on main. The change is not in any tag (v1.10.0 is the latest and has the optional field), so neither consumer has it: exposure comes on adoption for both. Code that reads the field: in acme/api, services/billing/app/services/settlement.py reference_for reads invoice.settlement_reference (the Invoice import is from acme_contracts.models.invoice); the word also appears in a comment in routers/settlements.py, which is not a read. In acme/worker, worker/tasks/settlement_sync.py reads invoice.settlement_reference. In the api, reference_for is called by summarise (same file), summarise by get_settlement_summary through the aliased module import settlement_svc, which is GET /api/billing/settlements/summary (composed /api + /billing + /settlements + /summary). The web client reaches it through SETTLEMENT_SUMMARY_URL (http edge), fetchSettlementSummary and SettlementsPage, mounted at /billing/settlements. The unit test services/billing/tests/test_settlement.py imports the settlement service and is listed as a test.",
+  "complete_for": [
+    "changed_symbol",
+    "contract_read",
+    "route",
+    "http_edge",
+    "screen",
+    "consumer",
+    "unit_test"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/contracts",
+      "path": "contracts/models/invoice.py",
+      "symbol": "Invoice.settlement_reference"
+    },
+    {
+      "type": "contract_read",
+      "repo": "acme/api",
+      "path": "services/billing/app/services/settlement.py",
+      "symbol": "reference_for",
+      "evidence": [
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/services/settlement.py",
+          "contains": "from acme_contracts.models.invoice import Invoice"
+        },
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/services/settlement.py",
+          "contains": "if invoice.settlement_reference is None:"
+        }
+      ]
+    },
+    {
+      "type": "contract_read",
+      "repo": "acme/worker",
+      "path": "worker/tasks/settlement_sync.py",
+      "symbol": "sync_invoice",
+      "evidence": [
+        {
+          "repo": "acme/worker",
+          "path": "worker/tasks/settlement_sync.py",
+          "contains": "from acme_contracts.models.invoice import Invoice"
+        },
+        {
+          "repo": "acme/worker",
+          "path": "worker/tasks/settlement_sync.py",
+          "contains": "return invoice.settlement_reference or f\"pending-{invoice.id}\""
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/api",
+      "method": "GET",
+      "path": "/api/billing/settlements/summary",
+      "evidence": [
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/routers/settlements.py",
+          "contains": "@router.get(\"/summary\")"
+        },
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/routers/billing.py",
+          "contains": "billing_router.include_router(settlements_router, prefix=\"/settlements\")"
+        },
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/api.py",
+          "contains": "api_router.include_router(billing_router, prefix=\"/billing\")"
+        },
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/main.py",
+          "contains": "app.include_router(api_router, prefix=\"/api\")"
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/web",
+        "path": "src/modules/billing/api.ts",
+        "contains": "apiGet<SettlementSummary>(SETTLEMENT_SUMMARY_URL)"
+      },
+      "via": [
+        {
+          "repo": "acme/web",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const SETTLEMENT_SUMMARY_URL ="
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/api/endpoints.ts",
+          "contains": "\"/api/billing/settlements/summary\""
+        }
+      ],
+      "to": {
+        "repo": "acme/api",
+        "method": "GET",
+        "path": "/api/billing/settlements/summary",
+        "evidence": [
+          {
+            "repo": "acme/api",
+            "path": "services/billing/app/routers/settlements.py",
+            "contains": "@router.get(\"/summary\")"
+          },
+          {
+            "repo": "acme/api",
+            "path": "services/billing/app/routers/billing.py",
+            "contains": "billing_router.include_router(settlements_router, prefix=\"/settlements\")"
+          },
+          {
+            "repo": "acme/api",
+            "path": "services/billing/app/api.py",
+            "contains": "api_router.include_router(billing_router, prefix=\"/billing\")"
+          },
+          {
+            "repo": "acme/api",
+            "path": "services/billing/app/main.py",
+            "contains": "app.include_router(api_router, prefix=\"/api\")"
+          }
+        ]
+      }
+    },
+    {
+      "type": "screen",
+      "repo": "acme/web",
+      "route": "/billing/settlements",
+      "chain": [
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/services/settlement.py",
+          "contains": "from acme_contracts.models.invoice import Invoice"
+        },
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/services/settlement.py",
+          "contains": "if invoice.settlement_reference is None:"
+        },
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/services/settlement.py",
+          "contains": "\"references\": [reference_for(invoice) for invoice in invoices],"
+        },
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/routers/settlements.py",
+          "contains": "import app.services.settlement as settlement_svc"
+        },
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/routers/settlements.py",
+          "contains": "return settlement_svc.summarise(invoices)"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/api.ts",
+          "contains": "apiGet<SettlementSummary>(SETTLEMENT_SUMMARY_URL)"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/pages/SettlementsPage.tsx",
+          "contains": "import { fetchSettlementSummary } from \"../api\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/routes.tsx",
+          "contains": "import SettlementsPage from \"./pages/SettlementsPage\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/routes.tsx",
+          "contains": "<Route path=\"/billing/settlements\" element={<SettlementsPage />} />"
+        }
+      ]
+    },
+    {
+      "type": "consumer",
+      "repo": "acme/api",
+      "branch": "main",
+      "pin": "1.10.0",
+      "adoption": "on_adoption",
+      "evidence": [
+        {
+          "repo": "acme/api",
+          "path": "requirements.txt",
+          "contains": "acme-contracts==1.10.0",
+          "branch": "main"
+        }
+      ]
+    },
+    {
+      "type": "consumer",
+      "repo": "acme/worker",
+      "branch": "main",
+      "pin": "1.9.0",
+      "adoption": "on_adoption",
+      "evidence": [
+        {
+          "repo": "acme/worker",
+          "path": "requirements.txt",
+          "contains": "acme-contracts==1.9.0",
+          "branch": "main"
+        }
+      ]
+    },
+    {
+      "type": "unit_test",
+      "repo": "acme/api",
+      "path": "services/billing/tests/test_settlement.py",
+      "evidence": [
+        {
+          "repo": "acme/api",
+          "path": "services/billing/tests/test_settlement.py",
+          "contains": "import app.services.settlement as settlement_svc"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "contract_read",
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/settlements.py",
+      "why": "settlement_reference appears in this file only in a comment, which is not a read of the field",
+      "comment": {
+        "repo": "acme/api",
+        "path": "services/billing/app/routers/settlements.py",
+        "contains": "settlement_reference is filled in by the nightly settlement job."
+      }
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "edge_unfollowed",
+      "subject": "edge:event:acme/api:acme/worker",
+      "blocking": false
+    },
+    {
+      "kind": "entry_points_unread",
+      "subject": "acme/worker",
+      "blocking": false
+    }
+  ]
+}

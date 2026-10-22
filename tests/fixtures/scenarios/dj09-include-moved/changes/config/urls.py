@@ -1,0 +1,13 @@
+from django.contrib import admin
+from django.urls import include, path, re_path
+
+from billing import views as billing_views
+from cases import urls as cases_urls
+
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("billing/", include("billing.urls")),
+    path("support/cases/", include(cases_urls)),
+    path("api/v1/", include("billing.api_urls")),
+    re_path(r"^legacy/(?P<year>[0-9]{4})/$", billing_views.legacy_year),
+]

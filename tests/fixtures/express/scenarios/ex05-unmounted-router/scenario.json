@@ -1,0 +1,11 @@
+{
+  "id": "ex05-unmounted-router",
+  "repo": "ex/orders",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex05-unmounted-router"
+  },
+  "commit_message": "The draft handler reports a version",
+  "notes": "A router that nothing mounts claims no route; a mount in a comment is not a mount."
+}

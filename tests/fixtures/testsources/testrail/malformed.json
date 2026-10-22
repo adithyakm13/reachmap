@@ -1,0 +1,8 @@
+{
+  "note": "Synthetic: invented for the tests, shaped like the TestRail API v2 (paginated lists with _links.next, TestRail 6.7 and later). Not a recording of any real instance.",
+  "status": 200,
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body_text": "{\"offset\": 0, \"cases\": ["
+}

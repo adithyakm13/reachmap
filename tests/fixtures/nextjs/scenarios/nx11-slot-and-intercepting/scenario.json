@@ -1,0 +1,11 @@
+{
+  "id": "nx11-slot-and-intercepting",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx11-slot-and-intercepting"
+  },
+  "commit_message": "Photo cards and charts get a data attribute",
+  "notes": "A parallel slot page and its folder's page are one screen; an intercepting page shares the URL it intercepts and is partial."
+}

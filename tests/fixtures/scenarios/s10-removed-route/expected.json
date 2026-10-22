@@ -1,0 +1,132 @@
+{
+  "schema": 1,
+  "id": "s10-removed-route",
+  "repo": "acme/api",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s10-removed-route"
+  },
+  "explains": "The audit_log handler (@billing_router.get(\"/audit-log\"), declared directly on billing_router) is deleted from billing.py. At the base the route was GET /api/billing/audit-log: billing_router is mounted at /billing in api.py and api_router at /api in main.py. No other router in the service defines a route that matches that path (the invoices router mounts under /invoices, so /audit-log does not fit its {invoice_id} route), so after the change the route is gone. The web client still names it: AUDIT_LOG_URL in endpoints.ts, called by fetchAuditLog in billing/api.ts, called by InvoiceDetailPage (mounted at /billing/invoices/:invoiceId and under cases). A removed route still called is a finding: high risk (the page's audit request will fail) and low confidence (the client file is read from main, and nothing proves the call is reached at runtime). Evidence sits at the client line and at the removed decorator line at the base.",
+  "complete_for": [
+    "finding",
+    "screen"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/billing.py",
+      "symbol": "audit_log",
+      "change": "removed"
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/web",
+        "path": "src/modules/billing/api.ts",
+        "contains": "apiGet<AuditEntry[]>(AUDIT_LOG_URL)"
+      },
+      "via": [
+        {
+          "repo": "acme/web",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const AUDIT_LOG_URL = \"/api/billing/audit-log\";"
+        }
+      ],
+      "to": {
+        "repo": "acme/api",
+        "method": "GET",
+        "path": "/api/billing/audit-log",
+        "removed": true,
+        "evidence": [
+          {
+            "repo": "acme/api",
+            "path": "services/billing/app/routers/billing.py",
+            "contains": "@billing_router.get(\"/audit-log\")",
+            "at": "base"
+          },
+          {
+            "repo": "acme/api",
+            "path": "services/billing/app/api.py",
+            "contains": "api_router.include_router(billing_router, prefix=\"/billing\")"
+          },
+          {
+            "repo": "acme/api",
+            "path": "services/billing/app/main.py",
+            "contains": "app.include_router(api_router, prefix=\"/api\")"
+          }
+        ]
+      }
+    },
+    {
+      "type": "finding",
+      "kind": "removed_route_still_called",
+      "risk": "high",
+      "confidence": "low",
+      "evidence": [
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/api.ts",
+          "contains": "apiGet<AuditEntry[]>(AUDIT_LOG_URL)"
+        },
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/routers/billing.py",
+          "contains": "@billing_router.get(\"/audit-log\")",
+          "at": "base"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "acme/web",
+      "route": "/billing/invoices/:invoiceId",
+      "also_mounted": [
+        "/cases/:caseId/invoices/:invoiceId"
+      ],
+      "also_mounted_evidence": [
+        {
+          "repo": "acme/web",
+          "path": "src/modules/cases/routes.tsx",
+          "contains": "import InvoiceDetailPage from \"@/modules/billing/pages/InvoiceDetailPage\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/cases/routes.tsx",
+          "contains": "<Route path=\"/cases/:caseId/invoices/:invoiceId\" element={<InvoiceDetailPage />} />"
+        }
+      ],
+      "chain": [
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/api.ts",
+          "contains": "apiGet<AuditEntry[]>(AUDIT_LOG_URL)"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
+          "contains": "import { fetchAuditLog, fetchInvoice } from \"../api\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/routes.tsx",
+          "contains": "import InvoiceDetailPage from \"./pages/InvoiceDetailPage\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/routes.tsx",
+          "contains": "<Route path=\"/billing/invoices/:invoiceId\" element={<InvoiceDetailPage />} />"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [],
+  "not_established": [
+    {
+      "kind": "edge_unfollowed",
+      "subject": "edge:event:acme/api:acme/worker",
+      "blocking": false
+    }
+  ]
+}

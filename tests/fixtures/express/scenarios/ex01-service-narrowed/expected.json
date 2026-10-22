@@ -1,0 +1,223 @@
+{
+  "schema": 1,
+  "id": "ex01-service-narrowed",
+  "repo": "ex/orders",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex01-service-narrowed"
+  },
+  "explains": "findOrder in src/services/orders.ts falls back to the first order. Three files import the service module. src/controllers/orders.ts imports findOrder and uses it in getOrder, so getOrder is a caller; src/controllers/admin.ts imports only countOrders and src/controllers/search.ts only findOrders, so both are excluded by named-export narrowing with their import line and the declaration of the changed function as evidence. src/routes/orders.ts imports getOrder with a named import and wires it in router.get(\"/:id\", requireAuth, getOrder), so the route is GET /api/v1/orders/{id}: the router is the default export of its file, apiRouter mounts it under API_VERSION + \"/orders\" (API_VERSION is \"/v1\" in src/config.ts) and app.use(API_PREFIX, apiRouter) mounts apiRouter under \"/api\". The other handlers of that router do not use findOrder: GET /api/v1/orders uses listOrders (which calls findOrders), the lines routes use findLines and saveLine. The unit test imports findOrder and is a unit test, not a caller. The client builds orderUrl(orderId) as /api/v1/orders/${orderId}, a parameter segment that fits {id}; fetchOrder calls apiGet(orderUrl(orderId)), so the http edge goes to the route and OrderScreen, mounted at /orders/:orderId, is reached. OrdersScreen imports only fetchOrders and is excluded.",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "screen",
+    "http_edge",
+    "finding",
+    "caller",
+    "unit_test"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "ex/orders",
+      "path": "src/services/orders.ts",
+      "symbol": "findOrder"
+    },
+    {
+      "type": "caller",
+      "repo": "ex/orders",
+      "path": "src/controllers/orders.ts",
+      "evidence": [
+        {
+          "repo": "ex/orders",
+          "path": "src/controllers/orders.ts",
+          "contains": "import { findOrders, findOrder, saveOrder, findLines, saveLine } from \"../services/orders\";"
+        }
+      ],
+      "symbol": "getOrder"
+    },
+    {
+      "type": "unit_test",
+      "repo": "ex/orders",
+      "path": "src/services/__tests__/orders.test.ts",
+      "evidence": [
+        {
+          "repo": "ex/orders",
+          "path": "src/services/__tests__/orders.test.ts",
+          "contains": "import { findOrder } from \"../orders\";"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/api/v1/orders/{id}",
+      "evidence": [
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/orders.ts",
+          "contains": "router.get(\"/:id\", requireAuth, getOrder);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/index.ts",
+          "contains": "apiRouter.use(API_VERSION + \"/orders\", ordersRouter);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/app.ts",
+          "contains": "app.use(API_PREFIX, apiRouter);"
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "ex/web",
+        "path": "src/services/orders.ts",
+        "contains": "return apiGet(orderUrl(orderId));"
+      },
+      "via": [
+        {
+          "repo": "ex/web",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const orderUrl = (orderId: string) =>"
+        }
+      ],
+      "to": {
+        "repo": "ex/orders",
+        "method": "GET",
+        "path": "/api/v1/orders/{id}",
+        "evidence": [
+          {
+            "repo": "ex/orders",
+            "path": "src/routes/orders.ts",
+            "contains": "router.get(\"/:id\", requireAuth, getOrder);"
+          },
+          {
+            "repo": "ex/orders",
+            "path": "src/routes/index.ts",
+            "contains": "apiRouter.use(API_VERSION + \"/orders\", ordersRouter);"
+          },
+          {
+            "repo": "ex/orders",
+            "path": "src/app.ts",
+            "contains": "app.use(API_PREFIX, apiRouter);"
+          }
+        ]
+      }
+    },
+    {
+      "type": "screen",
+      "repo": "ex/web",
+      "route": "/orders/:orderId",
+      "chain": [
+        {
+          "repo": "ex/orders",
+          "path": "src/controllers/orders.ts",
+          "contains": "import { findOrders, findOrder, saveOrder, findLines, saveLine } from \"../services/orders\";"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/orders.ts",
+          "contains": "import { listOrders, getOrder, createOrder, addLine, listLines } from \"../controllers/orders\";"
+        },
+        {
+          "repo": "ex/web",
+          "path": "src/services/orders.ts",
+          "contains": "return apiGet(orderUrl(orderId));"
+        },
+        {
+          "repo": "ex/web",
+          "path": "src/screens/OrderScreen.tsx",
+          "contains": "import { fetchOrder } from \"@/services/orders\";"
+        },
+        {
+          "repo": "ex/web",
+          "path": "src/routes.tsx",
+          "contains": "import OrderScreen from \"./screens/OrderScreen\";"
+        },
+        {
+          "repo": "ex/web",
+          "path": "src/routes.tsx",
+          "contains": "<Route path=\"/orders/:orderId\" element={<OrderScreen />} />"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "caller",
+      "repo": "ex/orders",
+      "path": "src/controllers/admin.ts",
+      "why": "it imports countOrders only",
+      "evidence": [
+        {
+          "repo": "ex/orders",
+          "path": "src/controllers/admin.ts",
+          "contains": "import { countOrders } from \"../services/orders\";"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/services/orders.ts",
+          "contains": "export function findOrder("
+        }
+      ]
+    },
+    {
+      "type": "caller",
+      "repo": "ex/orders",
+      "path": "src/controllers/search.ts",
+      "why": "it imports findOrders only",
+      "evidence": [
+        {
+          "repo": "ex/orders",
+          "path": "src/controllers/search.ts",
+          "contains": "import { findOrders } from \"../services/orders\";"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/services/orders.ts",
+          "contains": "export function findOrder("
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/api/v1/orders",
+      "why": "listOrders uses findOrders"
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "POST",
+      "path": "/api/v1/orders/{id}/lines",
+      "why": "addLine uses saveLine"
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/api/v1/admin/stats",
+      "why": "its controller imports countOrders only"
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/api/search",
+      "why": "its controller imports findOrders only"
+    },
+    {
+      "type": "screen",
+      "repo": "ex/web",
+      "route": "/orders",
+      "why": "OrdersScreen imports fetchOrders, a different URL"
+    }
+  ],
+  "not_established": []
+}

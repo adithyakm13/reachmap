@@ -1,0 +1,11 @@
+{
+  "id": "sb13-wiring",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb13-wiring"
+  },
+  "commit_message": "WebConfig builds the cache in two steps",
+  "notes": "A class that wires the application is not followed and the run says so."
+}

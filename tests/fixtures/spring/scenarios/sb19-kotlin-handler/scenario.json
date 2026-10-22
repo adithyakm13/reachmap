@@ -1,0 +1,11 @@
+{
+  "id": "sb19-kotlin-handler",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb19-kotlin-handler"
+  },
+  "commit_message": "GET /customers trims the answer",
+  "notes": "A change inside one Kotlin handler reaches its route and not the other."
+}

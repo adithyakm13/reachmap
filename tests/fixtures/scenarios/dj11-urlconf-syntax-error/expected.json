@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "id": "dj11-urlconf-syntax-error",
+  "repo": "acme/portal",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/dj11-urlconf-syntax-error"
+  },
+  "explains": "billing/urls.py is changed into text that does not parse (a path() call is left open). Nothing can be read from it: which routes billing/urls.py maps, and the include of billing.reports below it, are not known. The run must not take the missing routes for removed ones (the routes were not deleted, they were not read), must not claim a route from the broken file, and must not call anything unmounted. It records the file that did not parse (blocking) and the include in config/urls.py that now carries a module that could not be read (blocking: a URLconf that looks unmounted may be mounted there). No route, no screen and no http edge is claimed, and the answer is not complete.",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "http_edge",
+    "screen"
+  ],
+  "must_find": [
+    {
+      "type": "changed_file",
+      "repo": "acme/portal",
+      "path": "billing/urls.py",
+      "role": "source"
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "ANY",
+      "path": "/billing/invoices",
+      "why": "billing/urls.py could not be read: no route is claimed from it, and none is called removed"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/portal-web",
+      "route": "/billing/invoices",
+      "why": "reached only through a route that was not read"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "mount_unresolved",
+      "subject": "config/urls.py:9",
+      "blocking": true
+    },
+    {
+      "kind": "parse_degraded",
+      "subject": "billing/urls.py",
+      "blocking": true
+    },
+    {
+      "kind": "route_change_withheld",
+      "subject": "acme/portal",
+      "blocking": true
+    }
+  ]
+}

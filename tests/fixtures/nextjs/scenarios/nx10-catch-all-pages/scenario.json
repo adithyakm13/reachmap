@@ -1,0 +1,11 @@
+{
+  "id": "nx10-catch-all-pages",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx10-catch-all-pages"
+  },
+  "commit_message": "Markdown renders its source in a figure",
+  "notes": "A component used by a catch-all page and an optional catch-all page."
+}

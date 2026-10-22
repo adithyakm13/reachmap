@@ -1,0 +1,11 @@
+{
+  "id": "nx14-added-route",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx14-added-route"
+  },
+  "commit_message": "Add the invoices route",
+  "notes": "An added route nobody calls yet."
+}

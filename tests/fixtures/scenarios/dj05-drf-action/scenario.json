@@ -1,0 +1,11 @@
+{
+  "id": "dj05-drf-action",
+  "repo": "acme/portal",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/dj05-drf-action"
+  },
+  "commit_message": "Acknowledge the voided invoice in the API",
+  "notes": "Body change in one @action of a viewset: the route of that action only, not the routes the router makes for the other actions."
+}

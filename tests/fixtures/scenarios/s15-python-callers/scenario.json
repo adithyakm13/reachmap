@@ -1,0 +1,11 @@
+{
+  "id": "s15-python-callers",
+  "repo": "acme/api",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s15-python-callers"
+  },
+  "commit_message": "Group thousands in formatted amounts",
+  "notes": "A shared library function changes; callers import it three different ways."
+}

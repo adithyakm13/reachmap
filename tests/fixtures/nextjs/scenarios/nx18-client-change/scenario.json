@@ -1,0 +1,11 @@
+{
+  "id": "nx18-client-change",
+  "repo": "nx/mobile",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx18-client-change"
+  },
+  "commit_message": "fetchOrder trims the id",
+  "notes": "A client change reaches the routes its call matches in the Next.js server, and its own screen."
+}

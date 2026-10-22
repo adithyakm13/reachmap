@@ -1,0 +1,11 @@
+{
+  "id": "s12-generic-field",
+  "repo": "acme/contracts",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s12-generic-field"
+  },
+  "commit_message": "Settle weekly by default",
+  "notes": "interval is defined in five models."
+}

@@ -1,0 +1,2 @@
+acme-contracts==1.9.0
+celery==5.3.6

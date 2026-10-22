@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "id": "ex14-lookalike-router",
+  "repo": "ex/orders",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex14-lookalike-router"
+  },
+  "explains": "src/lib/events.ts has a variable called router, made by createRouter() of the event bus (not Express), and calls router.get(\"/ping\", ...). src/lib/warm.ts calls cache.get(\"/orders/:id\", load) on a module of the repository. Neither is an Express router: an Express router is made by express.Router() or Router() of the express package, and an app by express(); the name of a variable means nothing. No route is claimed for either (GET /ping and GET /orders/{id} are not routes of this service), nothing imports the two files, and nothing else is reached.",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "screen",
+    "http_edge",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "changed_file",
+      "repo": "ex/orders",
+      "path": "src/lib/events.ts",
+      "role": "source"
+    },
+    {
+      "type": "changed_file",
+      "repo": "ex/orders",
+      "path": "src/lib/warm.ts",
+      "role": "source"
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/ping",
+      "why": "router is not an Express router"
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/orders/{id}",
+      "why": "cache is not a router"
+    }
+  ],
+  "not_established": []
+}

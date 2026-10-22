@@ -1,0 +1,30 @@
+{
+  "status": 200,
+  "headers": {
+    "Content-Type": "application/json",
+    "RateLimit-Limit": "2000",
+    "RateLimit-Remaining": "1990",
+    "X-Request-Id": "01HF8Z3K5V9C2N7QWERTY12345",
+    "Server": "nginx",
+    "X-Page": "1",
+    "X-Per-Page": "100",
+    "X-Next-Page": "",
+    "X-Total-Pages": "1"
+  },
+  "body": [
+    {
+      "id": "0000000000000000000000000000000000000009",
+      "short_id": "00000000",
+      "created_at": "2023-11-14T23:13:20.000+00:00",
+      "parent_ids": [
+        "4444444444444444444444444444444444444444"
+      ],
+      "title": "PR commit 9",
+      "message": "PR commit 9\n",
+      "author_name": "Dev One",
+      "author_email": "dev@example.invalid",
+      "committed_date": "2023-11-14T23:13:20.000+00:00",
+      "web_url": "https://gitlab.com/acme/api/-/commit/0000000000000000000000000000000000000009"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "dj13-regex-route",
+  "repo": "acme/portal",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/dj13-regex-route"
+  },
+  "commit_message": "Mark the legacy year view",
+  "notes": "Body change in a view that a regular expression route names: the route is kept as a partial pattern."
+}

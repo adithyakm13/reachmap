@@ -1,0 +1,587 @@
+/* The workspace's own styles. Static CSS only: the runner's policy allows style sheets from its own files and style elements that carry its
+   nonce, and nothing else. No url(), no @import, no font file: the font is the system stack of the theme (theme.ts). Colours come from the
+   Mantine variables (the palette of theme.ts), so the light and dark themes are one set of rules with the variables the theme redefines. */
+
+:root {
+  --rm-line: var(--mantine-color-default-border);
+  --rm-subtle: var(--mantine-color-gray-0);
+  --rm-hover: var(--mantine-color-gray-0);
+  --rm-code-bg: var(--mantine-color-gray-0);
+  --rm-focus: var(--mantine-color-accent-7);
+  --rm-selected: var(--mantine-color-accent-0);
+  --rm-lane: var(--mantine-color-gray-0);
+}
+
+:root[data-mantine-color-scheme="dark"] {
+  --rm-subtle: var(--mantine-color-dark-6);
+  --rm-hover: var(--mantine-color-dark-5);
+  --rm-code-bg: var(--mantine-color-dark-8);
+  --rm-focus: var(--mantine-color-accent-4);
+  --rm-selected: rgba(122, 130, 217, 0.12);
+  --rm-lane: var(--mantine-color-dark-8);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--mantine-color-body);
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "cv11", "ss01";
+}
+
+/* ---------------------------------------------------------------- landmarks, skip link, hidden text */
+
+.rm-skip {
+  position: absolute;
+  left: 8px;
+  top: -48px;
+  z-index: 1000;
+  padding: 8px 12px;
+  background: var(--mantine-color-body);
+  border: 1px solid var(--rm-line);
+  border-radius: var(--mantine-radius-sm);
+}
+.rm-skip:focus {
+  top: 8px;
+}
+
+.rm-sr {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+main:focus {
+  outline: none;
+}
+
+.mantine-AppShell-main {
+  min-width: 0;
+}
+
+.rm-main {
+  padding: 24px clamp(16px, 3vw, 36px) 72px;
+  min-width: 0;
+}
+
+.rm-page {
+  max-width: 1320px;
+  margin: 0 auto;
+}
+.rm-page > * {
+  min-width: 0;
+}
+
+/* bare headings of the pages: the theme's heading sizes, tight */
+.rm-main h1,
+.rm-main h2,
+.rm-main h3,
+.rm-main h4,
+.rm-drawer h3 {
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  overflow-wrap: break-word;
+}
+.rm-main h1 {
+  font-size: 1.5rem;
+  line-height: 1.25;
+}
+.rm-main h2,
+.rm-h2 {
+  font-size: 1.0625rem;
+  line-height: 1.3;
+  margin: 0;
+}
+.rm-main h3,
+.rm-drawer h3 {
+  font-size: 0.9375rem;
+  line-height: 1.35;
+}
+
+.rm-title-sub {
+  color: var(--mantine-color-dimmed);
+  font-weight: 500;
+}
+
+/* ---------------------------------------------------------------- the shell */
+
+.rm-header {
+  border-bottom: 1px solid var(--rm-line);
+  background: var(--mantine-color-body);
+}
+
+.rm-navbar {
+  border-right: 1px solid var(--rm-line);
+  background: var(--rm-subtle);
+}
+
+.rm-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: var(--mantine-radius-sm);
+  color: var(--mantine-color-text);
+  text-decoration: none;
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 500;
+}
+.rm-nav-link:hover {
+  background: var(--rm-hover);
+}
+.rm-nav-link[aria-current="page"] {
+  background: var(--rm-selected);
+  color: var(--mantine-color-accent-8);
+}
+:root[data-mantine-color-scheme="dark"] .rm-nav-link[aria-current="page"] {
+  color: var(--mantine-color-accent-3);
+}
+
+.rm-crumbs {
+  min-width: 0;
+  overflow: hidden;
+}
+.rm-crumb {
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+.rm-search-button {
+  min-width: 0;
+}
+@media (max-width: 62em) {
+  .rm-search-label {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------------- cards and tables */
+
+.rm-header-card {
+  background: var(--mantine-color-body);
+}
+.rm-metarow {
+  row-gap: 2px;
+}
+.rm-meta {
+  min-width: 0;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.rm-meta-label {
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+.rm-stat {
+  position: relative;
+}
+.rm-stat-n {
+  font-size: 1.75rem;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.rm-stat[data-tone="must"] {
+  border-top: 2px solid var(--mantine-color-accent-6);
+}
+.rm-stat[data-tone="sample"] {
+  border-top: 2px solid var(--mantine-color-slate-5);
+}
+.rm-stat[data-tone="candidate"] {
+  border-top: 2px dashed var(--mantine-color-gray-5);
+}
+
+.rm-legend {
+  padding: 0;
+}
+.rm-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--mantine-color-gray-5);
+  flex: none;
+}
+.rm-swatch[data-color="red.6"] { background: var(--mantine-color-red-6); }
+.rm-swatch[data-color="orange.5"] { background: var(--mantine-color-orange-5); }
+.rm-swatch[data-color="pink.5"] { background: var(--mantine-color-pink-5); }
+.rm-swatch[data-color="yellow.5"] { background: var(--mantine-color-yellow-5); }
+.rm-swatch[data-color="accent.8"] { background: var(--mantine-color-accent-8); }
+.rm-swatch[data-color="accent.5"] { background: var(--mantine-color-accent-5); }
+.rm-swatch[data-color="accent.2"] { background: var(--mantine-color-accent-2); }
+.rm-swatch[data-color="teal.6"] { background: var(--mantine-color-teal-6); }
+.rm-swatch[data-color="gray.4"] { background: var(--mantine-color-gray-4); }
+.rm-swatch[data-color="gray.5"] { background: var(--mantine-color-gray-5); }
+
+.rm-table-paper {
+  overflow: hidden;
+}
+
+.rm-listing th,
+.rm-areas th,
+.rm-findings th,
+.rm-grid th,
+.rm-edges th {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--mantine-color-dimmed);
+  white-space: nowrap;
+  background: var(--rm-subtle);
+}
+
+.rm-listing td,
+.rm-areas td,
+.rm-findings td,
+.rm-grid td,
+.rm-edges td {
+  vertical-align: top;
+}
+
+.rm-row-link {
+  cursor: pointer;
+}
+.rm-row-link:hover {
+  background: var(--rm-hover);
+}
+.rm-row-title {
+  overflow-wrap: break-word;
+}
+.rm-row-sub {
+  overflow-wrap: break-word;
+}
+
+tr[data-active="true"] {
+  box-shadow: inset 3px 0 0 var(--rm-focus);
+  background: var(--rm-hover);
+}
+tr[data-selected="true"] {
+  background: var(--rm-selected);
+}
+
+.rm-sort {
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+}
+.rm-sort-idle {
+  opacity: 0.45;
+}
+
+.rm-kind,
+.rm-kind code {
+  text-transform: none;
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 0.6875rem;
+  font-weight: 500;
+}
+
+.rm-dashed {
+  border-style: dashed !important;
+}
+.rm-orphaned {
+  text-decoration: line-through;
+}
+.rm-clickable {
+  cursor: pointer;
+}
+
+/* a badge is not upper-cased by the theme's default: the words of the page are written as they are meant to be read */
+.mantine-Badge-root {
+  text-transform: none;
+  --badge-fz: 0.75rem !important;
+  --badge-height: 1.5rem !important;
+}
+
+.rm-bulkbar {
+  position: sticky;
+  bottom: 16px;
+  z-index: 20;
+  box-shadow: var(--mantine-shadow-md);
+}
+
+.rm-group h3 {
+  margin: 0;
+}
+
+.rm-record-blocking {
+  border-left: 3px solid var(--mantine-color-red-6);
+}
+.rm-record {
+  overflow-wrap: break-word;
+}
+
+/* a model note (M14): never evidence; a stale one has the yellow edge of "needs a look", an orphaned one is quieter */
+.rm-note {
+  overflow-wrap: anywhere;
+}
+.rm-note-stale {
+  border-left: 3px solid var(--mantine-color-yellow-6);
+}
+.rm-note-orphaned {
+  border-style: dashed;
+}
+.rm-note pre {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.rm-empty {
+  border-style: dashed;
+}
+
+
+
+.rm-jobs-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+@media (min-width: 62em) {
+  .rm-jobs-grid {
+    grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
+  }
+}
+
+.rm-detail ul {
+  margin: 4px 0 8px;
+  padding-left: 20px;
+  font-size: var(--mantine-font-size-sm);
+}
+.rm-detail li {
+  margin: 3px 0;
+  overflow-wrap: break-word;
+}
+.rm-detail h2,
+.rm-detail h3,
+.rm-detail h4 {
+  margin: 16px 0 6px;
+}
+.rm-detail p {
+  margin: 4px 0;
+  font-size: var(--mantine-font-size-sm);
+}
+
+.rm-grid th.rm-grid-file {
+  text-transform: none;
+  letter-spacing: normal;
+}
+.rm-grid-file {
+  min-width: 150px;
+  max-width: 260px;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+.rm-grid-cell,
+.rm-grid-branch {
+  text-align: left;
+  border-radius: var(--mantine-radius-sm);
+  padding: 2px;
+}
+.rm-grid-cell:hover,
+.rm-grid-branch:hover {
+  background: var(--rm-hover);
+}
+.rm-grid-cell[aria-pressed="true"],
+.rm-grid-branch[aria-pressed="true"] {
+  outline: 2px solid var(--rm-focus);
+}
+
+.rm-tabs-list {
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  scrollbar-width: none;
+}
+.rm-tabs-list::-webkit-scrollbar {
+  display: none;
+}
+
+.rm-step {
+  list-style: none;
+}
+.rm-steps {
+  margin: 0;
+  padding: 0;
+}
+.rm-step-target:focus {
+  outline: 2px solid var(--rm-focus);
+  outline-offset: 2px;
+  border-radius: var(--mantine-radius-sm);
+}
+
+.rm-fact {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 8px;
+  align-items: baseline;
+}
+.rm-fact-value {
+  overflow-wrap: break-word;
+}
+
+.rm-copy {
+  display: inline-flex;
+}
+
+/* ---------------------------------------------------------------- focus: always visible */
+
+:focus-visible {
+  outline: 2px solid var(--rm-focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+  }
+}
+
+.rm-tabs-list .mantine-Tabs-tab {
+  padding-inline: 10px;
+  flex-shrink: 0; /* a narrow page scrolls the list; it does not squeeze a tab until its count has no room */
+  white-space: nowrap;
+}
+.rm-tabs-list .mantine-Badge-root {
+  flex-shrink: 0;
+  min-width: max-content;
+}
+
+/* tables: one line to a row, a long word cut with dots and its whole text in the title, rows of about 38 px */
+.rm-listing td,
+.rm-listing th,
+.rm-areas td,
+.rm-areas th,
+.rm-findings td,
+.rm-findings th,
+.rm-edges th {
+  white-space: nowrap;
+}
+.rm-edges td {
+  white-space: normal;
+}
+.rm-dense td {
+  padding-block: 5px;
+  height: 38px;
+}
+.rm-trunc {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.rm-cell-line {
+  min-width: 0;
+}
+.rm-cell-line > * {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* the strip of a run that did not establish everything (orange) or did not complete (red or orange): one line, quiet in the dark theme */
+.rm-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  padding: 6px 12px;
+  border-radius: var(--mantine-radius-sm);
+  overflow-wrap: anywhere;
+  border: 1px solid var(--rm-banner-line);
+  background: var(--rm-banner-bg);
+  color: var(--rm-banner-fg);
+}
+.rm-banner[data-color="orange"] {
+  --rm-banner-line: rgba(247, 103, 7, 0.35);
+  --rm-banner-bg: rgba(247, 103, 7, 0.1);
+  --rm-banner-fg: #a63608;
+}
+.rm-banner[data-color="red"] {
+  --rm-banner-line: rgba(224, 49, 49, 0.35);
+  --rm-banner-bg: rgba(224, 49, 49, 0.08);
+  --rm-banner-fg: var(--mantine-color-red-9);
+}
+:root[data-mantine-color-scheme="dark"] .rm-banner[data-color="orange"] {
+  --rm-banner-fg: var(--mantine-color-orange-3);
+}
+:root[data-mantine-color-scheme="dark"] .rm-banner[data-color="red"] {
+  --rm-banner-fg: var(--mantine-color-red-3);
+}
+.rm-banner-icon {
+  display: inline-flex;
+}
+.rm-banner-text {
+  color: var(--mantine-color-text);
+}
+.rm-banner-link {
+  margin-left: auto;
+}
+
+.rm-grid tbody th {
+  background: transparent;
+  text-transform: none;
+  font-size: inherit;
+  letter-spacing: normal;
+  color: inherit;
+  white-space: normal;
+}
+
+/* the command palette: the chosen action is a quiet tint, not a block of the accent */
+.mantine-Spotlight-action[data-selected] {
+  background: var(--rm-selected);
+  color: var(--mantine-color-text);
+}
+.mantine-Spotlight-action[data-selected] .mantine-Spotlight-actionDescription,
+.mantine-Spotlight-action[data-selected] .mantine-Spotlight-actionSection {
+  color: var(--mantine-color-dimmed);
+}
+
+/* tables whose columns share the width of the page (layout fixed): a long word is cut, a sentence wraps, a header may take two lines */
+.rm-fixed th,
+.rm-fixed td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rm-fixed th {
+  white-space: normal;
+  vertical-align: bottom;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+/* The accent is a lighter shade in the dark theme (to read as a link on a dark page), and Mantine picks the text of a filled button by the shade
+   of the light theme: in the dark theme a filled accent takes the dark text of the page, which reads on it (white on it is under 3:1) */
+:root[data-mantine-color-scheme="dark"] .mantine-Button-root:is([data-variant="filled"], :not([data-variant])) {
+  --button-color: var(--mantine-color-dark-8) !important;
+}
+:root[data-mantine-color-scheme="dark"] .mantine-Checkbox-input:checked {
+  --checkbox-icon-color: var(--mantine-color-dark-8) !important;
+}
+
+/* The text of a light badge is the sixth shade of its colour in Mantine: under 4.5:1 on its own tint for teal, yellow and orange in the light theme.
+   These are darker (6:1 or more on the tint), the same hues. The dark theme keeps Mantine's own (lighter) text, which reads on it. */
+:root[data-mantine-color-scheme="light"] {
+  --mantine-color-teal-light-color: #06694a;
+  --mantine-color-yellow-light-color: #7a4100;
+  --mantine-color-orange-light-color: #a63608;
+}

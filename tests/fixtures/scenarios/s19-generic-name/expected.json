@@ -1,0 +1,99 @@
+{
+  "schema": 1,
+  "id": "s19-generic-name",
+  "repo": "acme/web",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s19-generic-name"
+  },
+  "explains": "mapStateToProps is changed in src/modules/cases/legacy/CaseTable.tsx. The name is a boilerplate that react-redux code defines in every connected component: it is defined in four files (CaseTable, InvoiceTable, ReportTable and src/components/legacy/ConnectedList.tsx), more than distinct_max = 3, so the name is not distinctive and must not be used to find other code. The affected files follow from imports only: CaseTable is imported by CaseListPage (relative import ../legacy/CaseTable), mounted at /cases. The other files with their own mapStateToProps are not parallel implementations of this change and their screens (/billing/invoices through InvoiceTable, /reports through ReportTable) are not affected. The report says not_distinctive for mapStateToProps (not blocking: a stated limit). The only caller is the direct importer of the changed file; the screen is transitive reach and appears in the chain.",
+  "complete_for": [
+    "changed_symbol",
+    "caller",
+    "screen"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/web",
+      "path": "src/modules/cases/legacy/CaseTable.tsx",
+      "symbol": "mapStateToProps"
+    },
+    {
+      "type": "caller",
+      "repo": "acme/web",
+      "path": "src/modules/cases/pages/CaseListPage.tsx",
+      "symbol": "CaseListPage",
+      "evidence": [
+        {
+          "repo": "acme/web",
+          "path": "src/modules/cases/pages/CaseListPage.tsx",
+          "contains": "import { CaseTable } from \"../legacy/CaseTable\";"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "acme/web",
+      "route": "/cases",
+      "chain": [
+        {
+          "repo": "acme/web",
+          "path": "src/modules/cases/pages/CaseListPage.tsx",
+          "contains": "import { CaseTable } from \"../legacy/CaseTable\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/cases/routes.tsx",
+          "contains": "import CaseListPage from \"./pages/CaseListPage\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/cases/routes.tsx",
+          "contains": "<Route path=\"/cases\" element={<CaseListPage />} />"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "caller",
+      "repo": "acme/web",
+      "path": "src/modules/billing/legacy/InvoiceTable.tsx",
+      "why": "defines its own mapStateToProps; sharing a boilerplate name is not a dependency"
+    },
+    {
+      "type": "caller",
+      "repo": "acme/web",
+      "path": "src/modules/reports/legacy/ReportTable.tsx",
+      "why": "defines its own mapStateToProps; sharing a boilerplate name is not a dependency"
+    },
+    {
+      "type": "caller",
+      "repo": "acme/web",
+      "path": "src/components/legacy/ConnectedList.tsx",
+      "why": "defines its own mapStateToProps; sharing a boilerplate name is not a dependency"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/web",
+      "route": "/billing/invoices",
+      "why": "reached only by matching the name mapStateToProps"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/web",
+      "route": "/reports",
+      "why": "reached only by matching the name mapStateToProps"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "not_distinctive",
+      "subject": "mapStateToProps",
+      "blocking": false,
+      "definitions": 4
+    }
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "id": "dj13-regex-route",
+  "repo": "acme/portal",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/dj13-regex-route"
+  },
+  "explains": "legacy_year in billing/views.py changes (its body). config/urls.py maps it with re_path(r\"^legacy/(?P<year>[0-9]{4})/$\", billing_views.legacy_year). A regular expression is kept as a partial pattern: the literal segment and the named group become /legacy/{year}, but the expression is not evaluated, so the route is partial and a client could fit it only by name. The route reached is ANY /legacy/{year} (the method is not restricted), evidence the re_path line; the report says route_path_partial, naming the line (not blocking: a stated limit). config/urls.py is the caller (it uses legacy_year), billing/urls.py imports the module for other names and is excluded, and the test file is a unit test. The web client has no legacy URL.",
+  "complete_for": [
+    "changed_symbol",
+    "caller",
+    "route",
+    "http_edge",
+    "screen",
+    "unit_test"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/portal",
+      "path": "billing/views.py",
+      "symbol": "legacy_year"
+    },
+    {
+      "type": "caller",
+      "repo": "acme/portal",
+      "path": "config/urls.py",
+      "symbol": "urlpatterns",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "config/urls.py",
+          "contains": "from billing import views as billing_views"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "config/urls.py",
+          "contains": "billing_views.legacy_year"
+        }
+      ]
+    },
+    {
+      "type": "unit_test",
+      "repo": "acme/portal",
+      "path": "billing/tests/test_views.py",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/tests/test_views.py",
+          "contains": "from billing import views"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "ANY",
+      "path": "/legacy/{year}",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "config/urls.py",
+          "contains": "re_path(r\"^legacy/(?P<year>[0-9]{4})/$\", billing_views.legacy_year),"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "caller",
+      "repo": "acme/portal",
+      "path": "billing/urls.py",
+      "why": "imports billing.views as a module and uses only other views",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/urls.py",
+          "contains": "from . import views"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "billing/views.py",
+          "contains": "def legacy_year(request, year):"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "ANY",
+      "path": "/billing/invoices",
+      "why": "another view"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/portal-web",
+      "route": "/billing/invoices",
+      "why": "calls the list route"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "route_path_partial",
+      "subject": "config/urls.py:12",
+      "blocking": false
+    }
+  ]
+}

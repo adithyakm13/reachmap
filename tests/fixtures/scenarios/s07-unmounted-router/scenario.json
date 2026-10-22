@@ -1,0 +1,11 @@
+{
+  "id": "s07-unmounted-router",
+  "repo": "acme/api",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s07-unmounted-router"
+  },
+  "commit_message": "Use CRLF line endings in the invoice CSV export",
+  "notes": "Handler on a router that nothing mounts."
+}

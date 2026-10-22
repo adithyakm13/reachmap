@@ -1,0 +1,11 @@
+workspace = "acme"
+
+[repos."acme/web"]
+host = "github"
+language = "typescript"
+roles = ["frontend"]
+
+[[test_sources]]
+kind = "qase"
+project = "ACME"
+token_env = "qase_tok_9f8a7b6c5d4e3f2a1b0c"

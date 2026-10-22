@@ -1,0 +1,11 @@
+{
+  "id": "s11-contract-field",
+  "repo": "acme/contracts",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s11-contract-field"
+  },
+  "commit_message": "Make the settlement reference required on invoices",
+  "notes": "Optional field becomes required, on main after v1.10.0 (unreleased)."
+}

@@ -1,0 +1,7 @@
+workspace = "acme"
+ticket_pattern = '\[([A-Z]+-\d+'
+
+[repos."acme/web"]
+host = "github"
+language = "typescript"
+roles = ["frontend"]

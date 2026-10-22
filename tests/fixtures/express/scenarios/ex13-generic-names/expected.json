@@ -1,0 +1,142 @@
+{
+  "schema": 1,
+  "id": "ex13-generic-names",
+  "repo": "ex/orders",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex13-generic-names"
+  },
+  "explains": "get in src/controllers/customers.ts wraps the customer. The word get is defined in five files of the service (this controller, three modules of src/lib and a method of the event bus), more than distinct_max, so it is recorded as not distinctive and is not used to link code by name. The reach follows the import: src/routes/customers.ts imports the controller as a namespace (import * as ctrl) and names ctrl.get in one statement, ctrl.list in another and ctrl.ordersOf inside a handler, so only the statement that spells ctrl.get is reached: GET /api/v1/customers/{customerId}. The client calls customerUrl(customerId) in fetchCustomer: the edge to the route and CustomerScreen follow.",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "screen",
+    "http_edge",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "ex/orders",
+      "path": "src/controllers/customers.ts",
+      "symbol": "get"
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/api/v1/customers/{customerId}",
+      "evidence": [
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/customers.ts",
+          "contains": "customersRouter.get(\"/:customerId\", ctrl.get);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/index.ts",
+          "contains": "apiRouter.use(API_VERSION + \"/customers\", customersRouter);"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/app.ts",
+          "contains": "app.use(API_PREFIX, apiRouter);"
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "ex/web",
+        "path": "src/services/customers.ts",
+        "contains": "return apiGet(customerUrl(customerId));"
+      },
+      "via": [
+        {
+          "repo": "ex/web",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const customerUrl = (customerId: string) =>"
+        }
+      ],
+      "to": {
+        "repo": "ex/orders",
+        "method": "GET",
+        "path": "/api/v1/customers/{customerId}",
+        "evidence": [
+          {
+            "repo": "ex/orders",
+            "path": "src/routes/customers.ts",
+            "contains": "customersRouter.get(\"/:customerId\", ctrl.get);"
+          },
+          {
+            "repo": "ex/orders",
+            "path": "src/routes/index.ts",
+            "contains": "apiRouter.use(API_VERSION + \"/customers\", customersRouter);"
+          },
+          {
+            "repo": "ex/orders",
+            "path": "src/app.ts",
+            "contains": "app.use(API_PREFIX, apiRouter);"
+          }
+        ]
+      }
+    },
+    {
+      "type": "screen",
+      "repo": "ex/web",
+      "route": "/customers/:customerId",
+      "chain": [
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/customers.ts",
+          "contains": "import * as ctrl from \"../controllers/customers\";"
+        },
+        {
+          "repo": "ex/web",
+          "path": "src/services/customers.ts",
+          "contains": "return apiGet(customerUrl(customerId));"
+        },
+        {
+          "repo": "ex/web",
+          "path": "src/screens/CustomerScreen.tsx",
+          "contains": "import { fetchCustomer, fetchCustomerOrders } from \"@/services/customers\";"
+        },
+        {
+          "repo": "ex/web",
+          "path": "src/routes.tsx",
+          "contains": "import CustomerScreen from \"./screens/CustomerScreen\";"
+        },
+        {
+          "repo": "ex/web",
+          "path": "src/routes.tsx",
+          "contains": "<Route path=\"/customers/:customerId\" element={<CustomerScreen />} />"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/api/v1/customers",
+      "why": "it spells ctrl.list"
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/api/v1/customers/{customerId}/orders",
+      "why": "it spells ctrl.ordersOf"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "not_distinctive",
+      "subject": "get",
+      "blocking": false,
+      "definitions": 5
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+# The built frontend, when there is one, travels in the sdist so that a wheel built from it has the workspace (see setup.py).
+# Without a build this line matches nothing, which is not an error.
+graft frontend/dist
+
+# The documents of the project root that a person reading the sdist expects (the README and the LICENSE are included by the build itself).
+include CHANGELOG.md
+include SECURITY.md
+include CONTRIBUTING.md
+
+# Nothing else travels in the sdist: no tests (they need the fixtures, which are not shipped), no docs sources, no frontend sources.
+prune tests
+prune docs
+prune examples
+prune frontend/src
+prune frontend/node_modules
+prune .claude

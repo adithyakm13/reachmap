@@ -1,0 +1,1461 @@
+{
+ "schema": 1,
+ "tool": {
+  "name": "reachmap",
+  "version": "0.0.0"
+ },
+ "run": {
+  "started_at": "2026-01-02T03:04:05Z",
+  "elapsed_s": 1.5
+ },
+ "inputs": {
+  "repo": "acme/api",
+  "change": {
+   "compare": "main...topic"
+  },
+  "as_of": null,
+  "formats": [
+   "json"
+  ],
+  "config": {
+   "workspace": "acme",
+   "path_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  }
+ },
+ "counts": {
+  "areas": 3,
+  "must_test": 2,
+  "sample": 1,
+  "candidates": 1,
+  "findings": 10,
+  "exclusions": 2,
+  "records": 2,
+  "blocking_records": 1
+ },
+ "change": {
+  "as_of": null,
+  "base_sha": "d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4",
+  "change_request": {
+   "number": 12,
+   "title": "Round invoice totals half up",
+   "body": "Fixes the rounding of invoice totals.",
+   "state": "merged",
+   "base_ref": "main",
+   "head_ref": "fix/rounding",
+   "url": "https://host.invalid/acme/api/pull/12",
+   "file_count": 1,
+   "commit_count": 2
+  },
+  "file_count": 1,
+  "files": [
+   {
+    "added": 2,
+    "binary": false,
+    "content_available": true,
+    "old_path": null,
+    "path": "services/billing/app/services/totals.py",
+    "removed": 2,
+    "role": "source",
+    "similarity": null,
+    "status": "modified"
+   }
+  ],
+  "head_sha": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+  "how": {
+   "base": "ref main",
+   "head": "ref topic",
+   "pre_change": "merge base of main and topic"
+  },
+  "kind": "compare",
+  "pre_change_sha": "d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4",
+  "remote": "acme/api",
+  "rename_detection_skipped": false,
+  "repo": "acme/api",
+  "resolved": true,
+  "spec": {
+   "compare": "main...topic"
+  }
+ },
+ "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+ "branches": [
+  {
+   "branch": "main",
+   "commit": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+   "state": "pre_change",
+   "added_lines_found": 0,
+   "evidence": [
+    {
+     "repo": "acme/api",
+     "path": "services/billing/app/services/totals.py",
+     "line": 6,
+     "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+     "detail": "    return round(amount, 2)"
+    }
+   ],
+   "detail": "services/billing/app/services/totals.py: pre_change (0 of 2 added lines found, 2 of 2 removed lines still there)"
+  },
+  {
+   "branch": "release/1.x",
+   "commit": "c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3",
+   "state": "present",
+   "added_lines_found": 2,
+   "evidence": [
+    {
+     "repo": "acme/api",
+     "path": "services/billing/app/services/totals.py",
+     "line": 6,
+     "ref": "c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3",
+     "detail": "    return amount.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)"
+    }
+   ],
+   "detail": "services/billing/app/services/totals.py: present (2 of 2 added lines found, 0 of 2 removed lines still there)"
+  },
+  {
+   "branch": "release/1.2",
+   "commit": "d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4",
+   "state": "partial",
+   "added_lines_found": 1,
+   "evidence": [
+    {
+     "repo": "acme/api",
+     "path": "services/billing/app/services/totals.py",
+     "line": 1,
+     "ref": "d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4",
+     "detail": "from decimal import ROUND_HALF_UP, Decimal"
+    }
+   ],
+   "detail": "services/billing/app/services/totals.py: partial (1 of 2 added lines found)"
+  },
+  {
+   "branch": "release/old",
+   "commit": "d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4",
+   "state": "unreadable",
+   "added_lines_found": 0,
+   "evidence": [],
+   "detail": "services/billing/app/services/totals.py could not be read at release/old: the fetch timed out"
+  }
+ ],
+ "findings": [
+  {
+   "kind": "direct",
+   "title": "The change reaches the API route GET /api/billing/invoices/{invoice_id} in acme/api",
+   "workflow": "billing",
+   "risk": "medium",
+   "confidence": "high",
+   "confidence_basis": "import-backed: 4 cited line(s) from the change to GET /api/billing/invoices/{invoice_id}",
+   "evidence": [
+    {
+     "repo": "acme/api",
+     "path": "services/billing/app/services/totals.py",
+     "line": 5,
+     "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+     "detail": "def round_total(amount):"
+    },
+    {
+     "repo": "acme/api",
+     "path": "services/billing/app/routers/invoices.py",
+     "line": 2,
+     "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+     "detail": "from app.services.totals import round_total"
+    },
+    {
+     "repo": "acme/api",
+     "path": "services/billing/app/routers/invoices.py",
+     "line": 12,
+     "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+     "detail": "@router.get(\"/{invoice_id}\")"
+    },
+    {
+     "repo": "acme/api",
+     "path": "services/billing/app/main.py",
+     "line": 6,
+     "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+     "detail": "app.include_router(api_router, prefix=\"/api\")"
+    }
+   ],
+   "identity": [
+    "direct",
+    "acme/api",
+    "api_route",
+    "GET /api/billing/invoices/{invoice_id}"
+   ],
+   "is_exclusion": false
+  },
+  {
+   "kind": "cross-repo",
+   "title": "The change in acme/api reaches the screen /billing/invoices in acme/web, through 2 chains",
+   "workflow": "billing",
+   "risk": "medium",
+   "confidence": "medium",
+   "confidence_basis": "http edge: the URL is a literal in a parameter; import-backed: 3 cited line(s) from the change to /billing/invoices",
+   "evidence": [
+    {
+     "repo": "acme/api",
+     "path": "services/billing/app/services/totals.py",
+     "line": 5,
+     "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+     "detail": "def round_total(amount):"
+    },
+    {
+     "repo": "acme/web",
+     "path": "src/modules/billing/api.ts",
+     "line": 3,
+     "ref": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+     "detail": "import { apiGet } from '../../api/client';"
+    },
+    {
+     "repo": "acme/web",
+     "path": "src/modules/billing/routes.tsx",
+     "line": 9,
+     "ref": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+     "detail": "<Route path=\"/billing/invoices\" element={<InvoiceListPage />} />"
+    }
+   ],
+   "identity": [
+    "cross-repo",
+    "acme/web",
+    "screen",
+    "/billing/invoices"
+   ],
+   "is_exclusion": false
+  },
+  {
+   "kind": "direct",
+   "title": "The change reaches the API route GET /api/cases in acme/api",
+   "workflow": "billing",
+   "risk": "medium",
+   "confidence": "low",
+   "confidence_basis": "by name: the symbol is matched by name only",
+   "evidence": [
+    {
+     "repo": "acme/api",
+     "path": "services/billing/app/services/totals.py",
+     "line": 5,
+     "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+     "detail": "def round_total(amount):"
+    },
+    {
+     "repo": "acme/api",
+     "path": "services/cases/app/routers/cases.py",
+     "line": 8,
+     "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+     "detail": "@router.get(\"/cases\")"
+    }
+   ],
+   "identity": [
+    "direct",
+    "acme/api",
+    "api_route",
+    "GET /api/cases"
+   ],
+   "is_exclusion": false
+  },
+  {
+   "kind": "contract-tightened",
+   "title": "settlement_reference became required on Invoice, read by acme/api",
+   "workflow": "billing",
+   "risk": "high",
+   "confidence": "medium",
+   "confidence_basis": "by name: 1 read of the field is not typed",
+   "evidence": [
+    {
+     "repo": "acme/contracts",
+     "path": "contracts/models/invoice.py",
+     "line": 12,
+     "ref": "c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3",
+     "detail": "    settlement_reference: str"
+    },
+    {
+     "repo": "acme/api",
+     "path": "services/billing/app/routers/invoices.py",
+     "line": 2,
+     "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+     "detail": "from app.services.totals import round_total"
+    }
+   ],
+   "identity": [
+    "contract-tightened",
+    "acme/contracts",
+    "contracts/models/invoice.py",
+    "Invoice.settlement_reference",
+    "acme/api"
+   ],
+   "is_exclusion": false
+  },
+  {
+   "kind": "release",
+   "title": "acme/api on main pins 1.10.0, which has the change: it is adopted",
+   "workflow": "billing",
+   "risk": "high",
+   "confidence": "high",
+   "confidence_basis": "pin read: requirements.txt names 1.10.0 and the ancestry of its tag contains the change",
+   "evidence": [
+    {
+     "repo": "acme/api",
+     "path": "requirements.txt",
+     "line": 1,
+     "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+     "detail": "acme-contracts==1.10.0"
+    }
+   ],
+   "identity": [
+    "release",
+    "acme/contracts",
+    "acme/api",
+    "main"
+   ],
+   "is_exclusion": false
+  },
+  {
+   "kind": "removed_route_still_called",
+   "title": "Route GET /api/billing/audit-log is removed and acme/web still calls it (src/modules/billing/api.ts)",
+   "workflow": "billing",
+   "risk": "high",
+   "confidence": "low",
+   "confidence_basis": "http edge: the URL fits the removed route exactly",
+   "evidence": [
+    {
+     "repo": "acme/api",
+     "path": "services/billing/app/routers/billing.py",
+     "line": 14,
+     "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+     "detail": "@billing_router.get(\"/audit-log\")"
+    },
+    {
+     "repo": "acme/web",
+     "path": "src/modules/billing/api.ts",
+     "line": 3,
+     "ref": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+     "detail": "import { apiGet } from '../../api/client';"
+    }
+   ],
+   "identity": [
+    "removed_route_still_called",
+    "acme/api",
+    "GET /api/billing/audit-log"
+   ],
+   "is_exclusion": false
+  },
+  {
+   "kind": "branch-missing",
+   "title": "The change is on release/1.x and not on main",
+   "workflow": "billing",
+   "risk": "high",
+   "confidence": "high",
+   "confidence_basis": "1 of 1 changed file(s) are unchanged on main and carry the change on every one of release/1.x",
+   "evidence": [
+    {
+     "repo": "acme/api",
+     "path": "services/billing/app/services/totals.py",
+     "line": 6,
+     "ref": "c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3",
+     "detail": "    return round(amount, 2)"
+    }
+   ],
+   "identity": [
+    "branch-missing",
+    "acme/api",
+    "main",
+    "on-release-not-primary"
+   ],
+   "is_exclusion": false
+  },
+  {
+   "kind": "custom-kind",
+   "title": "A kind this version of the report does not know",
+   "workflow": "billing",
+   "risk": "low",
+   "confidence": "low",
+   "confidence_basis": "by name: made up for the test",
+   "evidence": [
+    {
+     "repo": "acme/api",
+     "path": "services/billing/app/services/totals.py",
+     "line": 5,
+     "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+     "detail": "def round_total(amount):"
+    }
+   ],
+   "identity": [
+    "custom-kind",
+    "acme/api"
+   ],
+   "is_exclusion": false
+  },
+  {
+   "kind": "exclusion",
+   "title": "src/modules/billing/pages/SettlementsPage.tsx is not reached through src/modules/billing/api.ts: it imports only names the change does not touch",
+   "workflow": "billing",
+   "risk": "low",
+   "confidence": "high",
+   "confidence_basis": "import-backed: the importer's own import line names only other exports",
+   "evidence": [
+    {
+     "repo": "acme/web",
+     "path": "src/modules/billing/pages/SettlementsPage.tsx",
+     "line": 1,
+     "ref": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+     "detail": "import { listSettlements } from '../api';"
+    }
+   ],
+   "identity": [
+    "exclusion",
+    "acme/web",
+    "src/modules/billing/api.ts",
+    "src/modules/billing/pages/SettlementsPage.tsx",
+    "named_export_narrowing"
+   ],
+   "is_exclusion": true
+  },
+  {
+   "kind": "guard-excluded",
+   "title": "The call in services/billing/app/jobs.py cannot enter the changed code",
+   "workflow": "billing",
+   "risk": "low",
+   "confidence": "high",
+   "confidence_basis": "guard proven: the guard line and the call line",
+   "evidence": [
+    {
+     "repo": "acme/api",
+     "path": "services/billing/app/jobs.py",
+     "line": 4,
+     "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+     "detail": "    if not enabled:"
+    },
+    {
+     "repo": "acme/api",
+     "path": "services/billing/app/jobs.py",
+     "line": 6,
+     "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+     "detail": "        round_total(x)"
+    }
+   ],
+   "identity": [
+    "guard-excluded",
+    "acme/api",
+    "services/billing/app/jobs.py"
+   ],
+   "is_exclusion": true
+  }
+ ],
+ "areas": [
+  {
+   "label": "GET /api/billing/invoices/{invoice_id}",
+   "kind": "api_route",
+   "repo": "acme/api",
+   "module": "billing",
+   "route_line": {
+    "repo": "acme/api",
+    "path": "services/billing/app/routers/invoices.py",
+    "line": 12,
+    "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+    "detail": "@router.get(\"/{invoice_id}\")"
+   },
+   "chains": [
+    [
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/services/totals.py",
+      "line": 5,
+      "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+      "detail": "def round_total(amount):"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/invoices.py",
+      "line": 2,
+      "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+      "detail": "from app.services.totals import round_total"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/invoices.py",
+      "line": 12,
+      "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+      "detail": "@router.get(\"/{invoice_id}\")"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/main.py",
+      "line": 6,
+      "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+      "detail": "app.include_router(api_router, prefix=\"/api\")"
+     }
+    ]
+   ],
+   "also_mounted": [],
+   "priority": "must_test",
+   "by_name": false
+  },
+  {
+   "label": "/billing/invoices",
+   "kind": "screen",
+   "repo": "acme/web",
+   "module": "billing",
+   "route_line": {
+    "repo": "acme/web",
+    "path": "src/modules/billing/routes.tsx",
+    "line": 9,
+    "ref": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+    "detail": "<Route path=\"/billing/invoices\" element={<InvoiceListPage />} />"
+   },
+   "chains": [
+    [
+     {
+      "repo": "acme/web",
+      "path": "src/modules/billing/api.ts",
+      "line": 3,
+      "ref": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+      "detail": "import { apiGet } from '../../api/client';"
+     },
+     {
+      "repo": "acme/web",
+      "path": "src/modules/billing/pages/InvoiceListPage.tsx",
+      "line": 1,
+      "ref": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+      "detail": "import { listInvoices } from '../api';"
+     },
+     {
+      "repo": "acme/web",
+      "path": "src/modules/billing/routes.tsx",
+      "line": 9,
+      "ref": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+      "detail": "<Route path=\"/billing/invoices\" element={<InvoiceListPage />} />"
+     }
+    ],
+    [
+     {
+      "repo": "acme/web",
+      "path": "src/modules/billing/api.ts",
+      "line": 3,
+      "ref": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+      "detail": "import { apiGet } from '../../api/client';"
+     },
+     {
+      "repo": "acme/web",
+      "path": "src/modules/billing/routes.tsx",
+      "line": 9,
+      "ref": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+      "detail": "<Route path=\"/billing/invoices\" element={<InvoiceListPage />} />"
+     }
+    ]
+   ],
+   "also_mounted": [
+    "/cases/:caseId/invoices"
+   ],
+   "priority": "must_test",
+   "by_name": false
+  },
+  {
+   "label": "GET /api/cases",
+   "kind": "api_route",
+   "repo": "acme/api",
+   "module": "cases",
+   "route_line": {
+    "repo": "acme/api",
+    "path": "services/cases/app/routers/cases.py",
+    "line": 8,
+    "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+    "detail": "@router.get(\"/cases\")"
+   },
+   "chains": [
+    [
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/services/totals.py",
+      "line": 5,
+      "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+      "detail": "def round_total(amount):"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/cases/app/routers/cases.py",
+      "line": 8,
+      "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+      "detail": "@router.get(\"/cases\")"
+     }
+    ]
+   ],
+   "also_mounted": [],
+   "priority": "sample",
+   "by_name": false
+  },
+  {
+   "label": "/cases/archive",
+   "kind": "screen",
+   "repo": "acme/web",
+   "module": "cases",
+   "route_line": {
+    "repo": "acme/web",
+    "path": "src/modules/cases/routes.tsx",
+    "line": 4,
+    "ref": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+    "detail": "<Route path=\"/cases/archive\" element={<ArchivePage />} />"
+   },
+   "chains": [
+    [
+     {
+      "repo": "acme/web",
+      "path": "src/modules/cases/ArchivePage.tsx",
+      "line": 7,
+      "ref": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+      "detail": "const rounded = roundTotal(x);"
+     },
+     {
+      "repo": "acme/web",
+      "path": "src/modules/cases/routes.tsx",
+      "line": 4,
+      "ref": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+      "detail": "<Route path=\"/cases/archive\" element={<ArchivePage />} />"
+     }
+    ]
+   ],
+   "also_mounted": [],
+   "priority": "candidate",
+   "by_name": true
+  }
+ ],
+ "propagations": [
+  {
+   "repo": "acme/api",
+   "complete": false,
+   "reasons": [
+    "edge:event:acme/api:acme/worker was not followed: no adapter for the kind 'event'",
+    "src/modules/legacy/routes.tsx could not be parsed"
+   ],
+   "passes": [
+    {
+     "repo": "acme/api",
+     "depth": 0,
+     "sha": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+     "candidate": false,
+     "prefix": [],
+     "seed": null,
+     "hop": null,
+     "analysis": {
+      "files": [],
+      "impacts": [],
+      "repo": "acme/api"
+     },
+     "reach": {
+      "complete": true,
+      "reasons": [],
+      "reached": []
+     }
+    },
+    {
+     "repo": "acme/web",
+     "depth": 2,
+     "sha": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+     "candidate": false,
+     "prefix": [],
+     "seed": null,
+     "hop": 1,
+     "analysis": {
+      "files": [],
+      "impacts": [],
+      "repo": "acme/web"
+     },
+     "reach": {
+      "complete": false,
+      "reasons": [
+       "a route file could not be parsed"
+      ],
+      "reached": []
+     }
+    }
+   ],
+   "hops": [
+    {
+     "candidate": false,
+     "chain": [
+      {
+       "repo": "acme/api",
+       "path": "requirements.txt",
+       "line": 1,
+       "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+       "detail": "acme-contracts==1.10.0"
+      }
+     ],
+     "complete": true,
+     "declared": [
+      "acme/contracts",
+      "acme/api"
+     ],
+     "depth": 1,
+     "detail": "the change is in no tag of the producer, so no pin has it yet",
+     "direction": "forward",
+     "from_repo": "acme/contracts",
+     "kind": "package",
+     "note": "",
+     "pins": [
+      {
+       "ref": "main",
+       "repo": "acme/api",
+       "role": "primary",
+       "sha": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2"
+      },
+      {
+       "ref": "release/1.2",
+       "repo": "acme/api",
+       "role": "release",
+       "sha": "d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4"
+      }
+     ],
+     "reasons": [],
+     "seeds": [],
+     "source_evidence": [],
+     "target_evidence": [
+      {
+       "repo": "acme/api",
+       "path": "requirements.txt",
+       "line": 1,
+       "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+       "detail": "acme-contracts==1.10.0"
+      }
+     ],
+     "to_repo": "acme/api"
+    },
+    {
+     "candidate": false,
+     "chain": [
+      {
+       "repo": "acme/web",
+       "path": "src/modules/billing/api.ts",
+       "line": 3,
+       "ref": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+       "detail": "import { apiGet } from '../../api/client';"
+      }
+     ],
+     "complete": false,
+     "declared": [
+      "acme/api",
+      "acme/web"
+     ],
+     "depth": 2,
+     "detail": "web routes were read in part",
+     "direction": "forward",
+     "from_repo": "acme/api",
+     "kind": "http",
+     "note": "",
+     "pins": [
+      {
+       "ref": "main",
+       "repo": "acme/api",
+       "role": "primary",
+       "sha": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2"
+      }
+     ],
+     "reasons": [
+      "src/modules/legacy/routes.tsx could not be parsed"
+     ],
+     "seeds": [],
+     "source_evidence": [
+      {
+       "repo": "acme/api",
+       "path": "services/billing/app/routers/invoices.py",
+       "line": 12,
+       "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+       "detail": "@router.get(\"/{invoice_id}\")"
+      }
+     ],
+     "target_evidence": [
+      {
+       "repo": "acme/web",
+       "path": "src/modules/billing/api.ts",
+       "line": 3,
+       "ref": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+       "detail": "import { apiGet } from '../../api/client';"
+      }
+     ],
+     "to_repo": "acme/web"
+    }
+   ],
+   "reached": [
+    {
+     "area": {
+      "label": "GET /api/billing/invoices/{invoice_id}",
+      "kind": "api_route",
+      "repo": "acme/api",
+      "module": "billing",
+      "route_line": {
+       "repo": "acme/api",
+       "path": "services/billing/app/routers/invoices.py",
+       "line": 12,
+       "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+       "detail": "@router.get(\"/{invoice_id}\")"
+      },
+      "chains": [
+       [
+        {
+         "repo": "acme/api",
+         "path": "services/billing/app/services/totals.py",
+         "line": 5,
+         "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+         "detail": "def round_total(amount):"
+        },
+        {
+         "repo": "acme/api",
+         "path": "services/billing/app/routers/invoices.py",
+         "line": 2,
+         "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+         "detail": "from app.services.totals import round_total"
+        },
+        {
+         "repo": "acme/api",
+         "path": "services/billing/app/routers/invoices.py",
+         "line": 12,
+         "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+         "detail": "@router.get(\"/{invoice_id}\")"
+        },
+        {
+         "repo": "acme/api",
+         "path": "services/billing/app/main.py",
+         "line": 6,
+         "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+         "detail": "app.include_router(api_router, prefix=\"/api\")"
+        }
+       ]
+      ],
+      "also_mounted": [],
+      "priority": "must_test",
+      "by_name": false
+     },
+     "complete": true,
+     "reasons": [],
+     "routes": []
+    },
+    {
+     "area": {
+      "label": "/billing/invoices",
+      "kind": "screen",
+      "repo": "acme/web",
+      "module": "billing",
+      "route_line": {
+       "repo": "acme/web",
+       "path": "src/modules/billing/routes.tsx",
+       "line": 9,
+       "ref": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+       "detail": "<Route path=\"/billing/invoices\" element={<InvoiceListPage />} />"
+      },
+      "chains": [
+       [
+        {
+         "repo": "acme/web",
+         "path": "src/modules/billing/api.ts",
+         "line": 3,
+         "ref": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+         "detail": "import { apiGet } from '../../api/client';"
+        },
+        {
+         "repo": "acme/web",
+         "path": "src/modules/billing/pages/InvoiceListPage.tsx",
+         "line": 1,
+         "ref": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+         "detail": "import { listInvoices } from '../api';"
+        },
+        {
+         "repo": "acme/web",
+         "path": "src/modules/billing/routes.tsx",
+         "line": 9,
+         "ref": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+         "detail": "<Route path=\"/billing/invoices\" element={<InvoiceListPage />} />"
+        }
+       ],
+       [
+        {
+         "repo": "acme/web",
+         "path": "src/modules/billing/api.ts",
+         "line": 3,
+         "ref": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+         "detail": "import { apiGet } from '../../api/client';"
+        },
+        {
+         "repo": "acme/web",
+         "path": "src/modules/billing/routes.tsx",
+         "line": 9,
+         "ref": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+         "detail": "<Route path=\"/billing/invoices\" element={<InvoiceListPage />} />"
+        }
+       ]
+      ],
+      "also_mounted": [
+       "/cases/:caseId/invoices"
+      ],
+      "priority": "must_test",
+      "by_name": false
+     },
+     "complete": false,
+     "reasons": [
+      "src/modules/legacy/routes.tsx could not be parsed"
+     ],
+     "routes": []
+    },
+    {
+     "area": {
+      "label": "GET /api/cases",
+      "kind": "api_route",
+      "repo": "acme/api",
+      "module": "cases",
+      "route_line": {
+       "repo": "acme/api",
+       "path": "services/cases/app/routers/cases.py",
+       "line": 8,
+       "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+       "detail": "@router.get(\"/cases\")"
+      },
+      "chains": [
+       [
+        {
+         "repo": "acme/api",
+         "path": "services/billing/app/services/totals.py",
+         "line": 5,
+         "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+         "detail": "def round_total(amount):"
+        },
+        {
+         "repo": "acme/api",
+         "path": "services/cases/app/routers/cases.py",
+         "line": 8,
+         "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+         "detail": "@router.get(\"/cases\")"
+        }
+       ]
+      ],
+      "also_mounted": [],
+      "priority": "sample",
+      "by_name": false
+     },
+     "complete": true,
+     "reasons": [],
+     "routes": []
+    }
+   ],
+   "http_edges": [
+    {
+     "ambiguous_with": [],
+     "candidate": false,
+     "client": {
+      "repo": "acme/web",
+      "path": "src/modules/billing/api.ts",
+      "line": 3,
+      "ref": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+      "detail": "import { apiGet } from '../../api/client';"
+     },
+     "client_repo": "acme/web",
+     "direction": "to_client",
+     "fallback": false,
+     "kind": "exact",
+     "method": "GET",
+     "note": "",
+     "rematched": null,
+     "removed": false,
+     "url": "/api/billing/invoices",
+     "route": {
+      "evidence": [
+       {
+        "repo": "acme/api",
+        "path": "services/billing/app/routers/invoices.py",
+        "line": 12,
+        "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+        "detail": "@router.get(\"/{invoice_id}\")"
+       },
+       {
+        "repo": "acme/api",
+        "path": "services/billing/app/main.py",
+        "line": 6,
+        "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+        "detail": "app.include_router(api_router, prefix=\"/api\")"
+       }
+      ],
+      "file": "services/billing/app/routers/invoices.py",
+      "handler": "list_invoices",
+      "kind": "api_route",
+      "method": "GET",
+      "module": "billing",
+      "partial": false,
+      "path": "/api/billing/invoices",
+      "repo": "acme/api",
+      "target": "services/billing/app/routers/invoices.py"
+     },
+     "server_repo": "acme/api",
+     "via": [
+      {
+       "repo": "acme/web",
+       "path": "src/api/endpoints.ts",
+       "line": 9,
+       "ref": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+       "detail": "export const INVOICES_URL = \"/api/billing/invoices\";"
+      }
+     ]
+    },
+    {
+     "ambiguous_with": [],
+     "candidate": true,
+     "client": {
+      "repo": "acme/web",
+      "path": "src/modules/billing/api.ts",
+      "line": 3,
+      "ref": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+      "detail": "import { apiGet } from '../../api/client';"
+     },
+     "client_repo": "acme/web",
+     "direction": "to_client",
+     "fallback": false,
+     "kind": "partial",
+     "method": "GET",
+     "note": "the client URL is partial: matched by name",
+     "rematched": null,
+     "removed": false,
+     "url": "/api/billing/inv",
+     "route": {
+      "evidence": [
+       {
+        "repo": "acme/api",
+        "path": "services/billing/app/routers/invoices.py",
+        "line": 12,
+        "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+        "detail": "@router.get(\"/{invoice_id}\")"
+       },
+       {
+        "repo": "acme/api",
+        "path": "services/billing/app/main.py",
+        "line": 6,
+        "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+        "detail": "app.include_router(api_router, prefix=\"/api\")"
+       }
+      ],
+      "file": "services/billing/app/routers/invoices.py",
+      "handler": "list_invoices",
+      "kind": "api_route",
+      "method": "GET",
+      "module": "billing",
+      "partial": false,
+      "path": "/api/billing/invoices",
+      "repo": "acme/api",
+      "target": "services/billing/app/routers/invoices.py"
+     },
+     "server_repo": "acme/api",
+     "via": [
+      {
+       "repo": "acme/web",
+       "path": "src/api/endpoints.ts",
+       "line": 9,
+       "ref": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+       "detail": "export const INVOICES_URL = \"/api/billing/invoices\";"
+      }
+     ]
+    },
+    {
+     "ambiguous_with": [],
+     "candidate": false,
+     "client": {
+      "repo": "acme/web",
+      "path": "src/modules/billing/api.ts",
+      "line": 3,
+      "ref": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+      "detail": "import { apiGet } from '../../api/client';"
+     },
+     "client_repo": "acme/web",
+     "direction": "to_client",
+     "fallback": false,
+     "kind": "exact",
+     "method": "GET",
+     "note": "the route is removed by the change; the URL fits no route after the change",
+     "rematched": null,
+     "removed": true,
+     "url": "/api/billing/audit-log",
+     "route": {
+      "evidence": [
+       {
+        "repo": "acme/api",
+        "path": "services/billing/app/routers/invoices.py",
+        "line": 12,
+        "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+        "detail": "@router.get(\"/{invoice_id}\")"
+       },
+       {
+        "repo": "acme/api",
+        "path": "services/billing/app/main.py",
+        "line": 6,
+        "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+        "detail": "app.include_router(api_router, prefix=\"/api\")"
+       }
+      ],
+      "file": "services/billing/app/routers/invoices.py",
+      "handler": "audit_log",
+      "kind": "api_route",
+      "method": "GET",
+      "module": "billing",
+      "partial": false,
+      "path": "/api/billing/audit-log",
+      "repo": "acme/api",
+      "target": "services/billing/app/routers/invoices.py"
+     },
+     "server_repo": "acme/api",
+     "via": [
+      {
+       "repo": "acme/web",
+       "path": "src/api/endpoints.ts",
+       "line": 9,
+       "ref": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+       "detail": "export const INVOICES_URL = \"/api/billing/invoices\";"
+      }
+     ]
+    }
+   ],
+   "consumers": [
+    {
+     "adoption": "adopted",
+     "branch": "main",
+     "contains_change": true,
+     "detail": "v1.10.0 contains the change commit; first released in v1.10.0",
+     "evidence": [
+      {
+       "repo": "acme/api",
+       "path": "requirements.txt",
+       "line": 1,
+       "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+       "detail": "acme-contracts==1.10.0"
+      }
+     ],
+     "first_release": "v1.10.0",
+     "manifest": "requirements.txt",
+     "pin": "1.10.0",
+     "producer": "acme/contracts",
+     "released": true,
+     "repo": "acme/api",
+     "sha": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+     "state": "pinned",
+     "tag": "v1.10.0"
+    },
+    {
+     "adoption": "on_adoption",
+     "branch": "release/1.2",
+     "contains_change": false,
+     "detail": "v1.2.0 does not contain the change commit; first released in v1.10.0",
+     "evidence": [
+      {
+       "repo": "acme/api",
+       "path": "requirements.txt",
+       "line": 1,
+       "ref": "d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4",
+       "detail": "acme-contracts==1.2.0"
+      }
+     ],
+     "first_release": "v1.10.0",
+     "manifest": "requirements.txt",
+     "pin": "1.2.0",
+     "producer": "acme/contracts",
+     "released": true,
+     "repo": "acme/api",
+     "sha": "d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4",
+     "state": "pinned",
+     "tag": "v1.2.0"
+    },
+    {
+     "adoption": "undecided",
+     "branch": "main",
+     "contains_change": null,
+     "detail": "the manifest does not name the package",
+     "evidence": [],
+     "first_release": null,
+     "manifest": "requirements.txt",
+     "pin": null,
+     "producer": "acme/contracts",
+     "released": false,
+     "repo": "acme/worker",
+     "sha": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+     "state": "no_pin",
+     "tag": null
+    }
+   ],
+   "contract_changes": [
+    {
+     "after": {
+      "annotation": "str",
+      "core": "str",
+      "default": null,
+      "has_default": false,
+      "kind": "field",
+      "nullable": false
+     },
+     "before": {
+      "annotation": "str | None",
+      "core": "str",
+      "default": "None",
+      "has_default": true,
+      "kind": "field",
+      "nullable": true
+     },
+     "change": "modified",
+     "counted": true,
+     "definitions": 2,
+     "distinct": true,
+     "evidence": [
+      {
+       "repo": "acme/contracts",
+       "path": "contracts/models/invoice.py",
+       "line": 12,
+       "ref": "c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3",
+       "detail": "    settlement_reference: str"
+      },
+      {
+       "repo": "acme/contracts",
+       "path": "contracts/models/invoice.py",
+       "line": 12,
+       "ref": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+       "detail": "    settlement_reference: str | None = None"
+      }
+     ],
+     "kinds": [
+      "contract-tightened"
+     ],
+     "name": "settlement_reference",
+     "owner": "Invoice",
+     "path": "contracts/models/invoice.py",
+     "repo": "acme/contracts",
+     "symbol": "Invoice.settlement_reference"
+    }
+   ],
+   "contract_reads": [
+    {
+     "adoption": "on_adoption",
+     "basis": "typed",
+     "branch": "main",
+     "candidate": false,
+     "evidence": [
+      {
+       "repo": "acme/api",
+       "path": "services/billing/app/routers/invoices.py",
+       "line": 2,
+       "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+       "detail": "from app.services.totals import round_total"
+      },
+      {
+       "repo": "acme/api",
+       "path": "services/billing/app/services/settlement.py",
+       "line": 9,
+       "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+       "detail": "    if invoice.settlement_reference is None:"
+      }
+     ],
+     "field": "settlement_reference",
+     "form": "attribute",
+     "line": 9,
+     "owner": "Invoice",
+     "path": "services/billing/app/services/settlement.py",
+     "pin": "1.10.0",
+     "producer": "acme/contracts",
+     "repo": "acme/api",
+     "sha": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+     "symbol": "reference_for"
+    },
+    {
+     "adoption": "on_adoption",
+     "basis": "by_name",
+     "branch": "release/1.2",
+     "candidate": false,
+     "evidence": [
+      {
+       "repo": "acme/api",
+       "path": "services/billing/app/routers/invoices.py",
+       "line": 2,
+       "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+       "detail": "from app.services.totals import round_total"
+      },
+      {
+       "repo": "acme/api",
+       "path": "services/billing/app/services/settlement.py",
+       "line": 9,
+       "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+       "detail": "    if invoice.settlement_reference is None:"
+      }
+     ],
+     "field": "settlement_reference",
+     "form": "attribute",
+     "line": 9,
+     "owner": "Invoice",
+     "path": "services/billing/app/services/settlement.py",
+     "pin": "1.2.0",
+     "producer": "acme/contracts",
+     "repo": "acme/api",
+     "sha": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+     "symbol": "reference_for"
+    }
+   ],
+   "contract_candidates": [
+    {
+     "adoption": "on_adoption",
+     "basis": "by_name",
+     "branch": "main",
+     "candidate": true,
+     "evidence": [
+      {
+       "repo": "acme/worker",
+       "path": "worker/tasks.py",
+       "line": 3,
+       "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+       "detail": "    ref = row.settlement_reference"
+      }
+     ],
+     "field": "settlement_reference",
+     "form": "attribute",
+     "line": 3,
+     "owner": "Invoice",
+     "path": "worker/tasks.py",
+     "pin": "1.10.0",
+     "producer": "acme/contracts",
+     "repo": "acme/worker",
+     "sha": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+     "symbol": "reference_for"
+    }
+   ],
+   "unit_tests": [
+    {
+     "evidence": [
+      {
+       "repo": "acme/api",
+       "path": "services/billing/app/routers/invoices.py",
+       "line": 2,
+       "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+       "detail": "from app.services.totals import round_total"
+      }
+     ],
+     "path": "services/billing/tests/test_totals.py",
+     "repo": "acme/api",
+     "via": "services/billing/app/services/totals.py"
+    },
+    {
+     "evidence": [
+      {
+       "repo": "acme/web",
+       "path": "src/modules/billing/api.ts",
+       "line": 3,
+       "ref": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+       "detail": "import { apiGet } from '../../api/client';"
+      }
+     ],
+     "path": "src/modules/billing/__tests__/api it's.test.ts",
+     "repo": "acme/web",
+     "via": "src/modules/billing/api.ts"
+    }
+   ],
+   "unit_test_commands": [
+    {
+     "command": "pytest services/billing/tests/test_totals.py",
+     "paths": [
+      "services/billing/tests/test_totals.py"
+     ],
+     "repo": "acme/api"
+    },
+    {
+     "command": null,
+     "paths": [
+      "src/modules/billing/__tests__/api it's.test.ts"
+     ],
+     "repo": "acme/web"
+    }
+   ],
+   "unfollowed": [
+    "edge:event:acme/api:acme/worker"
+   ],
+   "unread_entry_points": [
+    "acme/worker"
+   ]
+  }
+ ],
+ "backend_calls": [
+  {
+   "client": {
+    "repo": "acme/web",
+    "path": "src/modules/billing/api.ts",
+    "line": 37,
+    "ref": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+    "detail": "  return apiGet<InvoiceSummary>(INVOICES_URL);"
+   },
+   "complete": false,
+   "handler": "services/billing/app/routers/invoices.py",
+   "reasons": [
+    "services/billing/app/services/legacy.py did not parse (invalid syntax): what it imports was not listed"
+   ],
+   "modules": [
+    {
+     "depth": 1,
+     "evidence": {
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/invoices.py",
+      "line": 2,
+      "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+      "detail": "from app.services.totals import round_total"
+     },
+     "imported_by": "services/billing/app/routers/invoices.py",
+     "path": "services/billing/app/services/totals.py"
+    },
+    {
+     "depth": 2,
+     "evidence": {
+      "repo": "acme/api",
+      "path": "services/billing/app/services/totals.py",
+      "line": 1,
+      "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+      "detail": "from acme_common.money import cents_to_decimal"
+     },
+     "imported_by": "services/billing/app/services/totals.py",
+     "path": "libs/common/acme_common/money.py"
+    }
+   ],
+   "route": {
+    "evidence": [
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/invoices.py",
+      "line": 12,
+      "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+      "detail": "@router.get(\"/{invoice_id}\")"
+     },
+     {
+      "repo": "acme/api",
+      "path": "services/billing/app/main.py",
+      "line": 6,
+      "ref": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+      "detail": "app.include_router(api_router, prefix=\"/api\")"
+     }
+    ],
+    "file": "services/billing/app/routers/invoices.py",
+    "handler": "list_invoices",
+    "kind": "api_route",
+    "method": "GET",
+    "module": "billing",
+    "partial": false,
+    "path": "/api/billing/invoices",
+    "repo": "acme/api",
+    "target": "services/billing/app/routers/invoices.py"
+   }
+  }
+ ],
+ "suggestions": [],
+ "mapped_tests": [],
+ "incompleteness": [
+  {
+   "kind": "read_unreadable",
+   "subject": "acme/api:release/old:services/billing/app/services/totals.py",
+   "not_established": "Whether services/billing/app/services/totals.py on release/old carries the change was not established, because the read failed",
+   "detail": "the fetch timed out",
+   "blocks_selection": true
+  },
+  {
+   "kind": "edge_unfollowed",
+   "subject": "edge:event:acme/api:acme/worker",
+   "not_established": "What lies past edge:event:acme/api:acme/worker was not established, because no adapter follows that kind of edge yet",
+   "detail": "the change reached code at one end of an edge of the kind 'event' that no adapter follows yet",
+   "blocks_selection": false
+  }
+ ],
+ "notes": [
+  "main is left out of nothing",
+  "release/old was read at its tip"
+ ],
+ "revision": 1,
+ "status": "completed"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "s10-removed-route",
+  "repo": "acme/api",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s10-removed-route"
+  },
+  "commit_message": "Remove the audit log endpoint",
+  "notes": "Handler deleted while the web endpoints file still names its URL."
+}

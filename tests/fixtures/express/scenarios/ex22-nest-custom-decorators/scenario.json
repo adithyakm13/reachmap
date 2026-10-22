@@ -1,0 +1,11 @@
+{
+  "id": "ex22-nest-custom-decorators",
+  "repo": "ex/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex22-nest-custom-decorators"
+  },
+  "commit_message": "The custom ping is louder",
+  "notes": "A decorator called Get that is not the one of @nestjs/common is not a route."
+}

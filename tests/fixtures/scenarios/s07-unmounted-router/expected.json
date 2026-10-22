@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "id": "s07-unmounted-router",
+  "repo": "acme/api",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s07-unmounted-router"
+  },
+  "explains": "export_invoices_csv in services/billing/app/routers/legacy_exports.py changes. It is declared on legacy_export_router with @legacy_export_router.get(\"/invoices.csv\"). Searching the service for include_router(legacy_export_router ...) finds only a commented-out line in billing.py (a comment is not a mount) and nothing in main.py, api.py or any other file, so no router mounts it and the handler has no URL: no route is claimed, not even a guessed /invoices.csv or /api/billing/legacy-exports/invoices.csv. The report says router_unmounted and names the router. The web endpoints file names no CSV URL, so no http edge or screen is reached.",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "http_edge",
+    "screen"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/legacy_exports.py",
+      "symbol": "export_invoices_csv"
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "acme/api",
+      "method": "GET",
+      "path_suffix": "/invoices.csv",
+      "why": "the router is never mounted, so no full path exists",
+      "comment": {
+        "repo": "acme/api",
+        "path": "services/billing/app/routers/billing.py",
+        "contains": "billing_router.include_router(legacy_export_router, prefix=\"/legacy-exports\")"
+      }
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "router_unmounted",
+      "subject": "services/billing/app/routers/legacy_exports.py:legacy_export_router",
+      "blocking": false
+    },
+    {
+      "kind": "edge_unfollowed",
+      "subject": "edge:event:acme/api:acme/worker",
+      "blocking": false
+    }
+  ]
+}

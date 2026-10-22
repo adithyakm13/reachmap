@@ -1,0 +1,11 @@
+{
+  "id": "sb11-unlexable-controller",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb11-unlexable-controller"
+  },
+  "commit_message": "InvoiceController.list loses its closing quote",
+  "notes": "A controller that does not lex claims no route, and no route is called removed."
+}

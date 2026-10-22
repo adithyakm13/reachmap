@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "id": "dj12-root-urlconf-dynamic",
+  "repo": "acme/portal",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/dj12-root-urlconf-dynamic"
+  },
+  "explains": "ROOT_URLCONF in config/settings/base.py changes from the literal \"config.urls\" to os.environ.get(\"PORTAL_URLCONF\", \"config.urls\"). A call is not a literal, so which URLconf is the root, and therefore which routes the project has, is not known: no route is claimed, none is called removed, and the run records that the root URLconf was not established (blocking). It does not guess config.urls from the default argument.",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "http_edge",
+    "screen"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/portal",
+      "path": "config/settings/base.py",
+      "symbol": "ROOT_URLCONF"
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "ANY",
+      "path": "/billing/invoices",
+      "why": "without a root URLconf no route can be composed"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/portal-web",
+      "route": "/billing/invoices",
+      "why": "reached only through a route"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "route_change_withheld",
+      "subject": "acme/portal",
+      "blocking": true
+    },
+    {
+      "kind": "urlconf_root_unknown",
+      "subject": "acme/portal",
+      "blocking": true
+    }
+  ]
+}

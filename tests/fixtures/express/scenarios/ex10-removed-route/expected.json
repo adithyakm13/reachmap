@@ -1,0 +1,119 @@
+{
+  "schema": 1,
+  "id": "ex10-removed-route",
+  "repo": "ex/orders",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex10-removed-route"
+  },
+  "explains": "The route statement customersRouter.get(\"/:customerId/orders\", ...) is removed from src/routes/customers.ts. Before the change it was GET /api/v1/customers/{customerId}/orders. The web client still calls customerOrdersUrl(customerId) on its primary branch, with a parameter segment that fit {customerId}: a removed route that a client still calls is a finding with high risk and low confidence, with the client line and the removed route's line at the base as evidence. After the change the URL fits no route of the server (the route with one segment less is another path). The client call is followed to its screen, CustomerScreen, mounted at /customers/:customerId. No route is reached in the service: the statement is gone.",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "finding",
+    "http_edge",
+    "screen"
+  ],
+  "must_find": [
+    {
+      "type": "changed_file",
+      "repo": "ex/orders",
+      "path": "src/routes/customers.ts",
+      "role": "source"
+    },
+    {
+      "type": "finding",
+      "kind": "removed_route_still_called",
+      "risk": "high",
+      "confidence": "low",
+      "evidence": [
+        {
+          "repo": "ex/web",
+          "path": "src/services/customers.ts",
+          "contains": "return apiGet(customerOrdersUrl(customerId));"
+        },
+        {
+          "repo": "ex/orders",
+          "path": "src/routes/customers.ts",
+          "contains": "customersRouter.get(\"/:customerId/orders\", (req, res) => {",
+          "at": "base"
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "ex/web",
+        "path": "src/services/customers.ts",
+        "contains": "return apiGet(customerOrdersUrl(customerId));"
+      },
+      "via": [
+        {
+          "repo": "ex/web",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const customerOrdersUrl = (customerId: string) =>"
+        }
+      ],
+      "to": {
+        "repo": "ex/orders",
+        "method": "GET",
+        "path": "/api/v1/customers/{customerId}/orders",
+        "evidence": [
+          {
+            "repo": "ex/orders",
+            "path": "src/routes/customers.ts",
+            "contains": "customersRouter.get(\"/:customerId/orders\", (req, res) => {",
+            "at": "base"
+          },
+          {
+            "repo": "ex/orders",
+            "path": "src/routes/index.ts",
+            "contains": "apiRouter.use(API_VERSION + \"/customers\", customersRouter);"
+          },
+          {
+            "repo": "ex/orders",
+            "path": "src/app.ts",
+            "contains": "app.use(API_PREFIX, apiRouter);"
+          }
+        ],
+        "removed": true
+      }
+    },
+    {
+      "type": "screen",
+      "repo": "ex/web",
+      "route": "/customers/:customerId",
+      "chain": [
+        {
+          "repo": "ex/web",
+          "path": "src/services/customers.ts",
+          "contains": "return apiGet(customerOrdersUrl(customerId));"
+        },
+        {
+          "repo": "ex/web",
+          "path": "src/screens/CustomerScreen.tsx",
+          "contains": "import { fetchCustomer, fetchCustomerOrders } from \"@/services/customers\";"
+        },
+        {
+          "repo": "ex/web",
+          "path": "src/routes.tsx",
+          "contains": "import CustomerScreen from \"./screens/CustomerScreen\";"
+        },
+        {
+          "repo": "ex/web",
+          "path": "src/routes.tsx",
+          "contains": "<Route path=\"/customers/:customerId\" element={<CustomerScreen />} />"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "finding",
+      "kind": "added_route_uncalled",
+      "why": "nothing is added"
+    }
+  ],
+  "not_established": []
+}

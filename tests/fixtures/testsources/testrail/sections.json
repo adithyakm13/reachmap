@@ -1,0 +1,72 @@
+{
+  "note": "Synthetic: invented for the tests, shaped like the TestRail API v2 (paginated lists with _links.next, TestRail 6.7 and later). Not a recording of any real instance.",
+  "status": 200,
+  "headers": {
+    "Content-Type": "application/json; charset=UTF-8"
+  },
+  "body": {
+    "offset": 0,
+    "limit": 15,
+    "size": 6,
+    "_links": {
+      "next": null,
+      "prev": null
+    },
+    "sections": [
+      {
+        "id": 31,
+        "suite_id": 2,
+        "name": "Billing",
+        "description": null,
+        "parent_id": null,
+        "display_order": 31,
+        "depth": 0
+      },
+      {
+        "id": 32,
+        "suite_id": 2,
+        "name": "Invoices",
+        "description": null,
+        "parent_id": 31,
+        "display_order": 32,
+        "depth": 1
+      },
+      {
+        "id": 33,
+        "suite_id": 2,
+        "name": "Invoice detail",
+        "description": null,
+        "parent_id": 32,
+        "display_order": 33,
+        "depth": 2
+      },
+      {
+        "id": 34,
+        "suite_id": 2,
+        "name": "Settlements",
+        "description": null,
+        "parent_id": 31,
+        "display_order": 34,
+        "depth": 1
+      },
+      {
+        "id": 40,
+        "suite_id": 2,
+        "name": "Cases",
+        "description": null,
+        "parent_id": null,
+        "display_order": 40,
+        "depth": 0
+      },
+      {
+        "id": 41,
+        "suite_id": 2,
+        "name": "Case notes",
+        "description": null,
+        "parent_id": 40,
+        "display_order": 41,
+        "depth": 1
+      }
+    ]
+  }
+}

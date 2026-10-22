@@ -1,0 +1,72 @@
+{
+  "schema": 1,
+  "id": "s20-removed-import-line",
+  "repo": "acme/web",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s20-removed-import-line"
+  },
+  "explains": "InvoiceListPage.tsx drops the line import { truncate } from \"@/lib/format\"; and its one use. The changed symbol is InvoiceListPage; its screen follows from the routes file that imports the page (billing/routes.tsx mounts it at /billing/invoices). The removed line is not a fingerprint: the module src/lib/format.ts is imported by 57 files before the change. The specifier text @/lib/format, the one on the removed line, appears in 30 of them (28 odd-numbered widgets plus InvoiceListPage and CaseListPage, 29 after the change); the 27 even-numbered widgets reach the same module by ../lib/format. Searching for the removed line's text would produce dozens of false findings. No file is claimed because it also imports that module: not the 55 widgets under src/widgets/ and not CaseListPage, whose screen /cases is therefore not affected. The changed file is not the hub, so the walk does not stop and there is no hub_cutoff.",
+  "complete_for": [
+    "changed_symbol",
+    "screen"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/web",
+      "path": "src/modules/billing/pages/InvoiceListPage.tsx",
+      "symbol": "InvoiceListPage",
+      "removed_line": {
+        "repo": "acme/web",
+        "path": "src/modules/billing/pages/InvoiceListPage.tsx",
+        "contains": "import { truncate } from \"@/lib/format\";",
+        "at": "base"
+      }
+    },
+    {
+      "type": "screen",
+      "repo": "acme/web",
+      "route": "/billing/invoices",
+      "chain": [
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/routes.tsx",
+          "contains": "import InvoiceListPage from \"./pages/InvoiceListPage\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/routes.tsx",
+          "contains": "<Route path=\"/billing/invoices\" element={<InvoiceListPage />} />"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "caller",
+      "repo": "acme/web",
+      "path_prefix": "src/widgets/",
+      "why": "all 55 import the same module as the removed line and 28 of them use the same specifier text; the text of a removed import line is not a fingerprint"
+    },
+    {
+      "type": "caller",
+      "repo": "acme/web",
+      "path": "src/modules/cases/pages/CaseListPage.tsx",
+      "why": "imports the same module path, nothing else links it to the change",
+      "naive_match": {
+        "repo": "acme/web",
+        "path": "src/modules/cases/pages/CaseListPage.tsx",
+        "contains": "import { truncate } from \"@/lib/format\";"
+      }
+    },
+    {
+      "type": "screen",
+      "repo": "acme/web",
+      "route": "/cases",
+      "why": "reached only by matching the removed import's module path"
+    }
+  ],
+  "not_established": []
+}

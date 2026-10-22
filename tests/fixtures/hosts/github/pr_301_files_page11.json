@@ -1,0 +1,24 @@
+{
+  "status": 200,
+  "headers": {
+    "Content-Type": "application/json; charset=utf-8",
+    "X-RateLimit-Limit": "5000",
+    "X-RateLimit-Remaining": "4871",
+    "X-RateLimit-Reset": "1700003600",
+    "X-GitHub-Request-Id": "A1B2:3C4D:5E6F7A:8B9C0D:6553A1B2",
+    "Link": "<https://api.github.com/repos/acme/web/pulls/301/files?per_page=100&page=1>; rel=\"first\", <https://api.github.com/repos/acme/web/pulls/301/files?per_page=100&page=10>; rel=\"prev\""
+  },
+  "body": [
+    {
+      "sha": "0000000000000000000000000000000000000000",
+      "filename": "src/generated/client300.ts",
+      "status": "added",
+      "additions": 12,
+      "deletions": 0,
+      "changes": 12,
+      "blob_url": "https://github.com/acme/web/blob/2222222222222222222222222222222222222222/src/generated/client300.ts",
+      "raw_url": "https://github.com/acme/web/raw/2222222222222222222222222222222222222222/src/generated/client300.ts",
+      "contents_url": "https://api.github.com/repos/acme/web/contents/src/generated/client300.ts?ref=2222222222222222222222222222222222222222"
+    }
+  ]
+}

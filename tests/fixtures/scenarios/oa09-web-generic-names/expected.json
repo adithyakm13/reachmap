@@ -1,0 +1,228 @@
+{
+  "schema": 1,
+  "id": "oa09-web-generic-names",
+  "repo": "acme/ledger-web",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/oa09-web-generic-names"
+  },
+  "explains": "ReportsPage and StatementsPage change. ReportsPage imports list from the generated client (the operationId list of GET /reports) and also calls cache.get, an unrelated object whose method is called get; StatementsPage imports downloadStatement. An import of a function from the generated client is a resolved edge: the import says which function it is, so list() fits GET /v1/reports and downloadStatement(...) fits GET /v1/statements/{statementId}/download whatever the names are, and the handlers of those routes are system.py (list) and statements.py (download_statement, which imports app/services/render.py). The cap on generic and over-defined names is for a match by name alone, and cache.get is one: get is made only of generic words, so no member call is matched by it (a name match needs a distinctive name, and the cap counts definitions, not references), and cache.get is not a call of the operation get of GET /ping. downloadStatement is defined four times in the web app (the generated client and three unrelated functions in src/legacy), more than distinct_max = 3, and list and get are generic: the three names are recorded as not distinctive (not blocking), which says that no member call of them was matched. The change reaches the two screens through the routes files.",
+  "complete_for": [
+    "changed_symbol",
+    "http_edge",
+    "screen",
+    "backend_call"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/ledger-web",
+      "path": "src/modules/reports/pages/ReportsPage.tsx",
+      "symbol": "ReportsPage"
+    },
+    {
+      "type": "changed_symbol",
+      "repo": "acme/ledger-web",
+      "path": "src/modules/statements/pages/StatementsPage.tsx",
+      "symbol": "StatementsPage"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/ledger-web",
+      "route": "/reports",
+      "chain": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/reports/routes.tsx",
+          "contains": "import ReportsPage from \"./pages/ReportsPage\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/reports/routes.tsx",
+          "contains": "<Route path=\"/reports\" element={<ReportsPage />} />"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "acme/ledger-web",
+      "route": "/statements",
+      "chain": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/statements/routes.tsx",
+          "contains": "import StatementsPage from \"./pages/StatementsPage\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/statements/routes.tsx",
+          "contains": "<Route path=\"/statements\" element={<StatementsPage />} />"
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/ledger-web",
+        "path": "src/modules/reports/pages/ReportsPage.tsx",
+        "contains": "list() ?? []"
+      },
+      "via": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"get\": {"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"/reports\": {"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"url\": \"https://ledger.example.invalid/v1\""
+        }
+      ],
+      "to": {
+        "repo": "acme/ledger-api",
+        "method": "GET",
+        "path": "/v1/reports",
+        "evidence": [
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"get\": {"
+          },
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"/reports\": {"
+          },
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"url\": \"https://ledger.example.invalid/v1\""
+          }
+        ]
+      }
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/ledger-web",
+        "path": "src/modules/statements/pages/StatementsPage.tsx",
+        "contains": "downloadStatement(\"2024-02\")"
+      },
+      "via": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"get\": {"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"/statements/{statementId}/download\": {"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"url\": \"https://ledger.example.invalid/v1\""
+        }
+      ],
+      "to": {
+        "repo": "acme/ledger-api",
+        "method": "GET",
+        "path": "/v1/statements/{statementId}/download",
+        "evidence": [
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"get\": {"
+          },
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"/statements/{statementId}/download\": {"
+          },
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"url\": \"https://ledger.example.invalid/v1\""
+          }
+        ]
+      }
+    },
+    {
+      "type": "backend_call",
+      "from": {
+        "repo": "acme/ledger-web",
+        "path": "src/modules/reports/pages/ReportsPage.tsx",
+        "contains": "list() ?? []"
+      },
+      "route": {
+        "method": "GET",
+        "path": "/v1/reports"
+      },
+      "handler": "app/handlers/system.py",
+      "modules": []
+    },
+    {
+      "type": "backend_call",
+      "from": {
+        "repo": "acme/ledger-web",
+        "path": "src/modules/statements/pages/StatementsPage.tsx",
+        "contains": "downloadStatement(\"2024-02\")"
+      },
+      "route": {
+        "method": "GET",
+        "path": "/v1/statements/{statementId}/download"
+      },
+      "handler": "app/handlers/statements.py",
+      "modules": [
+        {
+          "path": "app/services/render.py",
+          "depth": 1
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/ledger-web",
+        "path": "src/modules/reports/pages/ReportsPage.tsx",
+        "contains": "cache.get(\"reports\")"
+      },
+      "to": {
+        "repo": "acme/ledger-api",
+        "method": "GET",
+        "path": "/v1/ping"
+      },
+      "why": "get is made only of generic words, so no member call is matched by it, and cache.get is the get of another object"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "not_distinctive",
+      "subject": "downloadStatement",
+      "blocking": false,
+      "definitions": 4
+    },
+    {
+      "kind": "not_distinctive",
+      "subject": "get",
+      "blocking": false,
+      "definitions": 2
+    },
+    {
+      "kind": "not_distinctive",
+      "subject": "list",
+      "blocking": false,
+      "definitions": 1
+    }
+  ]
+}

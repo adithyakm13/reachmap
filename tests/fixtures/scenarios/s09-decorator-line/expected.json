@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "id": "s09-decorator-line",
+  "repo": "acme/api",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s09-decorator-line"
+  },
+  "explains": "The changed line is retries=3 becoming retries=5, an argument inside a decorator that spans five lines at column 0 in services/billing/app/jobs.py: @scheduled( / name=... / cron=... / retries=5, / ) followed by def run_nightly_settlement. A decorator at column 0 sits outside the body of the function above it (_log) and before the def line of the function it decorates. The git hunk header even names _log as context. The decorator belongs to the function it decorates, so the changed symbol is run_nightly_settlement and not _log. No router mounts the job, so no route is claimed.",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "screen"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/api",
+      "path": "services/billing/app/jobs.py",
+      "symbol": "run_nightly_settlement",
+      "evidence": [
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/jobs.py",
+          "contains": "retries=5,"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/api",
+      "path": "services/billing/app/jobs.py",
+      "symbol": "_log",
+      "why": "the function above the decorator; the decorator lines are not part of its body"
+    },
+    {
+      "type": "changed_symbol",
+      "repo": "acme/api",
+      "path": "services/billing/app/jobs.py",
+      "symbol": "run_weekly_statement",
+      "why": "the function below; its own decorator is on a single line and unchanged"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "edge_unfollowed",
+      "subject": "edge:event:acme/api:acme/worker",
+      "blocking": false
+    }
+  ]
+}

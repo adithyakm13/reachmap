@@ -1,0 +1,298 @@
+{
+  "schema": 1,
+  "id": "dj04-service-helper",
+  "repo": "acme/portal",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/dj04-service-helper"
+  },
+  "explains": "outstanding_total in billing/services.py changes. Two modules import it and use it: billing/views.py (invoice_list calls it) and billing/api.py (the overdue action of InvoiceViewSet calls it). billing/reports.py imports the same module but only format_reference, so it is excluded by narrowing. The walk goes from each importer up to the route: invoice_list is mounted at ANY /billing/invoices as in dj01. In the viewset only the overdue action calls the helper, so the route reached is that action's (the router makes it from the @action(detail=False) method: GET /api/v1/invoices/overdue, under api/v1/ from config/urls.py, through include(router.urls) and the register line); the list and detail routes of the same viewset, and the void action, are not reached. The unit test imports billing.views, a caller, and is stated as a unit test. On the web, INVOICES_URL fits the list route and OVERDUE_URL, written over two lines, fits the overdue route exactly (the literal overdue is more specific than the detail route's parameter); both are called by InvoiceListPage, one screen, whose first chain goes through billing/views.py. The monthly report page is not reached: its route runs reports.monthly, which calls format_reference.",
+  "complete_for": [
+    "changed_symbol",
+    "caller",
+    "route",
+    "http_edge",
+    "screen",
+    "unit_test"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/portal",
+      "path": "billing/services.py",
+      "symbol": "outstanding_total"
+    },
+    {
+      "type": "caller",
+      "repo": "acme/portal",
+      "path": "billing/views.py",
+      "symbol": "invoice_list",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/views.py",
+          "contains": "from .services import outstanding_total"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "billing/views.py",
+          "contains": "outstanding_total([])"
+        }
+      ]
+    },
+    {
+      "type": "caller",
+      "repo": "acme/portal",
+      "path": "billing/api.py",
+      "symbol": "InvoiceViewSet",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/api.py",
+          "contains": "from .services import outstanding_total"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "billing/api.py",
+          "contains": "outstanding_total(self.get_queryset())"
+        }
+      ]
+    },
+    {
+      "type": "unit_test",
+      "repo": "acme/portal",
+      "path": "billing/tests/test_views.py",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/tests/test_views.py",
+          "contains": "from billing import views"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "ANY",
+      "path": "/billing/invoices",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/urls.py",
+          "contains": "path(\"invoices/\", views.invoice_list, name=\"invoice-list\"),"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "config/urls.py",
+          "contains": "path(\"billing/\", include(\"billing.urls\")),"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "GET",
+      "path": "/api/v1/invoices/overdue",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/api.py",
+          "contains": "@action(detail=False)"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "billing/api_urls.py",
+          "contains": "router.register(r\"invoices\", api.InvoiceViewSet, basename=\"invoice\")"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "billing/api_urls.py",
+          "contains": "path(\"\", include(router.urls)),"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "config/urls.py",
+          "contains": "path(\"api/v1/\", include(\"billing.api_urls\")),"
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/portal-web",
+        "path": "src/modules/billing/api.ts",
+        "contains": "apiGet<Invoice[]>(INVOICES_URL)"
+      },
+      "via": [
+        {
+          "repo": "acme/portal-web",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const INVOICES_URL = \"/billing/invoices/\";"
+        }
+      ],
+      "to": {
+        "repo": "acme/portal",
+        "method": "ANY",
+        "path": "/billing/invoices",
+        "evidence": [
+          {
+            "repo": "acme/portal",
+            "path": "billing/urls.py",
+            "contains": "path(\"invoices/\", views.invoice_list, name=\"invoice-list\"),"
+          },
+          {
+            "repo": "acme/portal",
+            "path": "config/urls.py",
+            "contains": "path(\"billing/\", include(\"billing.urls\")),"
+          }
+        ]
+      }
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/portal-web",
+        "path": "src/modules/billing/api.ts",
+        "contains": "apiGet<Invoice[]>(OVERDUE_URL)"
+      },
+      "via": [
+        {
+          "repo": "acme/portal-web",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const OVERDUE_URL ="
+        },
+        {
+          "repo": "acme/portal-web",
+          "path": "src/api/endpoints.ts",
+          "contains": "\"/api/v1/invoices/overdue/\""
+        }
+      ],
+      "to": {
+        "repo": "acme/portal",
+        "method": "GET",
+        "path": "/api/v1/invoices/overdue",
+        "evidence": [
+          {
+            "repo": "acme/portal",
+            "path": "billing/api.py",
+            "contains": "@action(detail=False)"
+          },
+          {
+            "repo": "acme/portal",
+            "path": "billing/api_urls.py",
+            "contains": "router.register(r\"invoices\", api.InvoiceViewSet, basename=\"invoice\")"
+          },
+          {
+            "repo": "acme/portal",
+            "path": "billing/api_urls.py",
+            "contains": "path(\"\", include(router.urls)),"
+          },
+          {
+            "repo": "acme/portal",
+            "path": "config/urls.py",
+            "contains": "path(\"api/v1/\", include(\"billing.api_urls\")),"
+          }
+        ]
+      }
+    },
+    {
+      "type": "screen",
+      "repo": "acme/portal-web",
+      "route": "/billing/invoices",
+      "chain": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/views.py",
+          "contains": "from .services import outstanding_total"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "billing/views.py",
+          "contains": "outstanding_total([])"
+        },
+        {
+          "repo": "acme/portal-web",
+          "path": "src/modules/billing/api.ts",
+          "contains": "apiGet<Invoice[]>(INVOICES_URL)"
+        },
+        {
+          "repo": "acme/portal-web",
+          "path": "src/modules/billing/pages/InvoiceListPage.tsx",
+          "contains": "import { fetchInvoices, fetchOverdue } from \"../api\";"
+        },
+        {
+          "repo": "acme/portal-web",
+          "path": "src/modules/billing/routes.tsx",
+          "contains": "import InvoiceListPage from \"./pages/InvoiceListPage\";"
+        },
+        {
+          "repo": "acme/portal-web",
+          "path": "src/modules/billing/routes.tsx",
+          "contains": "<Route path=\"/billing/invoices\" element={<InvoiceListPage />} />"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "caller",
+      "repo": "acme/portal",
+      "path": "billing/reports.py",
+      "why": "imports only format_reference from the module",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/reports.py",
+          "contains": "from .services import format_reference"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "billing/services.py",
+          "contains": "def outstanding_total(invoices):"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "GET",
+      "path": "/api/v1/invoices",
+      "why": "the list action of the viewset does not call the helper"
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "GET",
+      "path": "/api/v1/invoices/{pk}",
+      "why": "the detail action of the viewset does not call the helper"
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "POST",
+      "path": "/api/v1/invoices/{pk}/void",
+      "why": "the void action does not call the helper"
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "ANY",
+      "path": "/billing/reports/monthly",
+      "why": "the monthly report calls format_reference"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/portal-web",
+      "route": "/billing/reports/monthly",
+      "why": "its route runs the monthly report, which does not call the helper"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/portal-web",
+      "route": "/billing/invoices/:invoiceId",
+      "why": "calls the detail and void routes"
+    }
+  ],
+  "not_established": []
+}

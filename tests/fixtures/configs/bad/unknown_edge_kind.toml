@@ -1,0 +1,16 @@
+workspace = "acme"
+
+[repos."acme/web"]
+host = "github"
+language = "typescript"
+roles = ["frontend"]
+
+[repos."acme/api"]
+host = "github"
+language = "python"
+roles = ["backend"]
+
+[[edges]]
+kind = "grpc"
+from = "acme/web"
+to = "acme/api"

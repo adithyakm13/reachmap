@@ -1,0 +1,11 @@
+{
+  "id": "dj02-method-decorator",
+  "repo": "acme/portal",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/dj02-method-decorator"
+  },
+  "commit_message": "Say that the invoice was found",
+  "notes": "Body change in a function view that a decorator restricts to GET and PUT: two routes from one view."
+}

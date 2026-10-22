@@ -1,0 +1,11 @@
+{
+  "id": "ex06-commonjs-legacy",
+  "repo": "ex/orders",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex06-commonjs-legacy"
+  },
+  "commit_message": "getInvoice wraps the invoice",
+  "notes": "CommonJS: require, a destructured require, module.exports = router, and a router mounted with an inline require, two levels deep."
+}

@@ -1,0 +1,61 @@
+# The M16 Express and NestJS fixture workspace (tests/fixtures/express/): an Express orders service (apps, routers, mounts across
+# files, ES modules and CommonJS), a NestJS ledger service, and a React client of each. Every remote is a path under
+# ${REACHMAP_FIXTURES}: the directory tests/fixtures/ex_build.py wrote the three repositories into. Unset, the remotes are
+# "not configured" and the file does not load.
+workspace = "ex"
+
+[limits]
+hops = 3
+hub_importers = 50
+distinct_max = 3
+timeout_s = 900
+
+[repos."ex/orders"]
+host = "git"
+remote = "${REACHMAP_FIXTURES}/ex-orders"
+language = "typescript"
+roles = ["backend"]
+branches = ["main"]
+aliases = { from = "tsconfig.json" }
+entry_points = { kind = "express" }
+tests = { markers = ["__tests__/", ".test.", ".spec."] }
+
+[repos."ex/ledger"]
+host = "git"
+remote = "${REACHMAP_FIXTURES}/ex-ledger"
+language = "typescript"
+roles = ["backend"]
+branches = ["main"]
+aliases = { from = "tsconfig.json" }
+entry_points = { kind = "nestjs" }
+tests = { markers = ["__tests__/", ".test.", ".spec."] }
+
+[repos."ex/web"]
+host = "git"
+remote = "${REACHMAP_FIXTURES}/ex-web"
+language = "typescript"
+roles = ["frontend"]
+branches = ["main"]
+aliases = { from = "tsconfig.json" }
+entry_points = { kind = "react-router", routes_glob = "src/routes.tsx" }
+http_client = { kind = "endpoints-file", path = "src/api/endpoints.ts" }
+
+[repos."ex/console"]
+host = "git"
+remote = "${REACHMAP_FIXTURES}/ex-console"
+language = "typescript"
+roles = ["frontend"]
+branches = ["main"]
+aliases = { from = "tsconfig.json" }
+entry_points = { kind = "react-router", routes_glob = "src/routes.tsx" }
+http_client = { kind = "endpoints-file", path = "src/api/endpoints.ts" }
+
+[[edges]]
+kind = "http"
+from = "ex/web"
+to = "ex/orders"
+
+[[edges]]
+kind = "http"
+from = "ex/console"
+to = "ex/ledger"

@@ -1,0 +1,11 @@
+{
+  "id": "sb03-constant-path",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb03-constant-path"
+  },
+  "commit_message": "The status path is renamed",
+  "notes": "A constant that is part of a class path moves every route that uses it, and the client still names the old URL."
+}

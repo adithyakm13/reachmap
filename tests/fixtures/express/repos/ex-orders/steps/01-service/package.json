@@ -1,0 +1,12 @@
+{
+  "name": "orders-service",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/server.js",
+  "dependencies": {
+    "express": "^4.19.0"
+  },
+  "devDependencies": {
+    "supertest": "^7.0.0"
+  }
+}

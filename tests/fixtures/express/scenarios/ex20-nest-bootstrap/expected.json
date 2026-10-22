@@ -1,0 +1,215 @@
+{
+  "schema": 1,
+  "id": "ex20-nest-bootstrap",
+  "repo": "ex/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex20-nest-bootstrap"
+  },
+  "explains": "A line is added to bootstrap in src/main.ts (app.enableCors()). The file creates the application and sets the global prefix; whatever it registers (pipes, guards, filters, the prefix) applies to every controller, so every route of the service is reached: the four of LedgerController and the two of BalancesController. BalancesController is decorated with a version, which Nest puts in the path, and src/main.ts enables URI versioning (app.enableVersioning with VersioningType.URI): the path is kept with the unknown part marked, flagged partial, and the run says so (route_path_partial, at the controller decorator). The console calls BALANCES_URL, /api/ledger/balances, which fits the partial balances route only through its unknown segment: that is a match by name, so BalancesScreen (/balances) is a candidate, shown apart and never must-test. The audit and reports controllers are served by nothing, so the bootstrap reaches none of their routes and nothing is said about them.",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "ex/ledger",
+      "path": "src/main.ts",
+      "symbol": "bootstrap"
+    },
+    {
+      "type": "route",
+      "repo": "ex/ledger",
+      "method": "GET",
+      "path": "/api/ledger/entries",
+      "evidence": [
+        {
+          "repo": "ex/ledger",
+          "path": "src/ledger/ledger.controller.ts",
+          "contains": "@Get()"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/ledger/ledger.controller.ts",
+          "contains": "@Controller(ENTRIES_PATH)"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/ledger/ledger.module.ts",
+          "contains": "controllers: [LedgerController],"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/main.ts",
+          "contains": "app.setGlobalPrefix(\"api\");"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "ex/ledger",
+      "method": "GET",
+      "path": "/api/ledger/entries/{id}",
+      "evidence": [
+        {
+          "repo": "ex/ledger",
+          "path": "src/ledger/ledger.controller.ts",
+          "contains": "@Get(\":id\")"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/ledger/ledger.controller.ts",
+          "contains": "@Controller(ENTRIES_PATH)"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/ledger/ledger.module.ts",
+          "contains": "controllers: [LedgerController],"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/main.ts",
+          "contains": "app.setGlobalPrefix(\"api\");"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "ex/ledger",
+      "method": "POST",
+      "path": "/api/ledger/entries",
+      "evidence": [
+        {
+          "repo": "ex/ledger",
+          "path": "src/ledger/ledger.controller.ts",
+          "contains": "@Post()"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/ledger/ledger.controller.ts",
+          "contains": "@Controller(ENTRIES_PATH)"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/ledger/ledger.module.ts",
+          "contains": "controllers: [LedgerController],"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/main.ts",
+          "contains": "app.setGlobalPrefix(\"api\");"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "ex/ledger",
+      "method": "DELETE",
+      "path": "/api/ledger/entries/{id}",
+      "evidence": [
+        {
+          "repo": "ex/ledger",
+          "path": "src/ledger/ledger.controller.ts",
+          "contains": "@Delete(\":id\")"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/ledger/ledger.controller.ts",
+          "contains": "@Controller(ENTRIES_PATH)"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/ledger/ledger.module.ts",
+          "contains": "controllers: [LedgerController],"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/main.ts",
+          "contains": "app.setGlobalPrefix(\"api\");"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "ex/ledger",
+      "method": "GET",
+      "path": "/api/<unknown:version>/balances",
+      "evidence": [
+        {
+          "repo": "ex/ledger",
+          "path": "src/balances/balances.controller.ts",
+          "contains": "@Get()"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/balances/balances.controller.ts",
+          "contains": "@Controller({ path: \"balances\", version: \"1\" })"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/balances/balances.module.ts",
+          "contains": "controllers: [BalancesController],"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/main.ts",
+          "contains": "app.setGlobalPrefix(\"api\");"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "ex/ledger",
+      "method": "GET",
+      "path": "/api/<unknown:version>/balances/{account}",
+      "evidence": [
+        {
+          "repo": "ex/ledger",
+          "path": "src/balances/balances.controller.ts",
+          "contains": "@Get(\":account\")"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/balances/balances.controller.ts",
+          "contains": "@Controller({ path: \"balances\", version: \"1\" })"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/balances/balances.module.ts",
+          "contains": "controllers: [BalancesController],"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/main.ts",
+          "contains": "app.setGlobalPrefix(\"api\");"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "ex/ledger",
+      "method": "GET",
+      "path": "/api/reports/trial-balance",
+      "why": "the module is not imported"
+    },
+    {
+      "type": "route",
+      "repo": "ex/ledger",
+      "method": "GET",
+      "path": "/api/audit",
+      "why": "no module lists AuditController"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "route_path_partial",
+      "subject": "src/balances/balances.controller.ts:3",
+      "blocking": false
+    }
+  ]
+}

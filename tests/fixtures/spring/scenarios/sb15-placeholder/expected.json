@@ -1,0 +1,79 @@
+{
+  "schema": 1,
+  "id": "sb15-placeholder",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb15-placeholder"
+  },
+  "explains": "ledger.reports.base in application.properties moves from /reports to /summaries. ReportController maps ${ledger.reports.base}/daily: the property is part of the path of that one route, so the route GET /ledger/summaries/daily is reached, with the line of the property in its evidence (and the context path). No other route names the property, so no other route is reached. The old route GET /ledger/reports/daily is gone and no client names it; the new one is said as uncalled (added_route_uncalled).",
+  "complete_for": [
+    "changed_file",
+    "route",
+    "screen",
+    "http_edge",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "changed_file",
+      "repo": "acme/ledger",
+      "path": "src/main/resources/application.properties",
+      "role": "source"
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/ledger/summaries/daily",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/ReportController.java",
+          "contains": "@GetMapping(\"${ledger.reports.base}/daily\")"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/resources/application.properties",
+          "contains": "ledger.reports.base=/summaries"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/resources/application.properties",
+          "contains": "server.servlet.context-path=/ledger"
+        }
+      ]
+    },
+    {
+      "type": "finding",
+      "kind": "added_route_uncalled",
+      "risk": "low",
+      "confidence": "medium",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/ReportController.java",
+          "contains": "@GetMapping(\"${ledger.reports.base}/daily\")"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/ledger/v1/invoices",
+      "why": "its path does not name the property"
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/ledger/audit",
+      "why": "its path does not name the property"
+    }
+  ],
+  "not_established": []
+}

@@ -1,0 +1,86 @@
+{
+  "status": 200,
+  "headers": {
+    "Content-Type": "application/json; charset=utf-8",
+    "X-Request-Id": "9f3c1a2b-7d4e-4f10-8a61-0b2c3d4e5f60"
+  },
+  "body": {
+    "type": "pullrequest",
+    "id": 8,
+    "title": "Fix the footer",
+    "description": "Footer fix.",
+    "state": "MERGED",
+    "draft": false,
+    "queued": false,
+    "merge_commit": {
+      "type": "commit",
+      "hash": "333333333333"
+    },
+    "comment_count": 1,
+    "task_count": 0,
+    "close_source_branch": true,
+    "reason": "",
+    "created_on": "2023-11-14T22:13:20.000000+00:00",
+    "updated_on": "2023-11-15T09:00:00.000000+00:00",
+    "destination": {
+      "branch": {
+        "name": "main"
+      },
+      "commit": {
+        "type": "commit",
+        "hash": "444444444444",
+        "links": {
+          "self": {
+            "href": "https://api.bitbucket.org/2.0/repositories/acme/web/commit/444444444444"
+          }
+        }
+      },
+      "repository": {
+        "type": "repository",
+        "full_name": "acme/web",
+        "name": "web"
+      }
+    },
+    "source": {
+      "branch": {
+        "name": "fix/footer"
+      },
+      "commit": {
+        "type": "commit",
+        "hash": "555555555555",
+        "links": {
+          "self": {
+            "href": "https://api.bitbucket.org/2.0/repositories/acme/web/commit/555555555555"
+          }
+        }
+      },
+      "repository": {
+        "type": "repository",
+        "full_name": "acme/web",
+        "name": "web"
+      }
+    },
+    "author": {
+      "type": "user",
+      "display_name": "Dev One",
+      "nickname": "devone"
+    },
+    "participants": [],
+    "reviewers": [],
+    "summary": {
+      "type": "rendered",
+      "raw": "Footer fix."
+    },
+    "links": {
+      "self": {
+        "href": "https://api.bitbucket.org/2.0/repositories/acme/web/pullrequests/8"
+      },
+      "html": {
+        "href": "https://bitbucket.org/acme/web/pull-requests/8"
+      },
+      "diffstat": {
+        "href": "https://api.bitbucket.org/2.0/repositories/acme/web/pullrequests/8/diffstat"
+      }
+    }
+  }
+}

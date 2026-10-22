@@ -1,0 +1,135 @@
+{
+  "schema": 1,
+  "id": "s15-python-callers",
+  "repo": "acme/api",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s15-python-callers"
+  },
+  "explains": "format_cents changes in the shared library libs/common/acme_common/money.py (cents_to_decimal in the same file is untouched). Importers of acme_common.money, each resolved from its own service root (billing and cases both have a package called app, so module names are resolved per service marker): (1) services/billing/app/services/settlement.py imports it through a multi-line parenthesised import (from acme_common.money import ( cents_to_decimal, format_cents, )) and calls format_cents(total_cents); (2) services/billing/app/routers/invoices.py imports the name under an alias (format_cents as fmt_cents) and calls fmt_cents(invoice.amount_cents); (3) services/cases/app/routers/cases.py imports the module under an alias (import acme_common.money as money_utils) and calls money_utils.format_cents(row.exposure_cents). services/billing/app/jobs.py imports only cents_to_decimal from the same module, so it is not a caller of format_cents. services/billing/tests/test_money.py imports format_cents but a unit test is a test, not a caller: it is listed as a unit test. services/billing/tests/test_settlement.py imports the settlement service, not the library, so it is not a caller either. Callers are the direct importers and call sites of the changed function; the routes and screens those callers reach are transitive reach, not callers, and are not claimed here.",
+  "complete_for": [
+    "changed_symbol",
+    "caller"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/api",
+      "path": "libs/common/acme_common/money.py",
+      "symbol": "format_cents"
+    },
+    {
+      "type": "caller",
+      "repo": "acme/api",
+      "path": "services/billing/app/services/settlement.py",
+      "symbol": "summarise",
+      "evidence": [
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/services/settlement.py",
+          "contains": "from acme_common.money import ("
+        },
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/services/settlement.py",
+          "contains": "    format_cents,"
+        },
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/services/settlement.py",
+          "contains": "format_cents(total_cents)"
+        }
+      ]
+    },
+    {
+      "type": "caller",
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/invoices.py",
+      "symbol": "get_invoice",
+      "evidence": [
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/routers/invoices.py",
+          "contains": "from acme_common.money import format_cents as fmt_cents"
+        },
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/routers/invoices.py",
+          "contains": "fmt_cents(invoice.amount_cents)"
+        }
+      ]
+    },
+    {
+      "type": "caller",
+      "repo": "acme/api",
+      "path": "services/cases/app/routers/cases.py",
+      "symbol": "get_case",
+      "evidence": [
+        {
+          "repo": "acme/api",
+          "path": "services/cases/app/routers/cases.py",
+          "contains": "import acme_common.money as money_utils"
+        },
+        {
+          "repo": "acme/api",
+          "path": "services/cases/app/routers/cases.py",
+          "contains": "money_utils.format_cents(row.exposure_cents)"
+        }
+      ]
+    },
+    {
+      "type": "unit_test",
+      "repo": "acme/api",
+      "path": "services/billing/tests/test_money.py",
+      "evidence": [
+        {
+          "repo": "acme/api",
+          "path": "services/billing/tests/test_money.py",
+          "contains": "from acme_common.money import cents_to_decimal, format_cents"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "caller",
+      "repo": "acme/api",
+      "path": "services/billing/tests/test_money.py",
+      "why": "a unit test is listed as a test, not as a caller",
+      "evidence": [
+        {
+          "repo": "acme/api",
+          "path": "services/billing/tests/test_money.py",
+          "contains": "from acme_common.money import cents_to_decimal, format_cents"
+        }
+      ]
+    },
+    {
+      "type": "caller",
+      "repo": "acme/api",
+      "path": "services/billing/tests/test_settlement.py",
+      "why": "imports the settlement service, not the library, and is a test"
+    },
+    {
+      "type": "caller",
+      "repo": "acme/api",
+      "path": "services/billing/app/jobs.py",
+      "why": "imports only cents_to_decimal from acme_common.money, which did not change",
+      "evidence": [
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/jobs.py",
+          "contains": "from acme_common.money import cents_to_decimal"
+        }
+      ]
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "edge_unfollowed",
+      "subject": "edge:event:acme/api:acme/worker",
+      "blocking": false
+    }
+  ]
+}

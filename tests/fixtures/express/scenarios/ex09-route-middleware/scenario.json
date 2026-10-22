@@ -1,0 +1,11 @@
+{
+  "id": "ex09-route-middleware",
+  "repo": "ex/orders",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex09-route-middleware"
+  },
+  "commit_message": "requireAuth accepts a session",
+  "notes": "Middleware named in a route call reaches the routes that name it and not the others of the router."
+}

@@ -1,0 +1,10 @@
+{
+  "slug": "dj-portal",
+  "name": "acme/portal",
+  "steps": [
+    {"dir": "01-scaffold", "branch": "main", "message": "Scaffold the portal project"},
+    {"dir": "02-billing", "branch": "main", "message": "Add the billing app and its URLs"},
+    {"dir": "03-cases", "branch": "main", "message": "Add the cases app"},
+    {"dir": "04-billing-api", "branch": "main", "message": "Add the billing API, the legacy export and a test"}
+  ]
+}

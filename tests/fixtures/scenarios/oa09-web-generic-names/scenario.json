@@ -1,0 +1,11 @@
+{
+  "id": "oa09-web-generic-names",
+  "repo": "acme/ledger-web",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/oa09-web-generic-names"
+  },
+  "commit_message": "Show the next month and the cached reports",
+  "notes": "ReportsPage uses list (generic) and cache.get; StatementsPage calls downloadStatement, defined four times in the web app."
+}

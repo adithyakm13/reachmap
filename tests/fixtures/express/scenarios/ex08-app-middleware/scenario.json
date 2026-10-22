@@ -1,0 +1,11 @@
+{
+  "id": "ex08-app-middleware",
+  "repo": "ex/orders",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex08-app-middleware"
+  },
+  "commit_message": "The request log prints the address",
+  "notes": "Middleware of the app reaches every route of the app: a change that cannot be placed in one route is not placed in none."
+}

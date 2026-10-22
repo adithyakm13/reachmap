@@ -1,0 +1,112 @@
+{
+  "schema": 1,
+  "id": "dj10-route-added",
+  "repo": "acme/portal",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/dj10-route-added"
+  },
+  "explains": "A new view, invoice_export, is added to billing/views.py and mapped in billing/urls.py with path(\"invoices/export/\", views.invoice_export). The changed lines are the new function and the new path() line. The new route is ANY /billing/invoices/export, under billing/ from config/urls.py. It is reached from the changed route line (the changed line is part of the route's evidence, so the chain is the route's own evidence) and from the new view. No web client names the URL: the client URLs are the list, the detail with a parameter, the void, the monthly report, the overdue and the cases URLs, and none of them fits the new literal path. Every client call fits some route, so the run can say that the added route is not called yet: added_route_uncalled, low risk and medium confidence, with the new path() line as evidence. The unit test imports billing.views, a changed file.",
+  "complete_for": [
+    "changed_symbol",
+    "caller",
+    "route",
+    "http_edge",
+    "screen",
+    "finding",
+    "unit_test"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/portal",
+      "path": "billing/views.py",
+      "symbol": "invoice_export",
+      "change": "added"
+    },
+    {
+      "type": "changed_symbol",
+      "repo": "acme/portal",
+      "path": "billing/urls.py",
+      "symbol": "urlpatterns"
+    },
+    {
+      "type": "caller",
+      "repo": "acme/portal",
+      "path": "billing/urls.py",
+      "symbol": "urlpatterns",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/urls.py",
+          "contains": "from . import views"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "billing/urls.py",
+          "contains": "views.invoice_export"
+        }
+      ]
+    },
+    {
+      "type": "unit_test",
+      "repo": "acme/portal",
+      "path": "billing/tests/test_views.py",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/tests/test_views.py",
+          "contains": "from billing import views"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "ANY",
+      "path": "/billing/invoices/export",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/urls.py",
+          "contains": "path(\"invoices/export/\", views.invoice_export, name=\"invoice-export\"),"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "config/urls.py",
+          "contains": "path(\"billing/\", include(\"billing.urls\")),"
+        }
+      ]
+    },
+    {
+      "type": "finding",
+      "kind": "added_route_uncalled",
+      "risk": "low",
+      "confidence": "medium",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/urls.py",
+          "contains": "path(\"invoices/export/\", views.invoice_export, name=\"invoice-export\"),"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "ANY",
+      "path": "/billing/invoices",
+      "why": "the list route did not change"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/portal-web",
+      "route": "/billing/invoices",
+      "why": "no call fits the new route"
+    }
+  ],
+  "not_established": []
+}

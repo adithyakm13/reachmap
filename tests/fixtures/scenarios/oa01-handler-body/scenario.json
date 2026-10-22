@@ -1,0 +1,11 @@
+{
+  "id": "oa01-handler-body",
+  "repo": "acme/ledger-api",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/oa01-handler-body"
+  },
+  "commit_message": "Return the currency with an invoice",
+  "notes": "Body change in get_invoice, a handler found by its operationId getInvoice."
+}

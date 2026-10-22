@@ -1,0 +1,802 @@
+{
+  "schema": 1,
+  "id": "sb10-context-path",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb10-context-path"
+  },
+  "explains": "server.servlet.context-path in application.properties moves from /ledger to /billing. The context path is put before every route of the application, so every route the table has at the head is reached: thirteen routes of InvoiceController (seven), StatusController (two), AuditController, CustomerController (two, the Kotlin one) and ReportController, all under /billing; the first line of each chain is the changed line, and the last line of the evidence of each route is the context path. The old routes under /ledger are gone. The web client still calls four of them (fetchInvoices, fetchInvoice, fetchTotal and fetchStatus): four removed routes still called, each a finding with high risk and low confidence, four http edges to routes that are removed, and after the change none of the four URLs fits a route, so the edge says so (four client_url_unmatched and a blocking edge_incomplete). The client calls are followed to the screens /invoices, /invoices/:invoiceId and /status.",
+  "complete_for": [
+    "changed_file",
+    "route",
+    "screen",
+    "http_edge",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "changed_file",
+      "repo": "acme/ledger",
+      "path": "src/main/resources/application.properties",
+      "role": "source"
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/billing/v1/invoices",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+          "contains": "@GetMapping"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+          "contains": "@RequestMapping(Paths.INVOICES)"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "INVOICES = BASE + \"/invoices\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "BASE = \"/v1\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/resources/application.properties",
+          "contains": "server.servlet.context-path=/billing"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/billing/v1/invoices/{id}",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+          "contains": "@GetMapping(\"/{id}\")"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+          "contains": "@RequestMapping(Paths.INVOICES)"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "INVOICES = BASE + \"/invoices\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "BASE = \"/v1\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/resources/application.properties",
+          "contains": "server.servlet.context-path=/billing"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/billing/v1/invoices/{id}/total",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+          "contains": "@GetMapping(\"/{id}/total\")"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+          "contains": "@RequestMapping(Paths.INVOICES)"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "INVOICES = BASE + \"/invoices\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "BASE = \"/v1\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/resources/application.properties",
+          "contains": "server.servlet.context-path=/billing"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/billing/v1/invoices/{id}/price",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+          "contains": "@GetMapping(\"/{id}/price\")"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+          "contains": "@RequestMapping(Paths.INVOICES)"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "INVOICES = BASE + \"/invoices\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "BASE = \"/v1\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/resources/application.properties",
+          "contains": "server.servlet.context-path=/billing"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "POST",
+      "path": "/billing/v1/invoices",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+          "contains": "@PostMapping"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+          "contains": "@RequestMapping(Paths.INVOICES)"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "INVOICES = BASE + \"/invoices\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "BASE = \"/v1\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/resources/application.properties",
+          "contains": "server.servlet.context-path=/billing"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "DELETE",
+      "path": "/billing/v1/invoices/{id}",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+          "contains": "@DeleteMapping(\"/{id}\")"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+          "contains": "@RequestMapping(Paths.INVOICES)"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "INVOICES = BASE + \"/invoices\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "BASE = \"/v1\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/resources/application.properties",
+          "contains": "server.servlet.context-path=/billing"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/billing/v1/invoices/{id}/lines",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+          "contains": "@RequestMapping(value = \"/{id}/lines\", method = RequestMethod.GET)"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+          "contains": "@RequestMapping(Paths.INVOICES)"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "INVOICES = BASE + \"/invoices\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "BASE = \"/v1\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/resources/application.properties",
+          "contains": "server.servlet.context-path=/billing"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/billing/v1/status",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/StatusController.java",
+          "contains": "@GetMapping(Paths.STATUS)"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "STATUS = BASE + \"/status\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "BASE = \"/v1\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/resources/application.properties",
+          "contains": "server.servlet.context-path=/billing"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/billing/v1/status/flags",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/StatusController.java",
+          "contains": "@GetMapping(Paths.STATUS + \"/flags\")"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "STATUS = BASE + \"/status\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "BASE = \"/v1\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/resources/application.properties",
+          "contains": "server.servlet.context-path=/billing"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/billing/audit",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/AuditController.java",
+          "contains": "@GetMapping"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/AuditController.java",
+          "contains": "@RequestMapping(\"/audit\")"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/resources/application.properties",
+          "contains": "server.servlet.context-path=/billing"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/billing/customers",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/kotlin/com/acme/ledger/api/CustomerController.kt",
+          "contains": "@GetMapping"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/kotlin/com/acme/ledger/api/CustomerController.kt",
+          "contains": "@RequestMapping(\"/customers\")"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/resources/application.properties",
+          "contains": "server.servlet.context-path=/billing"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/billing/customers/{id}",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/kotlin/com/acme/ledger/api/CustomerController.kt",
+          "contains": "@GetMapping(\"/{id}\")"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/kotlin/com/acme/ledger/api/CustomerController.kt",
+          "contains": "@RequestMapping(\"/customers\")"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/resources/application.properties",
+          "contains": "server.servlet.context-path=/billing"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/billing/reports/daily",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/ReportController.java",
+          "contains": "@GetMapping(\"${ledger.reports.base}/daily\")"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/resources/application.properties",
+          "contains": "ledger.reports.base=/reports"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/resources/application.properties",
+          "contains": "server.servlet.context-path=/billing"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "acme/ledger-web",
+      "route": "/invoices",
+      "chain": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/services/invoices.ts",
+          "contains": "return apiGet(INVOICES_URL);"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/screens/InvoicesScreen.tsx",
+          "contains": "import { fetchInvoices } from \"@/services/invoices\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/routes.tsx",
+          "contains": "import InvoicesScreen from \"./screens/InvoicesScreen\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/routes.tsx",
+          "contains": "<Route path=\"/invoices\" element={<InvoicesScreen />} />"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "acme/ledger-web",
+      "route": "/invoices/:invoiceId",
+      "chain": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/services/invoices.ts",
+          "contains": "return apiGet(INVOICE_URL(invoiceId));"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/screens/InvoiceScreen.tsx",
+          "contains": "import { fetchInvoice, fetchTotal } from \"@/services/invoices\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/routes.tsx",
+          "contains": "import InvoiceScreen from \"./screens/InvoiceScreen\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/routes.tsx",
+          "contains": "<Route path=\"/invoices/:invoiceId\" element={<InvoiceScreen />} />"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "acme/ledger-web",
+      "route": "/status",
+      "chain": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/services/status.ts",
+          "contains": "return apiGet(STATUS_URL);"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/screens/StatusScreen.tsx",
+          "contains": "import { fetchStatus } from \"@/services/status\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/routes.tsx",
+          "contains": "import StatusScreen from \"./screens/StatusScreen\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/routes.tsx",
+          "contains": "<Route path=\"/status\" element={<StatusScreen />} />"
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/ledger-web",
+        "path": "src/services/invoices.ts",
+        "contains": "return apiGet(INVOICES_URL);"
+      },
+      "via": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const INVOICES_URL = \"/ledger/v1/invoices\";"
+        }
+      ],
+      "to": {
+        "repo": "acme/ledger",
+        "method": "GET",
+        "path": "/ledger/v1/invoices",
+        "evidence": [
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+            "contains": "@GetMapping",
+            "at": "base"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+            "contains": "@RequestMapping(Paths.INVOICES)",
+            "at": "base"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/Paths.java",
+            "contains": "INVOICES = BASE + \"/invoices\";",
+            "at": "base"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/Paths.java",
+            "contains": "BASE = \"/v1\";",
+            "at": "base"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/resources/application.properties",
+            "contains": "server.servlet.context-path=/ledger",
+            "at": "base"
+          }
+        ],
+        "removed": true
+      }
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/ledger-web",
+        "path": "src/services/invoices.ts",
+        "contains": "return apiGet(INVOICE_URL(invoiceId));"
+      },
+      "via": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const INVOICE_URL = (invoiceId: string) =>"
+        }
+      ],
+      "to": {
+        "repo": "acme/ledger",
+        "method": "GET",
+        "path": "/ledger/v1/invoices/{id}",
+        "evidence": [
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+            "contains": "@GetMapping(\"/{id}\")",
+            "at": "base"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+            "contains": "@RequestMapping(Paths.INVOICES)",
+            "at": "base"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/Paths.java",
+            "contains": "INVOICES = BASE + \"/invoices\";",
+            "at": "base"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/Paths.java",
+            "contains": "BASE = \"/v1\";",
+            "at": "base"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/resources/application.properties",
+            "contains": "server.servlet.context-path=/ledger",
+            "at": "base"
+          }
+        ],
+        "removed": true
+      }
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/ledger-web",
+        "path": "src/services/invoices.ts",
+        "contains": "return apiGet(INVOICE_TOTAL_URL(invoiceId));"
+      },
+      "via": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const INVOICE_TOTAL_URL = (invoiceId: string) =>"
+        }
+      ],
+      "to": {
+        "repo": "acme/ledger",
+        "method": "GET",
+        "path": "/ledger/v1/invoices/{id}/total",
+        "evidence": [
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+            "contains": "@GetMapping(\"/{id}/total\")",
+            "at": "base"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+            "contains": "@RequestMapping(Paths.INVOICES)",
+            "at": "base"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/Paths.java",
+            "contains": "INVOICES = BASE + \"/invoices\";",
+            "at": "base"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/Paths.java",
+            "contains": "BASE = \"/v1\";",
+            "at": "base"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/resources/application.properties",
+            "contains": "server.servlet.context-path=/ledger",
+            "at": "base"
+          }
+        ],
+        "removed": true
+      }
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/ledger-web",
+        "path": "src/services/status.ts",
+        "contains": "return apiGet(STATUS_URL);"
+      },
+      "via": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const STATUS_URL = \"/ledger/v1/status\";"
+        }
+      ],
+      "to": {
+        "repo": "acme/ledger",
+        "method": "GET",
+        "path": "/ledger/v1/status",
+        "evidence": [
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/StatusController.java",
+            "contains": "@GetMapping(Paths.STATUS)",
+            "at": "base"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/Paths.java",
+            "contains": "STATUS = BASE + \"/status\";",
+            "at": "base"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/Paths.java",
+            "contains": "BASE = \"/v1\";",
+            "at": "base"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/resources/application.properties",
+            "contains": "server.servlet.context-path=/ledger",
+            "at": "base"
+          }
+        ],
+        "removed": true
+      }
+    },
+    {
+      "type": "finding",
+      "kind": "removed_route_still_called",
+      "risk": "high",
+      "confidence": "low",
+      "evidence": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/services/invoices.ts",
+          "contains": "return apiGet(INVOICES_URL);"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+          "contains": "@GetMapping",
+          "at": "base"
+        }
+      ]
+    },
+    {
+      "type": "finding",
+      "kind": "removed_route_still_called",
+      "risk": "high",
+      "confidence": "low",
+      "evidence": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/services/invoices.ts",
+          "contains": "return apiGet(INVOICE_URL(invoiceId));"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+          "contains": "@GetMapping(\"/{id}\")",
+          "at": "base"
+        }
+      ]
+    },
+    {
+      "type": "finding",
+      "kind": "removed_route_still_called",
+      "risk": "high",
+      "confidence": "low",
+      "evidence": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/services/invoices.ts",
+          "contains": "return apiGet(INVOICE_TOTAL_URL(invoiceId));"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+          "contains": "@GetMapping(\"/{id}/total\")",
+          "at": "base"
+        }
+      ]
+    },
+    {
+      "type": "finding",
+      "kind": "removed_route_still_called",
+      "risk": "high",
+      "confidence": "low",
+      "evidence": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/services/status.ts",
+          "contains": "return apiGet(STATUS_URL);"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/StatusController.java",
+          "contains": "@GetMapping(Paths.STATUS)",
+          "at": "base"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "finding",
+      "kind": "added_route_uncalled",
+      "why": "client calls fit no route, so no added route is called uncalled"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "edge_incomplete",
+      "subject": "edge:http:acme/ledger-web:acme/ledger",
+      "blocking": true
+    },
+    {
+      "kind": "client_url_unmatched",
+      "subject": "acme/ledger-web:src/services/invoices.ts:5",
+      "blocking": false
+    },
+    {
+      "kind": "client_url_unmatched",
+      "subject": "acme/ledger-web:src/services/invoices.ts:9",
+      "blocking": false
+    },
+    {
+      "kind": "client_url_unmatched",
+      "subject": "acme/ledger-web:src/services/invoices.ts:13",
+      "blocking": false
+    },
+    {
+      "kind": "client_url_unmatched",
+      "subject": "acme/ledger-web:src/services/status.ts:5",
+      "blocking": false
+    }
+  ]
+}

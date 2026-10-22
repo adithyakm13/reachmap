@@ -1,0 +1,172 @@
+{
+  "schema": 1,
+  "id": "s06-nested-mount-handler",
+  "repo": "acme/api",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s06-nested-mount-handler"
+  },
+  "explains": "get_invoice in services/billing/app/routers/invoices.py changes (its body, lines inside the function; the nested _load is not touched). It is declared with @router.get(\"/{invoice_id}\") on the invoices router. The route is composed on the router it is declared on, following the mounts outwards: invoices_router is included in billing_router with prefix /invoices (billing.py), billing_router in api_router with prefix /billing (api.py), api_router in app with prefix /api (main.py). Full path: /api + /billing + /invoices + /{invoice_id} = GET /api/billing/invoices/{invoice_id}. On the web side, invoiceUrl(invoiceId) in endpoints.ts builds `/api/billing/invoices/${invoiceId}`, whose last segment is a parameter, so it matches only the parameter route; fetchInvoice in billing/api.ts calls it and InvoiceDetailPage calls fetchInvoice. That page is mounted at /billing/invoices/:invoiceId and also at /cases/:caseId/invoices/:invoiceId: one screen with an also_mounted route. INVOICES_URL (/api/billing/invoices) has no parameter segment and matches only the list route, so InvoiceListPage and ReportsHomePage, which call it, are not affected.",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "http_edge",
+    "screen"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/invoices.py",
+      "symbol": "get_invoice"
+    },
+    {
+      "type": "route",
+      "repo": "acme/api",
+      "method": "GET",
+      "path": "/api/billing/invoices/{invoice_id}",
+      "evidence": [
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/routers/invoices.py",
+          "contains": "@router.get(\"/{invoice_id}\")"
+        },
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/routers/billing.py",
+          "contains": "billing_router.include_router(invoices_router, prefix=\"/invoices\")"
+        },
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/api.py",
+          "contains": "api_router.include_router(billing_router, prefix=\"/billing\")"
+        },
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/main.py",
+          "contains": "app.include_router(api_router, prefix=\"/api\")"
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/web",
+        "path": "src/modules/billing/api.ts",
+        "contains": "apiGet<Invoice>(invoiceUrl(invoiceId))"
+      },
+      "via": [
+        {
+          "repo": "acme/web",
+          "path": "src/api/endpoints.ts",
+          "contains": "`/api/billing/invoices/${invoiceId}`"
+        }
+      ],
+      "to": {
+        "repo": "acme/api",
+        "method": "GET",
+        "path": "/api/billing/invoices/{invoice_id}",
+        "evidence": [
+          {
+            "repo": "acme/api",
+            "path": "services/billing/app/routers/invoices.py",
+            "contains": "@router.get(\"/{invoice_id}\")"
+          },
+          {
+            "repo": "acme/api",
+            "path": "services/billing/app/routers/billing.py",
+            "contains": "billing_router.include_router(invoices_router, prefix=\"/invoices\")"
+          },
+          {
+            "repo": "acme/api",
+            "path": "services/billing/app/api.py",
+            "contains": "api_router.include_router(billing_router, prefix=\"/billing\")"
+          },
+          {
+            "repo": "acme/api",
+            "path": "services/billing/app/main.py",
+            "contains": "app.include_router(api_router, prefix=\"/api\")"
+          }
+        ]
+      }
+    },
+    {
+      "type": "screen",
+      "repo": "acme/web",
+      "route": "/billing/invoices/:invoiceId",
+      "also_mounted": [
+        "/cases/:caseId/invoices/:invoiceId"
+      ],
+      "also_mounted_evidence": [
+        {
+          "repo": "acme/web",
+          "path": "src/modules/cases/routes.tsx",
+          "contains": "import InvoiceDetailPage from \"@/modules/billing/pages/InvoiceDetailPage\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/cases/routes.tsx",
+          "contains": "<Route path=\"/cases/:caseId/invoices/:invoiceId\" element={<InvoiceDetailPage />} />"
+        }
+      ],
+      "chain": [
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/api.ts",
+          "contains": "apiGet<Invoice>(invoiceUrl(invoiceId))"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
+          "contains": "import { fetchAuditLog, fetchInvoice } from \"../api\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/routes.tsx",
+          "contains": "import InvoiceDetailPage from \"./pages/InvoiceDetailPage\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/routes.tsx",
+          "contains": "<Route path=\"/billing/invoices/:invoiceId\" element={<InvoiceDetailPage />} />"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/web",
+        "path": "src/modules/billing/api.ts",
+        "contains": "apiGet<Invoice[]>(INVOICES_URL)"
+      },
+      "to": {
+        "repo": "acme/api",
+        "method": "GET",
+        "path": "/api/billing/invoices/{invoice_id}"
+      },
+      "why": "INVOICES_URL has no parameter segment, so it cannot match a route parameter; it matches the list route"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/web",
+      "route": "/billing/invoices",
+      "why": "calls the list route GET /api/billing/invoices, not the changed route"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/web",
+      "route": "/reports",
+      "why": "calls the list route GET /api/billing/invoices, not the changed route"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "edge_unfollowed",
+      "subject": "edge:event:acme/api:acme/worker",
+      "blocking": false
+    }
+  ]
+}

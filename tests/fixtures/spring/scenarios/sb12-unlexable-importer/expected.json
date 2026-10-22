@@ -1,0 +1,216 @@
+{
+  "schema": 1,
+  "id": "sb12-unlexable-importer",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb12-unlexable-importer"
+  },
+  "explains": "InvoiceService.total changes (as in sb01) and a file is added that imports InvoiceService and does not lex (Broken.java: a string is never closed). A file that cannot be read may import the changed class, so the importers found are the ones that could be read and the list is not the whole list: a blocking parse_degraded for Broken.java, and the answer is not complete. What was found stays: InvoiceController (the handler total, GET /ledger/v1/invoices/{id}/total), the exclusion of AuditController, the unit tests, and the screen reached through the client call.",
+  "complete_for": [
+    "caller",
+    "unit_test",
+    "route",
+    "screen",
+    "http_edge",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/ledger",
+      "path": "src/main/java/com/acme/ledger/service/InvoiceService.java",
+      "symbol": "InvoiceService.total",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/service/InvoiceService.java",
+          "contains": "return id.length() * 120;"
+        }
+      ]
+    },
+    {
+      "type": "changed_file",
+      "repo": "acme/ledger",
+      "path": "src/main/java/com/acme/ledger/support/Broken.java",
+      "role": "source"
+    },
+    {
+      "type": "caller",
+      "repo": "acme/ledger",
+      "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+      "symbol": "InvoiceController.total",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+          "contains": "import com.acme.ledger.service.InvoiceService;"
+        }
+      ]
+    },
+    {
+      "type": "unit_test",
+      "repo": "acme/ledger",
+      "path": "src/test/java/com/acme/ledger/service/InvoiceServiceTest.java",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/test/java/com/acme/ledger/service/InvoiceServiceTest.java",
+          "contains": "private final InvoiceService service = new InvoiceService();"
+        }
+      ]
+    },
+    {
+      "type": "unit_test",
+      "repo": "acme/ledger",
+      "path": "src/test/java/com/acme/ledger/api/InvoiceControllerTest.java",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/test/java/com/acme/ledger/api/InvoiceControllerTest.java",
+          "contains": "import com.acme.ledger.service.InvoiceService;"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/ledger/v1/invoices/{id}/total",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+          "contains": "@GetMapping(\"/{id}/total\")"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+          "contains": "@RequestMapping(Paths.INVOICES)"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "INVOICES = BASE + \"/invoices\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "BASE = \"/v1\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/resources/application.properties",
+          "contains": "server.servlet.context-path=/ledger"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "acme/ledger-web",
+      "route": "/invoices/:invoiceId",
+      "chain": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+          "contains": "import com.acme.ledger.service.InvoiceService;"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/services/invoices.ts",
+          "contains": "return apiGet(INVOICE_TOTAL_URL(invoiceId));"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/screens/InvoiceScreen.tsx",
+          "contains": "import { fetchInvoice, fetchTotal } from \"@/services/invoices\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/routes.tsx",
+          "contains": "import InvoiceScreen from \"./screens/InvoiceScreen\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/routes.tsx",
+          "contains": "<Route path=\"/invoices/:invoiceId\" element={<InvoiceScreen />} />"
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/ledger-web",
+        "path": "src/services/invoices.ts",
+        "contains": "return apiGet(INVOICE_TOTAL_URL(invoiceId));"
+      },
+      "via": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const INVOICE_TOTAL_URL = (invoiceId: string) =>"
+        }
+      ],
+      "to": {
+        "repo": "acme/ledger",
+        "method": "GET",
+        "path": "/ledger/v1/invoices/{id}/total",
+        "evidence": [
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+            "contains": "@GetMapping(\"/{id}/total\")"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+            "contains": "@RequestMapping(Paths.INVOICES)"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/Paths.java",
+            "contains": "INVOICES = BASE + \"/invoices\";"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/Paths.java",
+            "contains": "BASE = \"/v1\";"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/resources/application.properties",
+            "contains": "server.servlet.context-path=/ledger"
+          }
+        ]
+      }
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "caller",
+      "repo": "acme/ledger",
+      "path": "src/main/java/com/acme/ledger/api/AuditController.java",
+      "why": "it imports InvoiceService and spells only list",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/AuditController.java",
+          "contains": "import com.acme.ledger.service.InvoiceService;"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/service/InvoiceService.java",
+          "contains": "@Service"
+        }
+      ]
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "parse_degraded",
+      "subject": "src/main/java/com/acme/ledger/support/Broken.java",
+      "blocking": true
+    }
+  ]
+}

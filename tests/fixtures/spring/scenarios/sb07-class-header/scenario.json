@@ -1,0 +1,11 @@
+{
+  "id": "sb07-class-header",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb07-class-header"
+  },
+  "commit_message": "InvoiceController allows cross origin calls",
+  "notes": "An annotation on the class applies to every handler of the class."
+}

@@ -1,0 +1,135 @@
+{
+  "schema": 1,
+  "id": "nx07-pages-router-app",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx07-pages-router-app"
+  },
+  "explains": "The wrapper div of src/pages/_app.tsx (inside MyApp) changes. In the Pages Router _app wraps every page, and it is not a route itself. The pages are the files of src/pages that are not _app, _document or _error and are not under pages/api: legacy/index.tsx (/legacy), legacy/[id].tsx (/legacy/:id), legacy/archive/[...path].tsx (/legacy/archive/*, a catch-all) and 404.tsx (/404). The chain runs from the changed line to the line that renders the page component (<Component />) and on to the page's default export. The App Router screens are not wrapped by _app, and the Pages Router API files are not pages.",
+  "complete_for": [
+    "changed_symbol",
+    "caller",
+    "screen",
+    "route"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "nx/shop",
+      "path": "src/pages/_app.tsx",
+      "symbol": "MyApp"
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/legacy",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/pages/_app.tsx",
+          "contains": "<div className=\"legacy legacy-wide\">"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/pages/_app.tsx",
+          "contains": "<Component {...pageProps} />"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/pages/legacy/index.tsx",
+          "contains": "export default function LegacyHome"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/legacy/:id",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/pages/_app.tsx",
+          "contains": "<div className=\"legacy legacy-wide\">"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/pages/_app.tsx",
+          "contains": "<Component {...pageProps} />"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/pages/legacy/[id].tsx",
+          "contains": "export default function LegacyItem"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/legacy/archive/*",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/pages/_app.tsx",
+          "contains": "<div className=\"legacy legacy-wide\">"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/pages/_app.tsx",
+          "contains": "<Component {...pageProps} />"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/pages/legacy/archive/[...path].tsx",
+          "contains": "export default function ArchivePage"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/404",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/pages/_app.tsx",
+          "contains": "<div className=\"legacy legacy-wide\">"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/pages/_app.tsx",
+          "contains": "<Component {...pageProps} />"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/pages/404.tsx",
+          "contains": "export default function NotFoundPage"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/",
+      "why": "an App Router page"
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/products",
+      "why": "an App Router page"
+    },
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "ANY",
+      "path": "/api/legacy/status",
+      "why": "an API file is not a page"
+    }
+  ],
+  "not_established": []
+}

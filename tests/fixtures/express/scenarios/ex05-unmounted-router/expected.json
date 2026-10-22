@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "id": "ex05-unmounted-router",
+  "repo": "ex/orders",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex05-unmounted-router"
+  },
+  "explains": "draft in src/controllers/draft.ts reports a version. src/routes/draft.ts imports it and wires it on draftRouter, a router that no app or router mounts: src/app.ts holds the import and the mount only in comments, and a comment is not code. So no route is claimed for the handler (GET /draft is not a route of this service) and the run says so: router_unmounted, naming the file and the router variable. Nothing else is reached.",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "screen",
+    "http_edge",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "ex/orders",
+      "path": "src/controllers/draft.ts",
+      "symbol": "draft"
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/draft",
+      "why": "the mount in app.ts is a comment"
+    },
+    {
+      "type": "route",
+      "repo": "ex/orders",
+      "method": "GET",
+      "path": "/",
+      "why": "the router is not mounted, so its path is not a route"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "router_unmounted",
+      "subject": "src/routes/draft.ts:draftRouter",
+      "blocking": false
+    }
+  ]
+}

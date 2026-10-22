@@ -1,0 +1,11 @@
+{
+  "id": "sb02-handler-body",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb02-handler-body"
+  },
+  "commit_message": "GET /invoices/{id} trims the invoice",
+  "notes": "A change inside one handler reaches the routes of that handler, not its siblings."
+}

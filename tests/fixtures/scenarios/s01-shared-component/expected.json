@@ -1,0 +1,219 @@
+{
+  "schema": 1,
+  "id": "s01-shared-component",
+  "repo": "acme/web",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s01-shared-component"
+  },
+  "explains": "StatusBadge.tsx is the changed file; only its body changes, so every file that imports StatusBadge is affected. Importers by specifier: InvoiceListPage uses the alias @/components/StatusBadge, InvoiceDetailPage and CaseDetailPage use the alias @components/StatusBadge, CaseListPage uses the relative path ../../../components/StatusBadge, and the unit test src/components/__tests__/StatusBadge.test.tsx uses ../StatusBadge. tsconfig.json maps both aliases to src/components (the stale jsconfig.json points at a folder that does not exist and must be ignored). Each importing page is mounted by its module routes file: billing mounts InvoiceListPage at /billing/invoices and InvoiceDetailPage at /billing/invoices/:invoiceId (also mounted under cases at /cases/:caseId/invoices/:invoiceId, one screen); cases mounts CaseListPage at /cases and CaseDetailPage at /cases/:caseId. SettlementsPage, ReportsHomePage and ScheduleReportPage do not import StatusBadge, so /billing/settlements, /reports and /reports/schedule are not affected. The test file is listed as a test, not as a caller or a screen.",
+  "complete_for": [
+    "changed_symbol",
+    "caller",
+    "screen",
+    "unit_test"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/web",
+      "path": "src/components/StatusBadge.tsx",
+      "symbol": "StatusBadge"
+    },
+    {
+      "type": "caller",
+      "repo": "acme/web",
+      "path": "src/modules/billing/pages/InvoiceListPage.tsx",
+      "symbol": "InvoiceListPage",
+      "evidence": [
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/pages/InvoiceListPage.tsx",
+          "contains": "import { StatusBadge } from \"@/components/StatusBadge\";"
+        }
+      ]
+    },
+    {
+      "type": "caller",
+      "repo": "acme/web",
+      "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
+      "symbol": "InvoiceDetailPage",
+      "evidence": [
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
+          "contains": "import { StatusBadge } from \"@components/StatusBadge\";"
+        }
+      ]
+    },
+    {
+      "type": "caller",
+      "repo": "acme/web",
+      "path": "src/modules/cases/pages/CaseListPage.tsx",
+      "symbol": "CaseListPage",
+      "evidence": [
+        {
+          "repo": "acme/web",
+          "path": "src/modules/cases/pages/CaseListPage.tsx",
+          "contains": "import { StatusBadge } from \"../../../components/StatusBadge\";"
+        }
+      ]
+    },
+    {
+      "type": "caller",
+      "repo": "acme/web",
+      "path": "src/modules/cases/pages/CaseDetailPage.tsx",
+      "symbol": "CaseDetailPage",
+      "evidence": [
+        {
+          "repo": "acme/web",
+          "path": "src/modules/cases/pages/CaseDetailPage.tsx",
+          "contains": "import { StatusBadge } from \"@components/StatusBadge\";"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "acme/web",
+      "route": "/billing/invoices",
+      "chain": [
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/pages/InvoiceListPage.tsx",
+          "contains": "import { StatusBadge } from \"@/components/StatusBadge\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/routes.tsx",
+          "contains": "import InvoiceListPage from \"./pages/InvoiceListPage\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/routes.tsx",
+          "contains": "<Route path=\"/billing/invoices\" element={<InvoiceListPage />} />"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "acme/web",
+      "route": "/billing/invoices/:invoiceId",
+      "also_mounted": [
+        "/cases/:caseId/invoices/:invoiceId"
+      ],
+      "also_mounted_evidence": [
+        {
+          "repo": "acme/web",
+          "path": "src/modules/cases/routes.tsx",
+          "contains": "import InvoiceDetailPage from \"@/modules/billing/pages/InvoiceDetailPage\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/cases/routes.tsx",
+          "contains": "<Route path=\"/cases/:caseId/invoices/:invoiceId\" element={<InvoiceDetailPage />} />"
+        }
+      ],
+      "chain": [
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/pages/InvoiceDetailPage.tsx",
+          "contains": "import { StatusBadge } from \"@components/StatusBadge\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/routes.tsx",
+          "contains": "import InvoiceDetailPage from \"./pages/InvoiceDetailPage\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/billing/routes.tsx",
+          "contains": "<Route path=\"/billing/invoices/:invoiceId\" element={<InvoiceDetailPage />} />"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "acme/web",
+      "route": "/cases",
+      "chain": [
+        {
+          "repo": "acme/web",
+          "path": "src/modules/cases/pages/CaseListPage.tsx",
+          "contains": "import { StatusBadge } from \"../../../components/StatusBadge\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/cases/routes.tsx",
+          "contains": "import CaseListPage from \"./pages/CaseListPage\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/cases/routes.tsx",
+          "contains": "<Route path=\"/cases\" element={<CaseListPage />} />"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "acme/web",
+      "route": "/cases/:caseId",
+      "chain": [
+        {
+          "repo": "acme/web",
+          "path": "src/modules/cases/pages/CaseDetailPage.tsx",
+          "contains": "import { StatusBadge } from \"@components/StatusBadge\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/cases/routes.tsx",
+          "contains": "import CaseDetailPage from \"./pages/CaseDetailPage\";"
+        },
+        {
+          "repo": "acme/web",
+          "path": "src/modules/cases/routes.tsx",
+          "contains": "<Route path=\"/cases/:caseId\" element={<CaseDetailPage />} />"
+        }
+      ]
+    },
+    {
+      "type": "unit_test",
+      "repo": "acme/web",
+      "path": "src/components/__tests__/StatusBadge.test.tsx",
+      "evidence": [
+        {
+          "repo": "acme/web",
+          "path": "src/components/__tests__/StatusBadge.test.tsx",
+          "contains": "import { StatusBadge } from \"../StatusBadge\";"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "screen",
+      "repo": "acme/web",
+      "route": "/billing/settlements",
+      "why": "SettlementsPage does not import StatusBadge"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/web",
+      "route": "/reports",
+      "why": "no page in the reports module imports StatusBadge"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/web",
+      "route": "/reports/schedule",
+      "why": "ScheduleReportPage (lazy) does not import StatusBadge"
+    },
+    {
+      "type": "caller",
+      "repo": "acme/web",
+      "path": "src/components/__tests__/StatusBadge.test.tsx",
+      "why": "a test file is listed as a unit test, never as a caller or a screen"
+    }
+  ],
+  "not_established": []
+}

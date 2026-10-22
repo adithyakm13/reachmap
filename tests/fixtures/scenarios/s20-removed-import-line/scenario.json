@@ -1,0 +1,11 @@
+{
+  "id": "s20-removed-import-line",
+  "repo": "acme/web",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s20-removed-import-line"
+  },
+  "commit_message": "Drop the truncate import from the invoice list",
+  "notes": "A removed import line whose module path is imported by 57 files."
+}

@@ -1,0 +1,71 @@
+{
+  "schema": 1,
+  "id": "sb11-unlexable-controller",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb11-unlexable-controller"
+  },
+  "explains": "InvoiceController.java stops lexing: a string in the handler list is never closed. A file that does not lex cannot be read for its controllers and mappings, so no route is claimed from it, and the run says what it could not establish: a blocking parse_degraded for the file. The seven routes of the controller are not found at the head, and they are not called removed: a route table that is not whole does not turn the routes of an unreadable file into removed routes (the shared guard says so with one blocking route_change_withheld for the repository), so the client calls (fetchInvoices, fetchInvoice, fetchTotal) are not findings of a removed route. The answer is not complete: an empty list of routes is not no route. InvoiceControllerTest uses the controller and is still a unit test.",
+  "complete_for": [
+    "unit_test",
+    "route",
+    "screen",
+    "http_edge",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "changed_file",
+      "repo": "acme/ledger",
+      "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+      "role": "source"
+    },
+    {
+      "type": "unit_test",
+      "repo": "acme/ledger",
+      "path": "src/test/java/com/acme/ledger/api/InvoiceControllerTest.java",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/test/java/com/acme/ledger/api/InvoiceControllerTest.java",
+          "contains": "private final InvoiceController controller = new InvoiceController(new InvoiceService(), new PricingImpl());"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/ledger/v1/invoices",
+      "why": "the file does not lex, so no route is claimed from it"
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/ledger/v1/invoices/{id}/total",
+      "why": "the file does not lex, so no route is claimed from it"
+    },
+    {
+      "type": "finding",
+      "kind": "removed_route_still_called",
+      "why": "the routes of a file that could not be read were not read, they were not deleted"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "parse_degraded",
+      "subject": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+      "blocking": true
+    },
+    {
+      "kind": "route_change_withheld",
+      "subject": "acme/ledger",
+      "blocking": true
+    }
+  ]
+}

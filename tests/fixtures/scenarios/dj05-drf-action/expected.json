@@ -1,0 +1,85 @@
+{
+  "schema": 1,
+  "id": "dj05-drf-action",
+  "repo": "acme/portal",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/dj05-drf-action"
+  },
+  "explains": "The body of the void action of InvoiceViewSet in billing/api.py changes (it is the method InvoiceViewSet.void, decorated with @action(detail=True, methods=[\"post\"])). The viewset is registered on a DefaultRouter in billing/api_urls.py: router.register(r\"invoices\", api.InvoiceViewSet, basename=\"invoice\"), and the router's urls are included at the empty path of that URLconf, which config/urls.py includes under api/v1/. The router makes the routes of a viewset from its actions: the list and detail routes from the list and retrieve actions of the mixins, and one route per @action. A change inside one method reaches the route of that method only. This is a detail action, so the path is invoices/{pk}/void, and the method is POST: POST /api/v1/invoices/{pk}/void, with the decorator line, the register line, the include of the router and the include in config/urls.py as evidence. The overdue action, the list and the detail routes, and the API root view are not reached. The web client does not call this route.",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "http_edge",
+    "screen",
+    "unit_test"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/portal",
+      "path": "billing/api.py",
+      "symbol": "InvoiceViewSet.void"
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "POST",
+      "path": "/api/v1/invoices/{pk}/void",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/api.py",
+          "contains": "@action(detail=True, methods=[\"post\"])"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "billing/api_urls.py",
+          "contains": "router.register(r\"invoices\", api.InvoiceViewSet, basename=\"invoice\")"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "billing/api_urls.py",
+          "contains": "path(\"\", include(router.urls)),"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "config/urls.py",
+          "contains": "path(\"api/v1/\", include(\"billing.api_urls\")),"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "GET",
+      "path": "/api/v1/invoices/overdue",
+      "why": "another action of the same viewset"
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "GET",
+      "path": "/api/v1/invoices",
+      "why": "the list route of the viewset: the change is in one method"
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "GET",
+      "path": "/api/v1/invoices/{pk}",
+      "why": "the detail route of the viewset: the change is in one method"
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "GET",
+      "path": "/api/v1",
+      "why": "the API root view of the router"
+    }
+  ],
+  "not_established": []
+}

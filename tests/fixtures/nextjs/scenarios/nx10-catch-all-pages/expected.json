@@ -1,0 +1,102 @@
+{
+  "schema": 1,
+  "id": "nx10-catch-all-pages",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx10-catch-all-pages"
+  },
+  "explains": "Markdown.tsx adds a class to its article. Two pages import it: src/app/docs/[...slug]/page.tsx and src/app/help/[[...topic]]/page.tsx. A catch-all folder [...slug] answers every path below /docs, written /docs/* (a trailing star, as the React Router adapter writes a splat). An optional catch-all [[...topic]] also answers the folder itself: /help and /help/*. One page file is one screen: /docs/* has one route, and /help is the smaller of the two paths of the help page, with /help/* also mounted, both cited by the one chain. The pages that do not import Markdown are not reached.",
+  "complete_for": [
+    "changed_symbol",
+    "caller",
+    "screen"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "nx/shop",
+      "path": "src/components/Markdown.tsx",
+      "symbol": "Markdown"
+    },
+    {
+      "type": "caller",
+      "repo": "nx/shop",
+      "path": "src/app/docs/[...slug]/page.tsx",
+      "symbol": "DocsPage",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/docs/[...slug]/page.tsx",
+          "contains": "import Markdown from \"@/components/Markdown\";"
+        }
+      ]
+    },
+    {
+      "type": "caller",
+      "repo": "nx/shop",
+      "path": "src/app/help/[[...topic]]/page.tsx",
+      "symbol": "HelpPage",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/help/[[...topic]]/page.tsx",
+          "contains": "import Markdown from \"@/components/Markdown\";"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/docs/*",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/docs/[...slug]/page.tsx",
+          "contains": "import Markdown from \"@/components/Markdown\";"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/docs/[...slug]/page.tsx",
+          "contains": "export default function DocsPage"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/help",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/help/[[...topic]]/page.tsx",
+          "contains": "import Markdown from \"@/components/Markdown\";"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/help/[[...topic]]/page.tsx",
+          "contains": "export default function HelpPage"
+        }
+      ],
+      "also_mounted": [
+        "/help/*"
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/products",
+      "why": "its page does not import Markdown"
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/",
+      "why": "its page does not import Markdown"
+    }
+  ],
+  "not_established": []
+}

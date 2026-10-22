@@ -1,0 +1,12 @@
+{
+  "id": "s16-no-merge-base",
+  "repo": "acme/web",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s16-no-merge-base"
+  },
+  "commit_message": "Rewrite the client from scratch on an unrelated history",
+  "notes": "Head is an orphan branch: no merge base with main, so no pre-change version.",
+  "orphan": true
+}

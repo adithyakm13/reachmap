@@ -1,0 +1,113 @@
+{
+  "schema": 1,
+  "id": "oa04-added-operation",
+  "repo": "acme/ledger-api",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/oa04-added-operation"
+  },
+  "explains": "The change adds the operation GET /invoices/{invoiceId}/pdf (operationId getInvoicePdf) to the spec and the function get_invoice_pdf to app/handlers/invoices.py, with the import of statement_pdf that it needs. The spec diff adds the route GET /v1/invoices/{invoiceId}/pdf; the handler is found by name (get_invoice_pdf is the snake_case form of getInvoicePdf). The other handlers of the module are not reached: the only changed line outside a declaration is an import statement, and only get_invoice_pdf spells the name it binds. No client in the workspace names the URL: the web copy of the spec does not have the operation, and every call the web app makes through its generated client fits a route (the names get, list and downloadStatement are dropped), so the added route is said to be uncalled, low risk and medium confidence, cited at the new method key.",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "http_edge",
+    "screen",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/ledger-api",
+      "path": "app/handlers/invoices.py",
+      "symbol": "get_invoice_pdf",
+      "change": "added"
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger-api",
+      "method": "GET",
+      "path": "/v1/invoices/{invoiceId}/pdf",
+      "evidence": [
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"get\": {"
+        },
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"/invoices/{invoiceId}/pdf\": {"
+        },
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"url\": \"https://ledger.example.invalid/v1\""
+        }
+      ]
+    },
+    {
+      "type": "finding",
+      "kind": "added_route_uncalled",
+      "risk": "low",
+      "confidence": "medium",
+      "evidence": [
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"get\": {"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "acme/ledger-api",
+      "method": "GET",
+      "path": "/v1/invoices/{invoiceId}",
+      "why": "get_invoice is untouched: the import line the change adds binds statement_pdf, which it does not use"
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger-api",
+      "method": "GET",
+      "path": "/v1/invoices",
+      "why": "list_invoices is untouched"
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger-api",
+      "method": "POST",
+      "path": "/v1/invoices",
+      "why": "create_invoice is untouched"
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger-api",
+      "method": "DELETE",
+      "path": "/v1/invoices/{invoiceId}",
+      "why": "void_invoice is untouched"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "not_distinctive",
+      "subject": "acme/ledger-web:downloadStatement",
+      "blocking": false,
+      "definitions": 4
+    },
+    {
+      "kind": "not_distinctive",
+      "subject": "acme/ledger-web:get",
+      "blocking": false,
+      "definitions": 2
+    },
+    {
+      "kind": "not_distinctive",
+      "subject": "acme/ledger-web:list",
+      "blocking": false,
+      "definitions": 1
+    }
+  ]
+}

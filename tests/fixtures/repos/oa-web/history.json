@@ -1,0 +1,7 @@
+{
+  "slug": "oa-web",
+  "name": "acme/ledger-web",
+  "steps": [
+    {"dir": "01-web", "branch": "main", "message": "Add the ledger web app with the generated API client"}
+  ]
+}

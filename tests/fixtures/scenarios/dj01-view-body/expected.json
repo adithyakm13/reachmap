@@ -1,0 +1,187 @@
+{
+  "schema": 1,
+  "id": "dj01-view-body",
+  "repo": "acme/portal",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/dj01-view-body"
+  },
+  "explains": "invoice_list in billing/views.py changes (its body: the line that builds the answer). It is a plain function view, and nothing restricts its methods, so the route answers every method: ANY. The URLconf says where it is mounted: config/urls.py includes billing.urls under billing/ (a string module path), and billing/urls.py has path(\"invoices/\", views.invoice_list). The full path is billing/ + invoices/, normalised without the trailing slash: ANY /billing/invoices, with the evidence of the path() line and then the include line. config/urls.py also imports billing.views, as billing_views, but only to name legacy_year, so it is excluded by narrowing; billing/urls.py names invoice_list and is the caller. The test file imports billing.views and is a unit test. On the web side INVOICES_URL is \"/billing/invoices/\" (the trailing slash is dropped), apiGet is a GET, and it fits only the list route; fetchInvoices is called by InvoiceListPage, mounted at /billing/invoices. The other pages call other routes (the detail route has a parameter segment the client literal list URL cannot fit, and the monthly report has its own route) and are not reached.",
+  "complete_for": [
+    "changed_symbol",
+    "caller",
+    "route",
+    "http_edge",
+    "screen",
+    "unit_test"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/portal",
+      "path": "billing/views.py",
+      "symbol": "invoice_list"
+    },
+    {
+      "type": "caller",
+      "repo": "acme/portal",
+      "path": "billing/urls.py",
+      "symbol": "urlpatterns",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/urls.py",
+          "contains": "from . import views"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "billing/urls.py",
+          "contains": "views.invoice_list"
+        }
+      ]
+    },
+    {
+      "type": "unit_test",
+      "repo": "acme/portal",
+      "path": "billing/tests/test_views.py",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/tests/test_views.py",
+          "contains": "from billing import views"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "ANY",
+      "path": "/billing/invoices",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "billing/urls.py",
+          "contains": "path(\"invoices/\", views.invoice_list, name=\"invoice-list\"),"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "config/urls.py",
+          "contains": "path(\"billing/\", include(\"billing.urls\")),"
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/portal-web",
+        "path": "src/modules/billing/api.ts",
+        "contains": "apiGet<Invoice[]>(INVOICES_URL)"
+      },
+      "via": [
+        {
+          "repo": "acme/portal-web",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const INVOICES_URL = \"/billing/invoices/\";"
+        }
+      ],
+      "to": {
+        "repo": "acme/portal",
+        "method": "ANY",
+        "path": "/billing/invoices",
+        "evidence": [
+          {
+            "repo": "acme/portal",
+            "path": "billing/urls.py",
+            "contains": "path(\"invoices/\", views.invoice_list, name=\"invoice-list\"),"
+          },
+          {
+            "repo": "acme/portal",
+            "path": "config/urls.py",
+            "contains": "path(\"billing/\", include(\"billing.urls\")),"
+          }
+        ]
+      }
+    },
+    {
+      "type": "screen",
+      "repo": "acme/portal-web",
+      "route": "/billing/invoices",
+      "chain": [
+        {
+          "repo": "acme/portal-web",
+          "path": "src/modules/billing/api.ts",
+          "contains": "apiGet<Invoice[]>(INVOICES_URL)"
+        },
+        {
+          "repo": "acme/portal-web",
+          "path": "src/modules/billing/pages/InvoiceListPage.tsx",
+          "contains": "import { fetchInvoices, fetchOverdue } from \"../api\";"
+        },
+        {
+          "repo": "acme/portal-web",
+          "path": "src/modules/billing/routes.tsx",
+          "contains": "import InvoiceListPage from \"./pages/InvoiceListPage\";"
+        },
+        {
+          "repo": "acme/portal-web",
+          "path": "src/modules/billing/routes.tsx",
+          "contains": "<Route path=\"/billing/invoices\" element={<InvoiceListPage />} />"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "caller",
+      "repo": "acme/portal",
+      "path": "config/urls.py",
+      "why": "imports billing.views as billing_views and uses only legacy_year",
+      "evidence": [
+        {
+          "repo": "acme/portal",
+          "path": "config/urls.py",
+          "contains": "from billing import views as billing_views"
+        },
+        {
+          "repo": "acme/portal",
+          "path": "billing/views.py",
+          "contains": "def invoice_list(request):"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "ANY",
+      "path": "/billing/reports/monthly",
+      "why": "a route of another view"
+    },
+    {
+      "type": "route",
+      "repo": "acme/portal",
+      "method": "ANY",
+      "path": "/billing",
+      "why": "the index view of the same app is another route"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/portal-web",
+      "route": "/billing/invoices/:invoiceId",
+      "why": "its calls fit the detail and void routes, not the list route"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/portal-web",
+      "route": "/billing/reports/monthly",
+      "why": "calls the monthly report route"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/portal-web",
+      "route": "/cases",
+      "why": "calls the cases routes"
+    }
+  ],
+  "not_established": []
+}

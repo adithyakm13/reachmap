@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "id": "ex24-unreadable-router",
+  "repo": "ex/orders",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex24-unreadable-router"
+  },
+  "explains": "src/routes/customers.ts is changed and no longer lexes (a template literal is never closed). The routes it declares, GET /api/v1/customers, GET /api/v1/customers/{customerId} and GET /api/v1/customers/{customerId}/orders, are missing from the route table at the head only because the file was not read: the web client calls two of them, and a removed route that a client still calls would be a finding, but these were not removed and no finding is made. What the run could not establish is said: parse_degraded for the file (blocking), mount_unresolved for the line of src/routes/index.ts that mounts the router it could not read (blocking: what it mounts is not known), and route_change_withheld for the repository (blocking), which counts the removals not claimed. Nothing is reached, no route is claimed for the file and the answer is not complete.",
+  "complete_for": [
+    "route",
+    "screen",
+    "http_edge",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "changed_file",
+      "repo": "ex/orders",
+      "path": "src/routes/customers.ts",
+      "role": "source"
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "finding",
+      "kind": "removed_route_still_called",
+      "why": "the routes were not read, they were not removed"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "parse_degraded",
+      "subject": "src/routes/customers.ts",
+      "blocking": true
+    },
+    {
+      "kind": "mount_unresolved",
+      "subject": "src/routes/index.ts:11",
+      "blocking": true
+    },
+    {
+      "kind": "route_change_withheld",
+      "subject": "ex/orders",
+      "blocking": true
+    }
+  ]
+}

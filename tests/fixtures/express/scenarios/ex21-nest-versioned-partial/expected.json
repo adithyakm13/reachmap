@@ -1,0 +1,70 @@
+{
+  "schema": 1,
+  "id": "ex21-nest-versioned-partial",
+  "repo": "ex/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex21-nest-versioned-partial"
+  },
+  "explains": "A line inside BalancesController.one changes. The controller is decorated @Controller({ path: \"balances\", version: \"1\" }) and src/main.ts enables URI versioning, so Nest puts the version in the path (without enableVersioning a version would add no segment, and with a header or media type versioning none either). The version is not evaluated. The route is GET /api/<unknown:version>/balances/{account}, flagged partial, and the run says so with route_path_partial at the controller decorator. The other method of the controller is not reached. The client URL BALANCES_URL, /api/ledger/balances, has one segment less than the route, so no http edge is claimed.",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "screen",
+    "http_edge",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "ex/ledger",
+      "path": "src/balances/balances.controller.ts",
+      "symbol": "BalancesController"
+    },
+    {
+      "type": "route",
+      "repo": "ex/ledger",
+      "method": "GET",
+      "path": "/api/<unknown:version>/balances/{account}",
+      "evidence": [
+        {
+          "repo": "ex/ledger",
+          "path": "src/balances/balances.controller.ts",
+          "contains": "@Get(\":account\")"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/balances/balances.controller.ts",
+          "contains": "@Controller({ path: \"balances\", version: \"1\" })"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/balances/balances.module.ts",
+          "contains": "controllers: [BalancesController],"
+        },
+        {
+          "repo": "ex/ledger",
+          "path": "src/main.ts",
+          "contains": "app.setGlobalPrefix(\"api\");"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "ex/ledger",
+      "method": "GET",
+      "path": "/api/<unknown:version>/balances",
+      "why": "another method"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "route_path_partial",
+      "subject": "src/balances/balances.controller.ts:3",
+      "blocking": false
+    }
+  ]
+}

@@ -1,0 +1,740 @@
+{
+  "schema": 1,
+  "id": "nx17-middleware",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx17-middleware"
+  },
+  "explains": "src/middleware.ts (the file beside the app and pages folders, the middleware of the project) now returns the session. Middleware runs before every request its matcher selects, and the matcher is not evaluated, so undecidable means affected: every screen of both routers and every route handler and API route is reached. That is fifteen screens (eleven App Router, four Pages Router) and eight routes (GET /api/health, GET and POST /api/orders, GET and DELETE /api/orders/{id}, GET /api/products, ANY /api/legacy/status, ANY /api/legacy/items/{id}), and past the http edges the three screens of the mobile client that call them: /orders, /orders/:orderId and /status. More than eight screens, so sample. The chain runs from the changed line to the declaration of the middleware function and on to the page's default export (or the method export of the route). All of them are listed here, 23 areas of the shop (a page with a slot page or an intercepting page, or with an optional catch-all, is one screen, with the other chains or paths shown) and the three client screens, and the test that recomputes the route table (test_nextjs_scenarios, nx_claims) says the list is the whole table.",
+  "complete_for": [
+    "changed_symbol",
+    "caller",
+    "screen",
+    "route",
+    "http_edge"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "nx/shop",
+      "path": "src/middleware.ts",
+      "symbol": "middleware"
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "return readSession() ?? null;"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "export function middleware()"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/page.tsx",
+          "contains": "export default function HomePage"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/about",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "return readSession() ?? null;"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "export function middleware()"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(marketing)/about/page.tsx",
+          "contains": "export default function AboutPage"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/cart",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "return readSession() ?? null;"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "export function middleware()"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/cart/page.tsx",
+          "contains": "export default function CartPage"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/dashboard",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "return readSession() ?? null;"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "export function middleware()"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/dashboard/page.tsx",
+          "contains": "export default function DashboardPage"
+        }
+      ],
+      "also_mounted_evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "return readSession() ?? null;"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "export function middleware()"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/dashboard/@analytics/page.tsx",
+          "contains": "export default function AnalyticsSlot"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/dashboard/settings",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "return readSession() ?? null;"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "export function middleware()"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/dashboard/settings/page.tsx",
+          "contains": "export default function SettingsPage"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/docs/*",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "return readSession() ?? null;"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "export function middleware()"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/docs/[...slug]/page.tsx",
+          "contains": "export default function DocsPage"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/feed",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "return readSession() ?? null;"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "export function middleware()"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/feed/page.tsx",
+          "contains": "export default function FeedPage"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/help",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "return readSession() ?? null;"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "export function middleware()"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/help/[[...topic]]/page.tsx",
+          "contains": "export default function HelpPage"
+        }
+      ],
+      "also_mounted": [
+        "/help/*"
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/photos/:id",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "return readSession() ?? null;"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "export function middleware()"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/photos/[id]/page.tsx",
+          "contains": "export default function PhotoPage"
+        }
+      ],
+      "also_mounted_evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "return readSession() ?? null;"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "export function middleware()"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/feed/@modal/(..)photos/[id]/page.tsx",
+          "contains": "export default function PhotoModal"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/products",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "return readSession() ?? null;"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "export function middleware()"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/products/page.tsx",
+          "contains": "export default function ProductsPage"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/products/:slug",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "return readSession() ?? null;"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "export function middleware()"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/products/[slug]/page.tsx",
+          "contains": "export default function ProductPage"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/legacy",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "return readSession() ?? null;"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "export function middleware()"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/pages/legacy/index.tsx",
+          "contains": "export default function LegacyHome"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/legacy/:id",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "return readSession() ?? null;"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "export function middleware()"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/pages/legacy/[id].tsx",
+          "contains": "export default function LegacyItem"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/legacy/archive/*",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "return readSession() ?? null;"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "export function middleware()"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/pages/legacy/archive/[...path].tsx",
+          "contains": "export default function ArchivePage"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/404",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "return readSession() ?? null;"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/middleware.ts",
+          "contains": "export function middleware()"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/pages/404.tsx",
+          "contains": "export default function NotFoundPage"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "GET",
+      "path": "/api/health",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/api/health/route.ts",
+          "contains": "export async function GET()"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "GET",
+      "path": "/api/orders",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/api/orders/route.ts",
+          "contains": "export async function GET()"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "POST",
+      "path": "/api/orders",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/api/orders/route.ts",
+          "contains": "export async function POST("
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "GET",
+      "path": "/api/orders/{id}",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/api/orders/[id]/route.ts",
+          "contains": "export async function GET("
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "DELETE",
+      "path": "/api/orders/{id}",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/api/orders/[id]/route.ts",
+          "contains": "export async function DELETE("
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "GET",
+      "path": "/api/products",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/api/products/route.ts",
+          "contains": "export async function GET()"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "ANY",
+      "path": "/api/legacy/status",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/pages/api/legacy/status.ts",
+          "contains": "export default function handler("
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "ANY",
+      "path": "/api/legacy/items/{id}",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/pages/api/legacy/items/[id].ts",
+          "contains": "export default function handler("
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/mobile",
+      "route": "/orders",
+      "chain": [
+        {
+          "repo": "nx/mobile",
+          "path": "src/services/orders.ts",
+          "contains": "return apiGet(ORDERS_URL);"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/screens/OrdersScreen.tsx",
+          "contains": "import { fetchOrders } from \"@/services/orders\";"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/routes.tsx",
+          "contains": "import OrdersScreen from \"./screens/OrdersScreen\";"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/routes.tsx",
+          "contains": "<Route path=\"/orders\" element={<OrdersScreen />} />"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/mobile",
+      "route": "/orders/:orderId",
+      "chain": [
+        {
+          "repo": "nx/mobile",
+          "path": "src/services/orders.ts",
+          "contains": "return apiGet(ORDER_URL(orderId));"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/screens/OrderScreen.tsx",
+          "contains": "import { fetchOrder, cancelOrder } from \"@/services/orders\";"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/routes.tsx",
+          "contains": "import OrderScreen from \"./screens/OrderScreen\";"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/routes.tsx",
+          "contains": "<Route path=\"/orders/:orderId\" element={<OrderScreen />} />"
+        }
+      ],
+      "also_mounted_evidence": [
+        {
+          "repo": "nx/mobile",
+          "path": "src/services/orders.ts",
+          "contains": "return apiDelete(ORDER_URL(orderId));"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/screens/OrderScreen.tsx",
+          "contains": "import { fetchOrder, cancelOrder } from \"@/services/orders\";"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/mobile",
+      "route": "/status",
+      "chain": [
+        {
+          "repo": "nx/mobile",
+          "path": "src/services/health.ts",
+          "contains": "return apiGet(HEALTH_URL);"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/screens/StatusScreen.tsx",
+          "contains": "import { ping, fetchStatus } from \"@/services/health\";"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/routes.tsx",
+          "contains": "import StatusScreen from \"./screens/StatusScreen\";"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/routes.tsx",
+          "contains": "<Route path=\"/status\" element={<StatusScreen />} />"
+        }
+      ],
+      "also_mounted_evidence": [
+        {
+          "repo": "nx/mobile",
+          "path": "src/services/health.ts",
+          "contains": "return apiGet(STATUS_URL);"
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "nx/mobile",
+        "path": "src/services/health.ts",
+        "contains": "return apiGet(HEALTH_URL);"
+      },
+      "via": [
+        {
+          "repo": "nx/mobile",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const HEALTH_URL = \"/api/health\";"
+        }
+      ],
+      "to": {
+        "repo": "nx/shop",
+        "method": "GET",
+        "path": "/api/health",
+        "evidence": [
+          {
+            "repo": "nx/shop",
+            "path": "src/app/api/health/route.ts",
+            "contains": "export async function GET()"
+          }
+        ]
+      }
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "nx/mobile",
+        "path": "src/services/health.ts",
+        "contains": "return apiGet(STATUS_URL);"
+      },
+      "via": [
+        {
+          "repo": "nx/mobile",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const STATUS_URL = \"/api/legacy/status\";"
+        }
+      ],
+      "to": {
+        "repo": "nx/shop",
+        "method": "ANY",
+        "path": "/api/legacy/status",
+        "evidence": [
+          {
+            "repo": "nx/shop",
+            "path": "src/pages/api/legacy/status.ts",
+            "contains": "export default function handler("
+          }
+        ]
+      }
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "nx/mobile",
+        "path": "src/services/orders.ts",
+        "contains": "return apiGet(ORDERS_URL);"
+      },
+      "via": [
+        {
+          "repo": "nx/mobile",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const ORDERS_URL = \"/api/orders\";"
+        }
+      ],
+      "to": {
+        "repo": "nx/shop",
+        "method": "GET",
+        "path": "/api/orders",
+        "evidence": [
+          {
+            "repo": "nx/shop",
+            "path": "src/app/api/orders/route.ts",
+            "contains": "export async function GET()"
+          }
+        ]
+      }
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "nx/mobile",
+        "path": "src/services/orders.ts",
+        "contains": "return apiGet(ORDER_URL(orderId));"
+      },
+      "via": [
+        {
+          "repo": "nx/mobile",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const ORDER_URL = (orderId: string) => `/api/orders/${orderId}`;"
+        }
+      ],
+      "to": {
+        "repo": "nx/shop",
+        "method": "GET",
+        "path": "/api/orders/{id}",
+        "evidence": [
+          {
+            "repo": "nx/shop",
+            "path": "src/app/api/orders/[id]/route.ts",
+            "contains": "export async function GET("
+          }
+        ]
+      }
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "nx/mobile",
+        "path": "src/services/orders.ts",
+        "contains": "return apiDelete(ORDER_URL(orderId));"
+      },
+      "via": [
+        {
+          "repo": "nx/mobile",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const ORDER_URL = (orderId: string) => `/api/orders/${orderId}`;"
+        }
+      ],
+      "to": {
+        "repo": "nx/shop",
+        "method": "DELETE",
+        "path": "/api/orders/{id}",
+        "evidence": [
+          {
+            "repo": "nx/shop",
+            "path": "src/app/api/orders/[id]/route.ts",
+            "contains": "export async function DELETE("
+          }
+        ]
+      }
+    }
+  ],
+  "must_exclude": [],
+  "not_established": [
+    {
+      "kind": "route_intercepted",
+      "subject": "src/app/feed/@modal/(..)photos/[id]/page.tsx",
+      "blocking": false
+    }
+  ]
+}

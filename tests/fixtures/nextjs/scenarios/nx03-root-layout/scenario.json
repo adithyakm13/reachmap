@@ -1,0 +1,11 @@
+{
+  "id": "nx03-root-layout",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx03-root-layout"
+  },
+  "commit_message": "Set the text direction on the root layout",
+  "notes": "The root layout reaches every App Router screen: more than eight, so sample."
+}

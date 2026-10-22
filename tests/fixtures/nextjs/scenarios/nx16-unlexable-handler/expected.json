@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "id": "nx16-unlexable-handler",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx16-unlexable-handler"
+  },
+  "explains": "src/app/api/broken/route.ts is added and does not lex: its template literal is never closed. The methods a route file serves are the HTTP method names it exports, and they cannot be told from text that does not lex, so no route is claimed from it and the run says what it could not establish: a blocking parse_degraded for the file (a needed input is unreadable). The answer is not complete: an empty list of routes is not 'no route'. Nothing is matched by the file name either: no route is claimed for /api/broken.",
+  "complete_for": [
+    "route",
+    "screen"
+  ],
+  "must_find": [
+    {
+      "type": "changed_file",
+      "repo": "nx/shop",
+      "path": "src/app/api/broken/route.ts",
+      "role": "source"
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "GET",
+      "path": "/api/broken",
+      "why": "the file does not lex, so no method is claimed"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "parse_degraded",
+      "subject": "src/app/api/broken/route.ts",
+      "blocking": true
+    }
+  ]
+}

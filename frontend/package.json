@@ -1,0 +1,41 @@
+{
+  "name": "reachmap-frontend",
+  "version": "0.0.0",
+  "private": true,
+  "description": "The Reachmap workspace: served by `reachmap serve`, built into the Python wheel",
+  "type": "module",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "postbuild": "node scripts/third-party-licenses.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.app.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@dagrejs/dagre": "3.1.1",
+    "@mantine/core": "9.7.1",
+    "@mantine/hooks": "9.7.1",
+    "@mantine/notifications": "9.7.1",
+    "@mantine/spotlight": "9.7.1",
+    "@tabler/icons-react": "3.49.0",
+    "@xyflow/react": "12.12.0",
+    "prism-react-renderer": "2.4.1",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-router-dom": "7.18.4"
+  },
+  "devDependencies": {
+    "@testing-library/react": "16.3.3",
+    "@testing-library/user-event": "14.6.7",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.1",
+    "jsdom": "29.1.1",
+    "typescript": "6.0.3",
+    "vite": "8.3.2",
+    "vitest": "4.1.11"
+  }
+}

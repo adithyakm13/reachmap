@@ -1,0 +1,213 @@
+{
+  "schema": 1,
+  "id": "sb06-generic-name",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb06-generic-name"
+  },
+  "explains": "Cache.get changes. The name get is defined six times in non-test code (Cache, Registry, Settings, Lookup, Memo and the handler InvoiceController.get), more than distinct_max = 3: it is not distinctive, so it is recorded and no code is linked to the change by the word get. The importers of Cache are linked by the type: StatusController (the field cache and its constructor use the type) and WebConfig (the bean method). In StatusController the handler status uses the field cache and is reached, with GET /ledger/v1/status; the handler flags only calls flags.get(mode), the get of a map, which shares the word and nothing else: it is not reached. Registry, Settings, Lookup and Memo define their own get: they are not callers. The route is called by fetchStatus and reaches the screen /status.",
+  "complete_for": [
+    "changed_symbol",
+    "caller",
+    "route",
+    "screen",
+    "http_edge",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/ledger",
+      "path": "src/main/java/com/acme/ledger/service/Cache.java",
+      "symbol": "Cache.get",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/service/Cache.java",
+          "contains": "return \"cache hit \" + key;"
+        }
+      ]
+    },
+    {
+      "type": "caller",
+      "repo": "acme/ledger",
+      "path": "src/main/java/com/acme/ledger/api/StatusController.java",
+      "symbol": "StatusController.cache",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/StatusController.java",
+          "contains": "import com.acme.ledger.service.Cache;"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/StatusController.java",
+          "contains": "private final Cache cache;"
+        }
+      ]
+    },
+    {
+      "type": "caller",
+      "repo": "acme/ledger",
+      "path": "src/main/java/com/acme/ledger/config/WebConfig.java",
+      "symbol": "WebConfig.cache",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/config/WebConfig.java",
+          "contains": "import com.acme.ledger.service.Cache;"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/config/WebConfig.java",
+          "contains": "return new Cache();"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/ledger/v1/status",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/StatusController.java",
+          "contains": "@GetMapping(Paths.STATUS)"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "STATUS = BASE + \"/status\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "BASE = \"/v1\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/resources/application.properties",
+          "contains": "server.servlet.context-path=/ledger"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "acme/ledger-web",
+      "route": "/status",
+      "chain": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/StatusController.java",
+          "contains": "import com.acme.ledger.service.Cache;"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/services/status.ts",
+          "contains": "return apiGet(STATUS_URL);"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/screens/StatusScreen.tsx",
+          "contains": "import { fetchStatus } from \"@/services/status\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/routes.tsx",
+          "contains": "import StatusScreen from \"./screens/StatusScreen\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/routes.tsx",
+          "contains": "<Route path=\"/status\" element={<StatusScreen />} />"
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/ledger-web",
+        "path": "src/services/status.ts",
+        "contains": "return apiGet(STATUS_URL);"
+      },
+      "via": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const STATUS_URL = \"/ledger/v1/status\";"
+        }
+      ],
+      "to": {
+        "repo": "acme/ledger",
+        "method": "GET",
+        "path": "/ledger/v1/status",
+        "evidence": [
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/StatusController.java",
+            "contains": "@GetMapping(Paths.STATUS)"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/Paths.java",
+            "contains": "STATUS = BASE + \"/status\";"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/Paths.java",
+            "contains": "BASE = \"/v1\";"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/resources/application.properties",
+            "contains": "server.servlet.context-path=/ledger"
+          }
+        ]
+      }
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/ledger/v1/status/flags",
+      "why": "its handler calls the get of a map and does not use the cache"
+    },
+    {
+      "type": "caller",
+      "repo": "acme/ledger",
+      "path": "src/main/java/com/acme/ledger/support/Registry.java",
+      "why": "it defines its own get: sharing a common word is not a dependency"
+    },
+    {
+      "type": "caller",
+      "repo": "acme/ledger",
+      "path": "src/main/java/com/acme/ledger/support/Settings.java",
+      "why": "it defines its own get: sharing a common word is not a dependency"
+    },
+    {
+      "type": "caller",
+      "repo": "acme/ledger",
+      "path": "src/main/java/com/acme/ledger/support/Lookup.java",
+      "why": "it defines its own get: sharing a common word is not a dependency"
+    },
+    {
+      "type": "caller",
+      "repo": "acme/ledger",
+      "path": "src/main/java/com/acme/ledger/support/Memo.java",
+      "why": "it defines its own get: sharing a common word is not a dependency"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "not_distinctive",
+      "subject": "get",
+      "blocking": false,
+      "definitions": 6
+    }
+  ]
+}

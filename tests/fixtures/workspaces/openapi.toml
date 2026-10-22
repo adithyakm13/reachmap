@@ -1,0 +1,35 @@
+# The OpenAPI fixture workspace (tests/fixtures/workspaces/openapi.json) as a reachmap.toml.
+# Every remote is a path under ${REACHMAP_FIXTURES}: the directory the fixture builder
+# wrote the two repositories into (tests/fixtures/build_openapi.py).
+workspace = "ledger"
+
+[limits]
+hops = 3
+hub_importers = 50
+distinct_max = 3
+timeout_s = 900
+
+[repos."acme/ledger-api"]
+host = "git"
+remote = "${REACHMAP_FIXTURES}/oa-api"
+language = "python"
+roles = ["backend"]
+branches = ["main"]
+http_server = { kind = "openapi", spec = "api/openapi.json", handlers = "app/handlers/*.py" }
+tests = { markers = ["tests/", "test_"] }
+
+[repos."acme/ledger-web"]
+host = "git"
+remote = "${REACHMAP_FIXTURES}/oa-web"
+language = "typescript"
+roles = ["frontend"]
+branches = ["main"]
+aliases = { from = "tsconfig.json" }
+entry_points = { kind = "react-router", routes_glob = "src/modules/*/routes.tsx" }
+http_client = { kind = "openapi", spec = "api/openapi.json", client = "src/api/generated" }
+tests = { markers = ["__tests__/", ".test.", ".spec."] }
+
+[[edges]]
+kind = "http"
+from = "acme/ledger-web"
+to = "acme/ledger-api"

@@ -1,0 +1,11 @@
+{
+  "id": "nx02-layout-fanout",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx02-layout-fanout"
+  },
+  "commit_message": "Widen the shop layout",
+  "notes": "A layout reaches every page of its group, and none of another group."
+}

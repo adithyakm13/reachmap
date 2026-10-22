@@ -1,0 +1,76 @@
+{
+  "about": "Follow-up commits on new branches of the built M1 repositories (tests/fixtures/eval/build.py), the witness changes of the cases in cases/*.toml. Only branches named eval/... are made: no existing branch or sha moves. A witness commit is dated `days` days after the commit `after` names (the original change's head), so it is later than the original's merge time.",
+  "witnesses": [
+    {
+      "id": "w01-invoice-list-column",
+      "repo": "acme/web",
+      "from": "scenario/s01-shared-component",
+      "branch": "eval/w01-invoice-list-column",
+      "after": {"repo": "acme/web", "ref": "scenario/s01-shared-component"},
+      "days": 2,
+      "message": "Keep the status column wide enough for the capitalised label",
+      "edits": [{"path": "src/modules/billing/pages/InvoiceListPage.tsx", "append": "// the status column needs a minimum width for the capitalised label"}]
+    },
+    {
+      "id": "w02-cases-routes",
+      "repo": "acme/web",
+      "from": "main",
+      "branch": "eval/w02-cases-routes",
+      "after": {"repo": "acme/api", "ref": "scenario/s06-nested-mount-handler"},
+      "days": 3,
+      "message": "Show the voided invoice notice under the cases mount too",
+      "edits": [{"path": "src/modules/cases/routes.tsx", "append": "// the invoice detail is mounted under cases as well: show the voided notice there"}]
+    },
+    {
+      "id": "w03-schedule-report",
+      "repo": "acme/web",
+      "from": "main",
+      "branch": "eval/w03-schedule-report",
+      "after": {"repo": "acme/web", "ref": "scenario/s19-generic-name"},
+      "days": 2,
+      "message": "Validate the schedule form before it is sent",
+      "edits": [{"path": "src/modules/reports/pages/ScheduleReportPage.tsx", "append": "// validate the schedule form before it is sent"}]
+    },
+    {
+      "id": "w04-reports-home",
+      "repo": "acme/web",
+      "from": "main",
+      "branch": "eval/w04-reports-home",
+      "after": {"repo": "acme/web", "ref": "scenario/s04-named-export"},
+      "days": 4,
+      "message": "Format the report dates with the UTC helper",
+      "edits": [{"path": "src/modules/reports/pages/ReportsHomePage.tsx", "append": "// format the report dates with the UTC helper"}]
+    },
+    {
+      "id": "w05-revert-s01",
+      "repo": "acme/web",
+      "from": "scenario/s01-shared-component",
+      "branch": "eval/w05-revert-s01",
+      "after": {"repo": "acme/web", "ref": "scenario/s01-shared-component"},
+      "days": 5,
+      "message": "Revert the capitalised status",
+      "revert": true
+    },
+    {
+      "id": "w06-badge-tweak",
+      "repo": "acme/web",
+      "from": "scenario/s01-shared-component",
+      "branch": "eval/w06-badge-tweak",
+      "after": {"repo": "acme/web", "ref": "scenario/s01-shared-component"},
+      "days": 6,
+      "message": "Tweak the status badge again",
+      "edits": [{"path": "src/components/StatusBadge.tsx", "append": "// the badge text is capitalised by the stylesheet too"}]
+    },
+    {
+      "id": "w07-revert-and-fix",
+      "repo": "acme/web",
+      "from": "scenario/s01-shared-component",
+      "branch": "eval/w07-revert-and-fix",
+      "after": {"repo": "acme/web", "ref": "scenario/s01-shared-component"},
+      "days": 7,
+      "message": "Show the status column fix",
+      "revert": true,
+      "edits": [{"path": "src/modules/billing/pages/InvoiceListPage.tsx", "append": "// with the badge back to what it was, the column can be narrow again"}]
+    }
+  ]
+}

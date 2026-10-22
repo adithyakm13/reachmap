@@ -1,0 +1,14 @@
+{
+  "steps": [
+    {
+      "dir": "01-client",
+      "branch": "main",
+      "message": "Client: endpoints and services"
+    },
+    {
+      "dir": "02-screens",
+      "branch": "main",
+      "message": "Screens and routes"
+    }
+  ]
+}

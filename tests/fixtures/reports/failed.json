@@ -1,0 +1,55 @@
+{
+ "schema": 1,
+ "tool": {
+  "name": "reachmap",
+  "version": "0.0.0"
+ },
+ "run": {
+  "started_at": "2026-01-02T03:04:05Z",
+  "elapsed_s": 0.1
+ },
+ "inputs": {
+  "repo": "acme/api",
+  "change": {
+   "compare": "main...nope"
+  },
+  "as_of": null,
+  "formats": [
+   "json"
+  ],
+  "config": {
+   "workspace": "acme",
+   "path_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  }
+ },
+ "counts": null,
+ "change": {
+  "as_of": null,
+  "kind": "compare",
+  "repo": "acme/api",
+  "resolved": false,
+  "spec": {
+   "compare": "main...nope"
+  }
+ },
+ "ref": null,
+ "branches": null,
+ "findings": null,
+ "areas": null,
+ "propagations": null,
+ "backend_calls": null,
+ "suggestions": null,
+ "mapped_tests": null,
+ "incompleteness": [
+  {
+   "kind": "run_failed",
+   "subject": "compare main...nope",
+   "not_established": "The analysis of compare main...nope was not completed, because the run failed",
+   "detail": "head 'nope': no such ref: 'nope'",
+   "blocks_selection": true
+  }
+ ],
+ "notes": [],
+ "revision": 1,
+ "status": "failed"
+}

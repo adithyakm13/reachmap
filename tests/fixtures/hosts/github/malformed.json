@@ -1,0 +1,7 @@
+{
+  "status": 200,
+  "headers": {
+    "Content-Type": "text/html"
+  },
+  "body_text": "<!DOCTYPE html><html><body>Sign in to GitHub</body></html>"
+}

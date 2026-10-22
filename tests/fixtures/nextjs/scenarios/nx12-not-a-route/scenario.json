@@ -1,0 +1,11 @@
+{
+  "id": "nx12-not-a-route",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx12-not-a-route"
+  },
+  "commit_message": "Touch files that are named like routing files and are not",
+  "notes": "layout, route, middleware and page by name outside the places Next gives them a meaning."
+}

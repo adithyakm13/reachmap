@@ -1,0 +1,113 @@
+{
+  "schema": 1,
+  "id": "s22-added-handler",
+  "repo": "acme/api",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s22-added-handler"
+  },
+  "explains": "A new handler get_invoice_pdf is appended to services/billing/app/routers/invoices.py, declared with @router.get(\"/{invoice_id}/pdf\"). Every added line is placed by diff line number, so every changed line is inside get_invoice_pdf. Its parameter line (    request: Request,) is textually identical to the parameter line of list_invoices, get_invoice and void_invoice in the same file (and of every handler in the other routers), so placing lines by their text would mark all of them changed; none of them is. Route: /api + /billing + /invoices + /{invoice_id}/pdf = GET /api/billing/invoices/{invoice_id}/pdf. It is a new route that no web URL reaches (invoiceUrl ends at the invoice id; nothing builds a /pdf URL), so no http edge and no screen is claimed. An added route nobody calls yet is said: the finding added_route_uncalled cites the new decorator line (low risk, since nothing depends on the route yet; medium confidence, since only the web client in this workspace was read).",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "http_edge",
+    "screen",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/invoices.py",
+      "symbol": "get_invoice_pdf",
+      "change": "added"
+    },
+    {
+      "type": "route",
+      "repo": "acme/api",
+      "method": "GET",
+      "path": "/api/billing/invoices/{invoice_id}/pdf",
+      "evidence": [
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/routers/invoices.py",
+          "contains": "@router.get(\"/{invoice_id}/pdf\")"
+        },
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/routers/billing.py",
+          "contains": "billing_router.include_router(invoices_router, prefix=\"/invoices\")"
+        },
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/api.py",
+          "contains": "api_router.include_router(billing_router, prefix=\"/billing\")"
+        },
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/main.py",
+          "contains": "app.include_router(api_router, prefix=\"/api\")"
+        }
+      ]
+    },
+    {
+      "type": "finding",
+      "kind": "added_route_uncalled",
+      "risk": "low",
+      "confidence": "medium",
+      "evidence": [
+        {
+          "repo": "acme/api",
+          "path": "services/billing/app/routers/invoices.py",
+          "contains": "@router.get(\"/{invoice_id}/pdf\")"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/invoices.py",
+      "symbol": "list_invoices",
+      "why": "shares the parameter line request: Request, with the new handler; its own lines are unchanged",
+      "naive_match": {
+        "repo": "acme/api",
+        "path": "services/billing/app/routers/invoices.py",
+        "contains": "    request: Request,"
+      }
+    },
+    {
+      "type": "changed_symbol",
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/invoices.py",
+      "symbol": "get_invoice",
+      "why": "shares the parameter line request: Request, with the new handler; its own lines are unchanged",
+      "naive_match": {
+        "repo": "acme/api",
+        "path": "services/billing/app/routers/invoices.py",
+        "contains": "    request: Request,"
+      }
+    },
+    {
+      "type": "changed_symbol",
+      "repo": "acme/api",
+      "path": "services/billing/app/routers/invoices.py",
+      "symbol": "void_invoice",
+      "why": "shares the parameter line request: Request, with the new handler; its own lines are unchanged",
+      "naive_match": {
+        "repo": "acme/api",
+        "path": "services/billing/app/routers/invoices.py",
+        "contains": "    request: Request,"
+      }
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "edge_unfollowed",
+      "subject": "edge:event:acme/api:acme/worker",
+      "blocking": false
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "ex16-nest-method-body",
+  "repo": "ex/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex16-nest-method-body"
+  },
+  "commit_message": "findOne answers null for a missing entry",
+  "notes": "A change inside one method of a controller reaches its route."
+}

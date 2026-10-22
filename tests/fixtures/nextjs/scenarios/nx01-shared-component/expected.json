@@ -1,0 +1,154 @@
+{
+  "schema": 1,
+  "id": "nx01-shared-component",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx01-shared-component"
+  },
+  "explains": "StatusBadge.tsx changes its markup (the body of the default export StatusBadge), so every file that imports it is affected. The importers are: src/app/(shop)/products/page.tsx by the alias @/components/StatusBadge, src/app/(shop)/products/[slug]/page.tsx by the relative path ../../../../components/StatusBadge, src/pages/legacy/[id].tsx (a Pages Router page) by the alias, and the unit test src/components/__tests__/StatusBadge.test.tsx by ../StatusBadge. In the App Router the folder is the route and page.tsx is the screen: the route group (shop) is not part of the URL, so the first two pages are /products and /products/:slug (the folder [slug] is a parameter). In the Pages Router the file is the route: pages/legacy/[id].tsx is /legacy/:id. Each screen is reached by the import line in its own file and cited at the line of its default export. The cart page, the legacy index, the about page and the home page do not import the badge, so they are not reached. The test is listed as a unit test, not as a caller or a screen.",
+  "complete_for": [
+    "changed_symbol",
+    "caller",
+    "screen",
+    "unit_test"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "nx/shop",
+      "path": "src/components/StatusBadge.tsx",
+      "symbol": "StatusBadge"
+    },
+    {
+      "type": "caller",
+      "repo": "nx/shop",
+      "path": "src/app/(shop)/products/page.tsx",
+      "symbol": "ProductsPage",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/products/page.tsx",
+          "contains": "import StatusBadge from \"@/components/StatusBadge\";"
+        }
+      ]
+    },
+    {
+      "type": "caller",
+      "repo": "nx/shop",
+      "path": "src/app/(shop)/products/[slug]/page.tsx",
+      "symbol": "ProductPage",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/products/[slug]/page.tsx",
+          "contains": "import StatusBadge from \"../../../../components/StatusBadge\";"
+        }
+      ]
+    },
+    {
+      "type": "caller",
+      "repo": "nx/shop",
+      "path": "src/pages/legacy/[id].tsx",
+      "symbol": "LegacyItem",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/pages/legacy/[id].tsx",
+          "contains": "import StatusBadge from \"@/components/StatusBadge\";"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/products",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/products/page.tsx",
+          "contains": "import StatusBadge from \"@/components/StatusBadge\";"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/products/page.tsx",
+          "contains": "export default function ProductsPage"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/products/:slug",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/products/[slug]/page.tsx",
+          "contains": "import StatusBadge from \"../../../../components/StatusBadge\";"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/app/(shop)/products/[slug]/page.tsx",
+          "contains": "export default function ProductPage"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/legacy/:id",
+      "chain": [
+        {
+          "repo": "nx/shop",
+          "path": "src/pages/legacy/[id].tsx",
+          "contains": "import StatusBadge from \"@/components/StatusBadge\";"
+        },
+        {
+          "repo": "nx/shop",
+          "path": "src/pages/legacy/[id].tsx",
+          "contains": "export default function LegacyItem"
+        }
+      ]
+    },
+    {
+      "type": "unit_test",
+      "repo": "nx/shop",
+      "path": "src/components/__tests__/StatusBadge.test.tsx",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/components/__tests__/StatusBadge.test.tsx",
+          "contains": "import StatusBadge from \"../StatusBadge\";"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/cart",
+      "why": "its page does not import StatusBadge"
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/legacy",
+      "why": "its page does not import StatusBadge"
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/about",
+      "why": "its page does not import StatusBadge"
+    },
+    {
+      "type": "screen",
+      "repo": "nx/shop",
+      "route": "/",
+      "why": "its page does not import StatusBadge"
+    }
+  ],
+  "not_established": []
+}

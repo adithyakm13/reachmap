@@ -1,0 +1,11 @@
+{
+  "id": "s02-hub-cutoff",
+  "repo": "acme/web",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/s02-hub-cutoff"
+  },
+  "commit_message": "Leave room for the ellipsis when truncating",
+  "notes": "Change in a file that 57 files import, above hub_importers = 50."
+}

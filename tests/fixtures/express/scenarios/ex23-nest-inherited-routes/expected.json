@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "id": "ex23-nest-inherited-routes",
+  "repo": "ex/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex23-nest-inherited-routes"
+  },
+  "explains": "src/base/base.controller.ts is added with BaseController, which declares GET health, and src/base/status.controller.ts with StatusController, decorated @Controller(\"status\"), which extends it and declares nothing of its own. The routes it inherits come from the base class; reading them would need the class hierarchy, which this does not follow. That is a blocking routes_unread record at the class, and the answer is not complete: no route is claimed for the controller, and an empty list is not 'no route'.",
+  "complete_for": [
+    "route",
+    "screen",
+    "http_edge"
+  ],
+  "must_find": [
+    {
+      "type": "changed_file",
+      "repo": "ex/ledger",
+      "path": "src/base/base.controller.ts",
+      "role": "source"
+    },
+    {
+      "type": "changed_file",
+      "repo": "ex/ledger",
+      "path": "src/base/status.controller.ts",
+      "role": "source"
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "ex/ledger",
+      "method": "GET",
+      "path": "/api/status/health",
+      "why": "inherited routes are not read, which is said"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "routes_unread",
+      "subject": "src/base/status.controller.ts:5",
+      "blocking": true
+    }
+  ]
+}

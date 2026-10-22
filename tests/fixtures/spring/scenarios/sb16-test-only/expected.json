@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "id": "sb16-test-only",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb16-test-only"
+  },
+  "explains": "Only InvoiceServiceTest changes. A test is a unit test of the code it tests and is never a caller: nothing in the application imports it, so no route is reached and the run says that no area was reached (and does not say anything about safety or coverage). The changed symbol is the test method.",
+  "complete_for": [
+    "changed_symbol",
+    "changed_file",
+    "caller",
+    "route",
+    "screen",
+    "http_edge",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "changed_file",
+      "repo": "acme/ledger",
+      "path": "src/test/java/com/acme/ledger/service/InvoiceServiceTest.java",
+      "role": "test"
+    },
+    {
+      "type": "changed_symbol",
+      "repo": "acme/ledger",
+      "path": "src/test/java/com/acme/ledger/service/InvoiceServiceTest.java",
+      "symbol": "InvoiceServiceTest.totalIsAHundredPerCharacter",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/test/java/com/acme/ledger/service/InvoiceServiceTest.java",
+          "contains": "assert service.total(\"abcd\") == 400;"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/ledger/v1/invoices/{id}/total",
+      "why": "a test is not a caller"
+    }
+  ],
+  "not_established": []
+}

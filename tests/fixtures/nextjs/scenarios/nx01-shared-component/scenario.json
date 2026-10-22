@@ -1,0 +1,11 @@
+{
+  "id": "nx01-shared-component",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx01-shared-component"
+  },
+  "commit_message": "StatusBadge shows the status as a data attribute",
+  "notes": "A shared component imported by pages of both routers, by an alias and by a relative path."
+}

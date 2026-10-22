@@ -1,0 +1,13 @@
+{
+  "note": "Synthetic: invented for the tests, shaped like the Qase API v1 (https://developers.qase.io). Not a recording of any real project.",
+  "status": 429,
+  "headers": {
+    "Content-Type": "application/json",
+    "Retry-After": "30",
+    "X-RateLimit-Remaining": "0"
+  },
+  "body": {
+    "status": false,
+    "errorMessage": "Too many requests."
+  }
+}

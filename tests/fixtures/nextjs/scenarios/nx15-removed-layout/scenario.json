@@ -1,0 +1,11 @@
+{
+  "id": "nx15-removed-layout",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx15-removed-layout"
+  },
+  "commit_message": "Remove the shop layout",
+  "notes": "Every page of the group loses its layout."
+}

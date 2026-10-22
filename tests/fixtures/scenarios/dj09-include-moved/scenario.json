@@ -1,0 +1,11 @@
+{
+  "id": "dj09-include-moved",
+  "repo": "acme/portal",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/dj09-include-moved"
+  },
+  "commit_message": "Serve the cases under support",
+  "notes": "The include of the cases URLconf moves under another prefix: its routes are new paths and the client still calls the old ones."
+}

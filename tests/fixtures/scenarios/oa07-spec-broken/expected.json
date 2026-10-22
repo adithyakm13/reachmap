@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "id": "oa07-spec-broken",
+  "repo": "acme/ledger-api",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/oa07-spec-broken"
+  },
+  "explains": "A bad merge leaves conflict markers in api/openapi.json (the file is not JSON), and get_invoice changes in the same commit. The handler change is real, but which operation get_invoice serves comes from the spec, which cannot be read at the head: the reader refuses it at the line of the first marker. No route is claimed, none is said to be absent, and the record is blocking: which operations the repository declares was not established. The answer is not complete (the propagation says so) and nothing is followed to the web app.",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "http_edge",
+    "screen",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/ledger-api",
+      "path": "app/handlers/invoices.py",
+      "symbol": "get_invoice"
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "acme/ledger-api",
+      "method": "GET",
+      "path": "/v1/invoices/{invoiceId}",
+      "why": "the spec cannot be read at the head, so no route is claimed from it"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "spec_unreadable",
+      "subject": "acme/ledger-api:api/openapi.json",
+      "blocking": true
+    }
+  ]
+}

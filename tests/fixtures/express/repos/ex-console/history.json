@@ -1,0 +1,9 @@
+{
+  "steps": [
+    {
+      "dir": "01-console",
+      "branch": "main",
+      "message": "Console client: endpoints, services, screens and routes"
+    }
+  ]
+}

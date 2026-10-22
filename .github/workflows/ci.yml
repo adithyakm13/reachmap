@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Configure git for fixtures
+        run: |
+          git config --global user.name "CI"
+          git config --global user.email "ci@example.invalid"
+          git config --global init.defaultBranch main
+      - name: Packaging tools (development tools only, never imported by the package)
+        run: python -m pip install setuptools build
+      - name: Unit tests
+        env:
+          REACHMAP_REQUIRE_PACKAGING: "1"
+        run: python -m unittest discover -s tests -v
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install
+        working-directory: frontend
+        run: npm ci
+      - name: Typecheck
+        working-directory: frontend
+        run: npx tsc --noEmit -p tsconfig.app.json
+      - name: Tests
+        working-directory: frontend
+        run: npm test
+      - name: Build
+        working-directory: frontend
+        run: npm run build
+      - name: Tests of the built page
+        working-directory: frontend
+        run: npx vitest run src/dist.test.ts
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Configure git for fixtures
+        run: |
+          git config --global user.name "CI"
+          git config --global user.email "ci@example.invalid"
+          git config --global init.defaultBranch main
+      - name: Packaging tools (development tools only, never imported by the package)
+        run: python -m pip install setuptools build
+      - name: The built page and the runner
+        env:
+          REACHMAP_REQUIRE_PACKAGING: "1"
+        run: python -m unittest tests.test_frontend_static tests.test_bundle_frontend tests.test_packaging -v
+      - name: Build the wheel with the frontend build and check it holds the workspace
+        run: |
+          python -m build --wheel
+          python -m zipfile -l dist/reachmap-*.whl | tee wheel.txt
+          grep -q "reachmap/runner/static/index.html" wheel.txt
+          grep -q "reachmap/runner/static/assets/.*\.js" wheel.txt
+          grep -q "reachmap/runner/static/assets/.*\.css" wheel.txt
+          grep -q "reachmap/runner/static/THIRD_PARTY_LICENSES.txt" wheel.txt

@@ -1,0 +1,136 @@
+{
+  "schema": 1,
+  "id": "nx05-direct-handler-change",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx05-direct-handler-change"
+  },
+  "explains": "A line inside GET of src/app/api/orders/[id]/route.ts changes (the id is trimmed). A route.ts file in the App Router has one route per exported HTTP method; the folder [id] is the parameter {id}, and a route group or a slot would not show in the path. The change is inside GET, so it reaches the route GET /api/orders/{id}, not DELETE /api/orders/{id} (a different declaration that does not use the changed lines). The route is cited at its method export. The mobile client builds ORDER_URL(orderId) as /api/orders/${orderId}, a parameter segment that fits the route parameter; fetchOrder calls apiGet(ORDER_URL(orderId)) so the http edge goes from services/orders.ts to GET /api/orders/{id}. OrderScreen calls fetchOrder (and cancelOrder, which calls apiDelete on the same URL: a DELETE, not the changed GET) and is mounted at /orders/:orderId. OrdersScreen imports only fetchOrders and is excluded. GET is defined in four route files, more than distinct_max, so the name is recorded as not distinctive and links nothing.",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "screen",
+    "http_edge"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "nx/shop",
+      "path": "src/app/api/orders/[id]/route.ts",
+      "symbol": "GET"
+    },
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "GET",
+      "path": "/api/orders/{id}",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/app/api/orders/[id]/route.ts",
+          "contains": "export async function GET("
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "nx/mobile",
+        "path": "src/services/orders.ts",
+        "contains": "return apiGet(ORDER_URL(orderId));"
+      },
+      "via": [
+        {
+          "repo": "nx/mobile",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const ORDER_URL = (orderId: string) => `/api/orders/${orderId}`;"
+        }
+      ],
+      "to": {
+        "repo": "nx/shop",
+        "method": "GET",
+        "path": "/api/orders/{id}",
+        "evidence": [
+          {
+            "repo": "nx/shop",
+            "path": "src/app/api/orders/[id]/route.ts",
+            "contains": "export async function GET("
+          }
+        ]
+      }
+    },
+    {
+      "type": "screen",
+      "repo": "nx/mobile",
+      "route": "/orders/:orderId",
+      "chain": [
+        {
+          "repo": "nx/mobile",
+          "path": "src/services/orders.ts",
+          "contains": "return apiGet(ORDER_URL(orderId));"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/screens/OrderScreen.tsx",
+          "contains": "import { fetchOrder, cancelOrder } from \"@/services/orders\";"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/routes.tsx",
+          "contains": "import OrderScreen from \"./screens/OrderScreen\";"
+        },
+        {
+          "repo": "nx/mobile",
+          "path": "src/routes.tsx",
+          "contains": "<Route path=\"/orders/:orderId\" element={<OrderScreen />} />"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "DELETE",
+      "path": "/api/orders/{id}",
+      "why": "DELETE is another declaration of the file"
+    },
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "GET",
+      "path": "/api/orders",
+      "why": "another file"
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "nx/mobile",
+        "path": "src/services/orders.ts",
+        "contains": "return apiDelete(ORDER_URL(orderId));"
+      },
+      "to": {
+        "repo": "nx/shop",
+        "method": "DELETE",
+        "path": "/api/orders/{id}"
+      },
+      "why": "the DELETE route is not reached"
+    },
+    {
+      "type": "screen",
+      "repo": "nx/mobile",
+      "route": "/orders",
+      "why": "OrdersScreen imports fetchOrders only"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "not_distinctive",
+      "subject": "GET",
+      "definitions": 4,
+      "blocking": false
+    }
+  ]
+}

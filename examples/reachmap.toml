@@ -1,0 +1,108 @@
+# The example workspace: four small synthetic repositories (company "acme": a React
+# frontend, a FastAPI backend, a contracts package and a worker), all invented.
+# examples/run_example.py builds them into a temporary folder and sets
+# REACHMAP_FIXTURES to that folder, so every remote below is a path on this machine.
+# An unset REACHMAP_FIXTURES makes the remotes "not configured" and the file does not load.
+#
+# docs/config.md describes every key.
+workspace = "acme"
+
+[limits]
+hops = 3             # edges followed past the changed repository
+hub_importers = 50   # never walk through a file imported by more files than this
+distinct_max = 3     # a name defined more often than this is not distinctive (the default is 10)
+timeout_s = 900
+
+# ---------------------------------------------------------------- repositories
+
+[repos."acme/web"]
+host = "git"                          # plain git: compare and range work, pull requests do not
+remote = "${REACHMAP_FIXTURES}/acme-web"
+language = "typescript"
+roles = ["frontend"]
+branches = ["main", "release/*"]
+aliases = { from = "tsconfig.json" }
+entry_points = { kind = "react-router", routes_glob = "src/modules/*/routes.tsx" }
+http_client = { kind = "endpoints-file", path = "src/api/endpoints.ts" }
+tests = { markers = ["__tests__/", ".test.", ".spec."], command = "npx jest {paths}" }
+
+[repos."acme/api"]
+host = "git"
+remote = "${REACHMAP_FIXTURES}/acme-api"
+language = "python"
+roles = ["backend"]
+branches = ["main", "release/*"]
+service_marker = "pyproject.toml"
+library_roots = ["libs/common"]
+entry_points = { kind = "fastapi" }
+tests = { markers = ["tests/", "test_"], command = "pytest {paths}" }
+
+[repos."acme/contracts"]
+host = "git"
+remote = "${REACHMAP_FIXTURES}/acme-contracts"
+language = "python"
+roles = ["contract"]
+branches = ["main"]
+contract = { kind = "pydantic", root = "contracts/models", package = "acme_contracts", versions = "git-tags", tag_prefix = "v" }
+
+[repos."acme/worker"]
+host = "git"
+remote = "${REACHMAP_FIXTURES}/acme-worker"
+language = "python"
+roles = ["backend"]
+branches = ["main"]
+entry_points = { kind = "celery" }    # accepted, not read yet: the run says so
+
+# ---------------------------------------------------------------- edges
+
+[[edges]]
+kind = "http"
+from = "acme/web"
+to = "acme/api"
+
+[[edges]]
+kind = "package"
+producer = "acme/contracts"
+consumer = "acme/api"
+manifest = "requirements.txt"
+pin_pattern = '^acme-contracts==(.+)$'
+import_marker = "acme_contracts"
+
+[[edges]]
+kind = "package"
+producer = "acme/contracts"
+consumer = "acme/worker"
+manifest = "requirements.txt"
+pin_pattern = '^acme-contracts==(.+)$'
+import_marker = "acme_contracts"
+
+[[edges]]
+kind = "contract"
+producer = "acme/contracts"
+consumer = "acme/api"
+
+[[edges]]
+kind = "contract"
+producer = "acme/contracts"
+consumer = "acme/worker"
+
+[[edges]]
+kind = "event"                        # declared, not followed yet: the run says so
+from = "acme/api"
+to = "acme/worker"
+topics_glob = "**/topics.py"
+
+# ---------------------------------------------------------------- test sources
+# A test source is read only when it is configured and its token variable is set.
+# Uncomment and set QASE_API_TOKEN in your own shell to try one; the file never holds the token.
+#
+# [[test_sources]]
+# kind = "qase"
+# project = "ACME"
+# token_env = "QASE_API_TOKEN"
+#
+# [[test_sources.areas]]
+# name = "Billing"
+# route_prefixes = ["/billing"]
+# modules = ["billing"]
+# suites = [12]

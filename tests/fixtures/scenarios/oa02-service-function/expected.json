@@ -1,0 +1,208 @@
+{
+  "schema": 1,
+  "id": "oa02-service-function",
+  "repo": "acme/ledger-api",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/oa02-service-function"
+  },
+  "explains": "invoice_total in app/services/ledger.py changes. ledger.py is imported by name (from app.services.ledger import all_totals, invoice_total, mark_void, new_invoice) by the handler module app/handlers/invoices.py, and by the unit test tests/test_ledger.py, which is a test and never a caller. In the handler module only get_invoice uses invoice_total (list_invoices uses all_totals, create_invoice new_invoice, void_invoice mark_void), so the walk reaches get_invoice and with it the route of operationId getInvoice, GET /v1/invoices/{invoiceId}. The chain of the screen shows the way: the import of ledger in the handler module and the line where get_invoice uses invoice_total, then the client line in the web app (fetchInvoice calls getInvoice), the import of fetchInvoice in the page, the import of the page in the routes file and its Route.",
+  "complete_for": [
+    "changed_symbol",
+    "caller",
+    "unit_test",
+    "route",
+    "http_edge",
+    "screen"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/ledger-api",
+      "path": "app/services/ledger.py",
+      "symbol": "invoice_total"
+    },
+    {
+      "type": "caller",
+      "repo": "acme/ledger-api",
+      "path": "app/handlers/invoices.py",
+      "symbol": "get_invoice",
+      "evidence": [
+        {
+          "repo": "acme/ledger-api",
+          "path": "app/handlers/invoices.py",
+          "contains": "from app.services.ledger import all_totals, invoice_total, mark_void, new_invoice"
+        }
+      ]
+    },
+    {
+      "type": "unit_test",
+      "repo": "acme/ledger-api",
+      "path": "tests/test_ledger.py",
+      "evidence": [
+        {
+          "repo": "acme/ledger-api",
+          "path": "tests/test_ledger.py",
+          "contains": "from app.services.ledger import all_totals, invoice_total"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger-api",
+      "method": "GET",
+      "path": "/v1/invoices/{invoiceId}",
+      "evidence": [
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"get\": {"
+        },
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"/invoices/{invoiceId}\": {"
+        },
+        {
+          "repo": "acme/ledger-api",
+          "path": "api/openapi.json",
+          "contains": "\"url\": \"https://ledger.example.invalid/v1\""
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/ledger-web",
+        "path": "src/modules/invoices/api.ts",
+        "contains": "return getInvoice(invoiceId);"
+      },
+      "via": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"get\": {"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"/invoices/{invoiceId}\": {"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "api/openapi.json",
+          "contains": "\"url\": \"https://ledger.example.invalid/v1\""
+        }
+      ],
+      "to": {
+        "repo": "acme/ledger-api",
+        "method": "GET",
+        "path": "/v1/invoices/{invoiceId}",
+        "evidence": [
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"get\": {"
+          },
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"/invoices/{invoiceId}\": {"
+          },
+          {
+            "repo": "acme/ledger-api",
+            "path": "api/openapi.json",
+            "contains": "\"url\": \"https://ledger.example.invalid/v1\""
+          }
+        ]
+      }
+    },
+    {
+      "type": "screen",
+      "repo": "acme/ledger-web",
+      "route": "/invoices/:invoiceId",
+      "chain": [
+        {
+          "repo": "acme/ledger-api",
+          "path": "app/handlers/invoices.py",
+          "contains": "from app.services.ledger import all_totals, invoice_total, mark_void, new_invoice"
+        },
+        {
+          "repo": "acme/ledger-api",
+          "path": "app/handlers/invoices.py",
+          "contains": "total = invoice_total(invoice_id)"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/invoices/api.ts",
+          "contains": "return getInvoice(invoiceId);"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/invoices/pages/InvoiceDetailPage.tsx",
+          "contains": "import { fetchInvoice } from \"../api\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/invoices/routes.tsx",
+          "contains": "import InvoiceDetailPage from \"./pages/InvoiceDetailPage\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/modules/invoices/routes.tsx",
+          "contains": "<Route path=\"/invoices/:invoiceId\" element={<InvoiceDetailPage />} />"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "acme/ledger-api",
+      "method": "GET",
+      "path": "/v1/invoices",
+      "why": "list_invoices uses all_totals, which the change does not touch"
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger-api",
+      "method": "POST",
+      "path": "/v1/invoices",
+      "why": "create_invoice uses new_invoice, which the change does not touch"
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger-api",
+      "method": "DELETE",
+      "path": "/v1/invoices/{invoiceId}",
+      "why": "void_invoice uses mark_void, which the change does not touch"
+    },
+    {
+      "type": "screen",
+      "repo": "acme/ledger-web",
+      "route": "/invoices",
+      "why": "InvoiceListPage reaches only listInvoices"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "not_distinctive",
+      "subject": "acme/ledger-web:downloadStatement",
+      "blocking": false,
+      "definitions": 4
+    },
+    {
+      "kind": "not_distinctive",
+      "subject": "acme/ledger-web:get",
+      "blocking": false,
+      "definitions": 2
+    },
+    {
+      "kind": "not_distinctive",
+      "subject": "acme/ledger-web:list",
+      "blocking": false,
+      "definitions": 1
+    }
+  ]
+}

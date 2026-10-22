@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "id": "ex25-unreadable-module",
+  "repo": "ex/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex25-unreadable-module"
+  },
+  "explains": "src/ledger/ledger.module.ts is changed and no longer lexes. LedgerController is listed only there, so at the head no module is known to serve it and its four routes are missing from the table: the console calls them, and the missing routes would be four removed routes that a client still calls. They were not removed: the module was not read. The run says what it could not establish: parse_degraded for the module (blocking), mount_unresolved for the line of src/app.module.ts that imports the module it could not read (blocking: whether it is a module that serves controllers is not known) and route_change_withheld for the repository (blocking). No finding is made, nothing is reached and the answer is not complete.",
+  "complete_for": [
+    "route",
+    "screen",
+    "http_edge",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "changed_file",
+      "repo": "ex/ledger",
+      "path": "src/ledger/ledger.module.ts",
+      "role": "source"
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "finding",
+      "kind": "removed_route_still_called",
+      "why": "the module was not read, the routes were not removed"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "parse_degraded",
+      "subject": "src/ledger/ledger.module.ts",
+      "blocking": true
+    },
+    {
+      "kind": "mount_unresolved",
+      "subject": "src/app.module.ts:6",
+      "blocking": true
+    },
+    {
+      "kind": "route_change_withheld",
+      "subject": "ex/ledger",
+      "blocking": true
+    }
+  ]
+}

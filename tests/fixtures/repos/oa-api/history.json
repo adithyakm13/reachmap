@@ -1,0 +1,7 @@
+{
+  "slug": "oa-api",
+  "name": "acme/ledger-api",
+  "steps": [
+    {"dir": "01-ledger", "branch": "main", "message": "Add the ledger API: spec, handlers and services"}
+  ]
+}

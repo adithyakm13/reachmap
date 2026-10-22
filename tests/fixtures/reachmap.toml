@@ -1,0 +1,86 @@
+# The M1 fixture workspace (tests/fixtures/workspace.json) as a reachmap.toml.
+# Every remote is a path under ${REACHMAP_FIXTURES}: the directory the fixture builder
+# wrote the four repositories into (tests/fixtures/build.py). Unset, the remotes are
+# "not configured" and the file does not load.
+workspace = "acme"
+
+[limits]
+hops = 3
+hub_importers = 50
+distinct_max = 3
+timeout_s = 900
+
+[repos."acme/web"]
+host = "git"
+remote = "${REACHMAP_FIXTURES}/acme-web"
+language = "typescript"
+roles = ["frontend"]
+branches = ["main", "release/*"]
+aliases = { from = "tsconfig.json" }
+entry_points = { kind = "react-router", routes_glob = "src/modules/*/routes.tsx" }
+http_client = { kind = "endpoints-file", path = "src/api/endpoints.ts" }
+tests = { markers = ["__tests__/", ".test.", ".spec."] }
+
+[repos."acme/api"]
+host = "git"
+remote = "${REACHMAP_FIXTURES}/acme-api"
+language = "python"
+roles = ["backend"]
+branches = ["main", "release/*"]
+service_marker = "pyproject.toml"
+library_roots = ["libs/common"]
+entry_points = { kind = "fastapi" }
+tests = { markers = ["tests/", "test_"] }
+
+[repos."acme/contracts"]
+host = "git"
+remote = "${REACHMAP_FIXTURES}/acme-contracts"
+language = "python"
+roles = ["contract"]
+branches = ["main"]
+contract = { kind = "pydantic", root = "contracts/models", package = "acme_contracts", versions = "git-tags", tag_prefix = "v" }
+
+[repos."acme/worker"]
+host = "git"
+remote = "${REACHMAP_FIXTURES}/acme-worker"
+language = "python"
+roles = ["backend"]
+branches = ["main"]
+entry_points = { kind = "celery" }
+
+[[edges]]
+kind = "http"
+from = "acme/web"
+to = "acme/api"
+
+[[edges]]
+kind = "package"
+producer = "acme/contracts"
+consumer = "acme/api"
+manifest = "requirements.txt"
+pin_pattern = '^acme-contracts==(.+)$'
+import_marker = "acme_contracts"
+
+[[edges]]
+kind = "package"
+producer = "acme/contracts"
+consumer = "acme/worker"
+manifest = "requirements.txt"
+pin_pattern = '^acme-contracts==(.+)$'
+import_marker = "acme_contracts"
+
+[[edges]]
+kind = "contract"
+producer = "acme/contracts"
+consumer = "acme/api"
+
+[[edges]]
+kind = "contract"
+producer = "acme/contracts"
+consumer = "acme/worker"
+
+[[edges]]
+kind = "event"
+from = "acme/api"
+to = "acme/worker"
+topics_glob = "**/topics.py"

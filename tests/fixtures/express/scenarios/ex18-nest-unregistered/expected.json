@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "id": "ex18-nest-unregistered",
+  "repo": "ex/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/ex18-nest-unregistered"
+  },
+  "explains": "trail in src/audit/audit.controller.ts answers a list. AuditController is decorated @Controller(\"audit\"), but no @Module lists it in controllers, so Nest does not serve it: no route is claimed (GET /api/audit is not a route of this service) and the run says so, router_unmounted.",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "screen",
+    "http_edge",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "ex/ledger",
+      "path": "src/audit/audit.controller.ts",
+      "symbol": "AuditController"
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "ex/ledger",
+      "method": "GET",
+      "path": "/api/audit",
+      "why": "no module lists AuditController"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "router_unmounted",
+      "subject": "src/audit/audit.controller.ts:AuditController",
+      "blocking": false
+    }
+  ]
+}

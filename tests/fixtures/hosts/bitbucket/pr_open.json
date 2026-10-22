@@ -1,0 +1,83 @@
+{
+  "status": 200,
+  "headers": {
+    "Content-Type": "application/json; charset=utf-8",
+    "X-Request-Id": "9f3c1a2b-7d4e-4f10-8a61-0b2c3d4e5f60"
+  },
+  "body": {
+    "type": "pullrequest",
+    "id": 21,
+    "title": "Add the export button",
+    "description": "Adds an export button.",
+    "state": "OPEN",
+    "draft": false,
+    "queued": false,
+    "merge_commit": null,
+    "comment_count": 1,
+    "task_count": 0,
+    "close_source_branch": true,
+    "reason": "",
+    "created_on": "2023-11-14T22:13:20.000000+00:00",
+    "updated_on": "2023-11-15T09:00:00.000000+00:00",
+    "destination": {
+      "branch": {
+        "name": "main"
+      },
+      "commit": {
+        "type": "commit",
+        "hash": "111111111111",
+        "links": {
+          "self": {
+            "href": "https://api.bitbucket.org/2.0/repositories/acme/web/commit/111111111111"
+          }
+        }
+      },
+      "repository": {
+        "type": "repository",
+        "full_name": "acme/web",
+        "name": "web"
+      }
+    },
+    "source": {
+      "branch": {
+        "name": "feature/export"
+      },
+      "commit": {
+        "type": "commit",
+        "hash": "222222222222",
+        "links": {
+          "self": {
+            "href": "https://api.bitbucket.org/2.0/repositories/acme/web/commit/222222222222"
+          }
+        }
+      },
+      "repository": {
+        "type": "repository",
+        "full_name": "acme/web",
+        "name": "web"
+      }
+    },
+    "author": {
+      "type": "user",
+      "display_name": "Dev One",
+      "nickname": "devone"
+    },
+    "participants": [],
+    "reviewers": [],
+    "summary": {
+      "type": "rendered",
+      "raw": "Adds an export button."
+    },
+    "links": {
+      "self": {
+        "href": "https://api.bitbucket.org/2.0/repositories/acme/web/pullrequests/21"
+      },
+      "html": {
+        "href": "https://bitbucket.org/acme/web/pull-requests/21"
+      },
+      "diffstat": {
+        "href": "https://api.bitbucket.org/2.0/repositories/acme/web/pullrequests/21/diffstat"
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "id": "nx08-pages-api-items",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx08-pages-api-items"
+  },
+  "commit_message": "The legacy items API wraps the order",
+  "notes": "A Pages Router API file answers every method; no client names it."
+}

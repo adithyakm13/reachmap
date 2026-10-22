@@ -1,0 +1,85 @@
+{
+  "schema": 1,
+  "id": "sb17-java-to-kotlin",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb17-java-to-kotlin"
+  },
+  "explains": "CustomerService.fetch, a Java service, changes. CustomerController is a Kotlin controller with a constructor property of the type CustomerService: it imports the class and spells fetch in the handler one (titleCase(service.fetch(id))), so that handler is reached through the import, and its route is GET /ledger/customers/{id} (class mapping /customers, method mapping /{id}, context path /ledger). The handler all spells all, not fetch: its route is not reached. Nothing in the web client calls the customers.",
+  "complete_for": [
+    "changed_symbol",
+    "caller",
+    "route",
+    "screen",
+    "http_edge",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/ledger",
+      "path": "src/main/java/com/acme/ledger/service/CustomerService.java",
+      "symbol": "CustomerService.fetch",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/service/CustomerService.java",
+          "contains": "return \"customer #\" + id;"
+        }
+      ]
+    },
+    {
+      "type": "caller",
+      "repo": "acme/ledger",
+      "path": "src/main/kotlin/com/acme/ledger/api/CustomerController.kt",
+      "symbol": "CustomerController.one",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/kotlin/com/acme/ledger/api/CustomerController.kt",
+          "contains": "import com.acme.ledger.service.CustomerService"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/kotlin/com/acme/ledger/api/CustomerController.kt",
+          "contains": "return titleCase(service.fetch(id))"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/ledger/customers/{id}",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/kotlin/com/acme/ledger/api/CustomerController.kt",
+          "contains": "@GetMapping(\"/{id}\")"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/kotlin/com/acme/ledger/api/CustomerController.kt",
+          "contains": "@RequestMapping(\"/customers\")"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/resources/application.properties",
+          "contains": "server.servlet.context-path=/ledger"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/ledger/customers",
+      "why": "its handler spells all, not fetch"
+    }
+  ],
+  "not_established": []
+}

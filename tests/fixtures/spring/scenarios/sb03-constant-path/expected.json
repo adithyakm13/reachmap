@@ -1,0 +1,252 @@
+{
+  "schema": 1,
+  "id": "sb03-constant-path",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb03-constant-path"
+  },
+  "explains": "The constant Paths.STATUS changes from BASE + /status to BASE + /state. Paths has two importers by use: StatusController, in the same package (no import line), spells Paths.STATUS twice, in the mapping of status and in the mapping of flags (Paths.STATUS + /flags); InvoiceController spells Paths.INVOICES only and is excluded by narrowing. So the two routes whose path the constant is part of are reached: GET /ledger/v1/state and GET /ledger/v1/state/flags, and the evidence of each cites the line of the constant that gives the path. The old routes GET /ledger/v1/status and GET /ledger/v1/status/flags are gone. The web client still names /ledger/v1/status (STATUS_URL, fetchStatus): the removed route is still called, which is a finding with high risk and low confidence, and after the change the URL fits no route, so the edge says the call matched nothing (client_url_unmatched, and a blocking edge_incomplete: an added route cannot be called uncalled while a call fits nothing). The client call is followed to the screen /status. Nothing calls /status/flags.",
+  "complete_for": [
+    "changed_symbol",
+    "caller",
+    "route",
+    "screen",
+    "http_edge",
+    "finding"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "acme/ledger",
+      "path": "src/main/java/com/acme/ledger/api/Paths.java",
+      "symbol": "Paths.STATUS",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "STATUS = BASE + \"/state\";"
+        }
+      ]
+    },
+    {
+      "type": "caller",
+      "repo": "acme/ledger",
+      "path": "src/main/java/com/acme/ledger/api/StatusController.java",
+      "symbol": "StatusController.status",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/StatusController.java",
+          "contains": "@GetMapping(Paths.STATUS)"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/StatusController.java",
+          "contains": "@GetMapping(Paths.STATUS + \"/flags\")"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/ledger/v1/state",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/StatusController.java",
+          "contains": "@GetMapping(Paths.STATUS)"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "STATUS = BASE + \"/state\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "BASE = \"/v1\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/resources/application.properties",
+          "contains": "server.servlet.context-path=/ledger"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/ledger/v1/state/flags",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/StatusController.java",
+          "contains": "@GetMapping(Paths.STATUS + \"/flags\")"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "STATUS = BASE + \"/state\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "BASE = \"/v1\";"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/resources/application.properties",
+          "contains": "server.servlet.context-path=/ledger"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "repo": "acme/ledger-web",
+      "route": "/status",
+      "chain": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/services/status.ts",
+          "contains": "return apiGet(STATUS_URL);"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/screens/StatusScreen.tsx",
+          "contains": "import { fetchStatus } from \"@/services/status\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/routes.tsx",
+          "contains": "import StatusScreen from \"./screens/StatusScreen\";"
+        },
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/routes.tsx",
+          "contains": "<Route path=\"/status\" element={<StatusScreen />} />"
+        }
+      ]
+    },
+    {
+      "type": "http_edge",
+      "from": {
+        "repo": "acme/ledger-web",
+        "path": "src/services/status.ts",
+        "contains": "return apiGet(STATUS_URL);"
+      },
+      "via": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/api/endpoints.ts",
+          "contains": "export const STATUS_URL = \"/ledger/v1/status\";"
+        }
+      ],
+      "to": {
+        "repo": "acme/ledger",
+        "method": "GET",
+        "path": "/ledger/v1/status",
+        "evidence": [
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/StatusController.java",
+            "contains": "@GetMapping(Paths.STATUS)",
+            "at": "base"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/Paths.java",
+            "contains": "STATUS = BASE + \"/status\";",
+            "at": "base"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/java/com/acme/ledger/api/Paths.java",
+            "contains": "BASE = \"/v1\";",
+            "at": "base"
+          },
+          {
+            "repo": "acme/ledger",
+            "path": "src/main/resources/application.properties",
+            "contains": "server.servlet.context-path=/ledger",
+            "at": "base"
+          }
+        ],
+        "removed": true
+      }
+    },
+    {
+      "type": "finding",
+      "kind": "removed_route_still_called",
+      "risk": "high",
+      "confidence": "low",
+      "evidence": [
+        {
+          "repo": "acme/ledger-web",
+          "path": "src/services/status.ts",
+          "contains": "return apiGet(STATUS_URL);"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/StatusController.java",
+          "contains": "@GetMapping(Paths.STATUS)",
+          "at": "base"
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "caller",
+      "repo": "acme/ledger",
+      "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+      "why": "it spells Paths.INVOICES only",
+      "evidence": [
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/InvoiceController.java",
+          "contains": "@RequestMapping(Paths.INVOICES)"
+        },
+        {
+          "repo": "acme/ledger",
+          "path": "src/main/java/com/acme/ledger/api/Paths.java",
+          "contains": "public final class Paths {"
+        }
+      ]
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/ledger/v1/invoices",
+      "why": "the class path of InvoiceController does not use the constant that changed"
+    },
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/ledger/v1/invoices/{id}/total",
+      "why": "the class path of InvoiceController does not use the constant that changed"
+    },
+    {
+      "type": "finding",
+      "kind": "added_route_uncalled",
+      "why": "a client call fits no route, so an added route is not called uncalled"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "edge_incomplete",
+      "subject": "edge:http:acme/ledger-web:acme/ledger",
+      "blocking": true
+    },
+    {
+      "kind": "client_url_unmatched",
+      "subject": "acme/ledger-web:src/services/status.ts:5",
+      "blocking": false
+    }
+  ]
+}

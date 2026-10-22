@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "id": "nx08-pages-api-items",
+  "repo": "nx/shop",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/nx08-pages-api-items"
+  },
+  "explains": "The response of the handler in src/pages/api/legacy/items/[id].ts changes. A file under pages/api is an API route, [id] is the parameter {id}, and the file's default export answers every HTTP method, so the route is ANY /api/legacy/items/{id}, cited at the default export. The client repository has no call to this URL, so no http edge, no screen and no finding follow. handler is defined in two files, not more than distinct_max, so it is a distinctive name and nothing is recorded.",
+  "complete_for": [
+    "changed_symbol",
+    "route",
+    "screen",
+    "http_edge"
+  ],
+  "must_find": [
+    {
+      "type": "changed_symbol",
+      "repo": "nx/shop",
+      "path": "src/pages/api/legacy/items/[id].ts",
+      "symbol": "handler"
+    },
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "ANY",
+      "path": "/api/legacy/items/{id}",
+      "evidence": [
+        {
+          "repo": "nx/shop",
+          "path": "src/pages/api/legacy/items/[id].ts",
+          "contains": "export default function handler("
+        }
+      ]
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "ANY",
+      "path": "/api/legacy/status",
+      "why": "another file with another handler"
+    },
+    {
+      "type": "route",
+      "repo": "nx/shop",
+      "method": "GET",
+      "path": "/api/orders/{id}",
+      "why": "an App Router route"
+    }
+  ],
+  "not_established": []
+}

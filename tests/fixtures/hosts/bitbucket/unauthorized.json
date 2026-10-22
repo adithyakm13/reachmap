@@ -1,0 +1,13 @@
+{
+  "status": 401,
+  "headers": {
+    "Content-Type": "application/json; charset=utf-8",
+    "X-Request-Id": "9f3c1a2b-7d4e-4f10-8a61-0b2c3d4e5f60"
+  },
+  "body": {
+    "type": "error",
+    "error": {
+      "message": "Bad credentials"
+    }
+  }
+}

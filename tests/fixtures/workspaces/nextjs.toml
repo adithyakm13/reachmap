@@ -1,0 +1,36 @@
+# The M16 Next.js fixture workspace (tests/fixtures/nextjs/): a Next.js shop (both routers, route groups, dynamic segments,
+# route handlers, a Pages Router API, middleware) and a small client of its API. Every remote is a path under
+# ${REACHMAP_FIXTURES}: the directory tests/fixtures/nx_build.py wrote the two repositories into. Unset, the remotes are
+# "not configured" and the file does not load.
+workspace = "nx"
+
+[limits]
+hops = 3
+hub_importers = 50
+distinct_max = 3
+timeout_s = 900
+
+[repos."nx/shop"]
+host = "git"
+remote = "${REACHMAP_FIXTURES}/nx-shop"
+language = "typescript"
+roles = ["frontend", "backend"]
+branches = ["main"]
+aliases = { from = "tsconfig.json" }
+entry_points = { kind = "nextjs" }
+tests = { markers = ["__tests__/", ".test.", ".spec."] }
+
+[repos."nx/mobile"]
+host = "git"
+remote = "${REACHMAP_FIXTURES}/nx-mobile"
+language = "typescript"
+roles = ["frontend"]
+branches = ["main"]
+aliases = { from = "tsconfig.json" }
+entry_points = { kind = "react-router", routes_glob = "src/routes.tsx" }
+http_client = { kind = "endpoints-file", path = "src/api/endpoints.ts" }
+
+[[edges]]
+kind = "http"
+from = "nx/mobile"
+to = "nx/shop"

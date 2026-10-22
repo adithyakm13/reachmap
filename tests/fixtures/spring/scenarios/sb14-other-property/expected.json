@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "id": "sb14-other-property",
+  "repo": "acme/ledger",
+  "change": {
+    "kind": "compare",
+    "base": "main",
+    "head": "scenario/sb14-other-property"
+  },
+  "explains": "server.port changes in application.properties. Only the keys that make the path of a route are followed in the application configuration (server.servlet.context-path, spring.mvc.servlet.path, spring.webflux.base-path and a key that a mapping names in a placeholder). A port can change what every route does, and nothing says which: the run records a blocking config_not_followed for the file, reaches no route, and is not complete.",
+  "complete_for": [
+    "route",
+    "screen",
+    "http_edge"
+  ],
+  "must_find": [
+    {
+      "type": "changed_file",
+      "repo": "acme/ledger",
+      "path": "src/main/resources/application.properties",
+      "role": "source"
+    }
+  ],
+  "must_exclude": [
+    {
+      "type": "route",
+      "repo": "acme/ledger",
+      "method": "GET",
+      "path": "/ledger/v1/invoices",
+      "why": "the key is not part of a route path and is not followed"
+    }
+  ],
+  "not_established": [
+    {
+      "kind": "config_not_followed",
+      "subject": "src/main/resources/application.properties",
+      "blocking": true
+    }
+  ]
+}

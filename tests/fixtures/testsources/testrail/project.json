@@ -1,0 +1,18 @@
+{
+  "note": "Synthetic: invented for the tests, shaped like the TestRail API v2 (paginated lists with _links.next, TestRail 6.7 and later). Not a recording of any real instance.",
+  "status": 200,
+  "headers": {
+    "Content-Type": "application/json; charset=UTF-8"
+  },
+  "body": {
+    "id": 3,
+    "name": "Acme Billing",
+    "announcement": null,
+    "show_announcement": false,
+    "is_completed": false,
+    "completed_on": null,
+    "suite_mode": 1,
+    "default_role_id": 3,
+    "url": "https://acme.testrail.example/index.php?/projects/overview/3"
+  }
+}
