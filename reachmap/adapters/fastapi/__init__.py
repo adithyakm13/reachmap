@@ -19,23 +19,24 @@ made anywhere but module level, or of something that cannot be resolved to a rou
 routers that look unmounted may be mounted there.
 
 Files are found with `git grep` (a cut or failed search makes everything incomplete, never empty) and parsed with
-`ast`; a file that does not parse claims nothing and records a blocking `parse_degraded`. Limits are in
-docs/briefs/M7-entry-points.md.
+`ast`; a file that does not parse claims nothing and records a blocking `parse_degraded`. That reading, the
+constant evaluation, the route evidence and the routes / routes_changed flow are shared with the Django adapter
+(`reachmap.adapters.python_routes`); this file keeps what is FastAPI's: routers, decorators, mounts and how a route is composed.
+Limits are in docs/briefs/M7-entry-points.md.
 """
 
 from __future__ import annotations
 
 import ast
-import posixpath
-from dataclasses import dataclass, field, replace
-from typing import Any, Iterable, Iterator
+from dataclasses import dataclass, field
+from typing import Any, Iterable
 
 from reachmap import config
-from reachmap.adapters import Reached, Route, diff_routes, guard_route_changes, normalize_path
-from reachmap.adapters.base import api_area, citable, dedupe, direct_hop, evidence_at, import_lines, module_changes, record_quoted
+from reachmap.adapters import Reached, Route, normalize_path
+from reachmap.adapters.base import citable, dedupe, direct_hop, import_lines, module_changes, record_quoted
 from reachmap.adapters.python import PyAdapter
-from reachmap.incomplete import record
-from reachmap.model import Evidence, Read
+from reachmap.adapters.python_routes import DEPTH, FileFacts, Gathered, Shared, TableBase, callee, kw, literal_strings, names_in, nearest_folder, route_evidence, statements
+from reachmap.model import Evidence
 
 __all__ = ["FastApiAdapter"]
 
@@ -43,8 +44,6 @@ METHODS = frozenset({"get", "post", "put", "delete", "patch", "options", "head",
 CONSTRUCTORS = frozenset({"APIRouter", "FastAPI"})
 CANDIDATE_PATTERNS = ["APIRouter", "FastAPI", "include_router", ".mount("]
 MOUNT_CALLS = frozenset({"include_router", "mount"})
-COMPOUND = (ast.If, ast.Try, getattr(ast, "TryStar", ast.Try), ast.With, ast.AsyncWith, ast.For, ast.AsyncFor, ast.While, getattr(ast, "Match", ast.If))
-DEPTH = 6  # how far a name is followed through imports and constants
 
 Ref = tuple[str, str]  # (file, variable of a router or an app)
 
@@ -112,16 +111,11 @@ class _Link:
 
 
 @dataclass(slots=True)
-class _Facts:
-    path: str
-    parsed: Any
+class _Facts(FileFacts):
     routers: dict[str, _Router] = field(default_factory=dict)
     handlers: list[_Handler] = field(default_factory=list)
     mounts: list[_Mount] = field(default_factory=list)
     strays: list[int] = field(default_factory=list)  # lines of mounts that are not module level statements
-    from_binding: dict[str, tuple[str, int, str]] = field(default_factory=dict)  # local name to (module, level, name)
-    module_binding: dict[str, tuple[str, int]] = field(default_factory=dict)  # local name to (module, level)
-    consts: dict[str, ast.expr | None] = field(default_factory=dict)  # None: assigned more than once
 
 
 @dataclass(frozen=True, slots=True)
@@ -148,113 +142,26 @@ class _Composed:
     route: Route
 
 
-def _names_in(*exprs: ast.expr | None) -> set[str]:
-    return {n.id for e in exprs if e is not None for n in ast.walk(e) if isinstance(n, ast.Name)}
-
-
-def _callee(func: ast.expr) -> str | None:
-    if isinstance(func, ast.Name):
-        return func.id
-    if isinstance(func, ast.Attribute):
-        return func.attr
-    return None
-
-
-def _statements(body: list[ast.stmt]) -> Iterator[ast.stmt]:
-    """The statements at module level, through `if`, `try`, `with`, `for` and `while` blocks (a mount in one of those
-    runs when the module is imported)."""
-    for stmt in body:
-        yield stmt
-        if isinstance(stmt, COMPOUND):
-            for attr in ("body", "orelse", "finalbody"):
-                yield from _statements(getattr(stmt, attr, None) or [])
-            for handler in getattr(stmt, "handlers", ()):
-                yield from _statements(handler.body)
-            for case in getattr(stmt, "cases", ()):
-                yield from _statements(case.body)
-
-
-def _kw(call: ast.Call, name: str) -> ast.expr | None:
-    return next((k.value for k in call.keywords if k.arg == name), None)
-
-
-class _Table:
+class _Table(TableBase):
     """The routers, handlers and mounts of one repository at one commit, and the routes composed from them."""
 
+    UNPARSED = "routes and mounts in it were not read"
+    DEGRADED = "no route or mount is claimed from it, so routes may be missing"
+    PATTERNS = CANDIDATE_PATTERNS
+    Str = _Str
+
     def __init__(self, adapter: "FastApiAdapter", sha: str) -> None:
-        self.adapter = adapter
-        self.language: PyAdapter = adapter.language
-        self.sha = sha
-        self.facts: dict[str, _Facts | None] = {}
-        self.complete = True
-        self.reasons: list[str] = []
-        self.candidates: set[str] = set()
+        super().__init__(adapter, sha)
         self.mounts_of: dict[Ref, list[_Link]] = {}
-        self.unresolved = False  # a mount that could not be read: a router that looks unmounted may be mounted there
         self._up: dict[Ref, list[_Option]] = {}
         self._composed: list[_Composed] | None = None
-        self.entry_files: set[str] = set()
         self._build()
 
-    def incomplete(self, why: str) -> None:
-        self.complete = False
-        if why not in self.reasons:
-            self.reasons.append(why)
-            self.adapter.problem(f"route table at {self.sha[:12]}: {why}")
+    # ---- reading a file
 
-    @property
-    def target(self) -> Any:
-        return self.adapter.target
-
-    # ---- finding and reading files
-
-    def _grep(self, patterns: list[str]) -> None:
-        """One `git grep` for all of the names (a line that holds any of them): the files that may declare routes."""
-        res = self.language.search(self.sha, patterns)
-        shown = " | ".join(patterns)
-        if res is None:
-            self.incomplete("the tree could not be read at this commit")
-            return
-        if res.state == Read.UNREADABLE:
-            self.incomplete(f"the search for {shown!r} was unreadable: {res.detail}")
-            return
-        if res.truncated_by == "examine_cap":
-            self.incomplete(f"search_truncated: the search for {shown!r} examined {res.examined} of {res.total} files")
-        for link, why in res.not_searched:
-            if link.endswith(".py"):
-                self.incomplete(f"{link} is a {why}: git grep does not search it, so routes in it may be missed")
-        for m in res.partial_matches:
-            if m.path.endswith(".py") and not self.language.is_test_path(m.path) and citable(m.path):
-                self.candidates.add(m.path)
-
-    def facts_of(self, path: str) -> _Facts | None:
-        if path in self.facts:
-            return self.facts[path]
-        self.facts[path] = None
-        parsed = self.language.parsed(self.sha, path) if self.language.file_text(self.sha, path).is_found else None
-        if parsed is None:
-            self.incomplete(f"{path} could not be read")
-            return None
-        if parsed.problems:
-            self.incomplete(f"{path} did not parse ({parsed.problems[0]}): routes and mounts in it were not read")
-            record_quoted(self.target, "parse_degraded", path, "no route or mount is claimed from it, so routes may be missing", parsed.problems[0], blocks_selection=True)
-            return None
-        self.facts[path] = self._extract(path, parsed)
-        return self.facts[path]
-
-    def _extract(self, path: str, parsed: Any) -> _Facts:
+    def read_facts(self, path: str, parsed: Any) -> _Facts:
         facts = _Facts(path, parsed)
-        for rec in parsed.imports:
-            if rec.kind == "from":
-                for n in rec.names:
-                    facts.from_binding[n.asname or n.name] = (rec.module, rec.level, n.name)
-            elif rec.kind == "import" and rec.names:
-                nm = rec.names[0]
-                if nm.asname:
-                    facts.module_binding[nm.asname] = (nm.name, 0)
-                else:
-                    first = nm.name.split(".")[0]
-                    facts.module_binding[first] = (first, 0)
+        facts.bind_imports()
         counts: dict[str, int] = {}
         for d in parsed.declarations:
             node = d.node
@@ -265,24 +172,24 @@ class _Table:
                 name = d.names[0]
                 counts[name] = counts.get(name, 0) + 1
                 facts.consts[name] = value if counts[name] == 1 else None
-                if isinstance(value, ast.Call) and _callee(value.func) in CONSTRUCTORS:
-                    facts.routers[name] = _Router(path, name, _callee(value.func) or "", _kw(value, "prefix"), node.lineno)
+                if isinstance(value, ast.Call) and callee(value.func) in CONSTRUCTORS:
+                    facts.routers[name] = _Router(path, name, callee(value.func) or "", kw(value, "prefix"), node.lineno)
             elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 decos = [x for x in (self._deco(deco) for deco in node.decorator_list) if x is not None]
                 if decos:
                     facts.handlers.append(_Handler(path, node.name, d.start, d.end, decos))
         seen: set[int] = set()
-        for stmt in _statements(parsed.tree.body):
+        for stmt in statements(parsed.tree.body):
             call = stmt.value if isinstance(stmt, ast.Expr) and isinstance(stmt.value, ast.Call) else None
             if call is None or not isinstance(call.func, ast.Attribute) or call.func.attr not in MOUNT_CALLS:
                 continue
             seen.add(id(call))
             if call.func.attr == "include_router":
-                child = call.args[0] if call.args else _kw(call, "router")
-                facts.mounts.append(_Mount(path, call.lineno, "include_router", call.func.value, child, _kw(call, "prefix")))
+                child = call.args[0] if call.args else kw(call, "router")
+                facts.mounts.append(_Mount(path, call.lineno, "include_router", call.func.value, child, kw(call, "prefix")))
             else:
-                prefix = call.args[0] if call.args else _kw(call, "path")
-                child = call.args[1] if len(call.args) > 1 else _kw(call, "app")
+                prefix = call.args[0] if call.args else kw(call, "path")
+                child = call.args[1] if len(call.args) > 1 else kw(call, "app")
                 facts.mounts.append(_Mount(path, call.lineno, "mount", call.func.value, child, prefix))
         for node in ast.walk(parsed.tree):
             if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and node.func.attr in MOUNT_CALLS and id(node) not in seen:
@@ -299,21 +206,18 @@ class _Table:
         elif attr == "websocket":
             methods = ["WEBSOCKET"]
         elif attr == "api_route":
-            node = _kw(deco, "methods")
+            node = kw(deco, "methods")
             if node is None:
                 methods = ["GET"]
-            elif isinstance(node, (ast.List, ast.Tuple, ast.Set)) and all(isinstance(e, ast.Constant) and isinstance(e.value, str) for e in node.elts):
-                methods = [e.value.upper() for e in node.elts]  # type: ignore[union-attr]
+            elif (named := literal_strings(node)) is not None:
+                methods = [m.upper() for m in named]
             else:
-                return _Deco(deco.func.value, [], deco.args[0] if deco.args else _kw(deco, "path"), deco.lineno, ast.unparse(node))
+                return _Deco(deco.func.value, [], deco.args[0] if deco.args else kw(deco, "path"), deco.lineno, ast.unparse(node))
         else:
             return None
-        return _Deco(deco.func.value, methods, deco.args[0] if deco.args else _kw(deco, "path"), deco.lineno)
+        return _Deco(deco.func.value, methods, deco.args[0] if deco.args else kw(deco, "path"), deco.lineno)
 
     # ---- resolving names to routers
-
-    def _modules(self, path: str, module: str, level: int) -> tuple[str, ...]:
-        return self.language.resolve_module(path, self.sha, module, level)
 
     def resolve_name(self, path: str, name: str, depth: int = 0) -> list[Ref]:
         facts = self.facts_of(path)
@@ -362,39 +266,6 @@ class _Table:
 
     # ---- evaluating prefixes
 
-    def eval(self, path: str, expr: ast.expr | None, depth: int = 0) -> _Str:
-        if expr is None:
-            return _Str()
-        if isinstance(expr, ast.Constant):
-            if isinstance(expr.value, str):
-                return _Str(expr.value)
-            if expr.value is None:
-                return _Str()
-        elif isinstance(expr, ast.JoinedStr):
-            out = _Str()
-            for v in expr.values:
-                if isinstance(v, ast.Constant) and isinstance(v.value, str):
-                    out += _Str(v.value)
-                elif isinstance(v, ast.FormattedValue) and v.conversion == -1 and v.format_spec is None:
-                    out += self.eval(path, v.value, depth + 1)
-                else:
-                    out += self._unknown(path, v)
-            return out
-        elif isinstance(expr, ast.BinOp) and isinstance(expr.op, ast.Add):
-            return self.eval(path, expr.left, depth + 1) + self.eval(path, expr.right, depth + 1)
-        elif isinstance(expr, ast.Name) and depth < DEPTH:
-            facts = self.facts_of(path)
-            if facts is not None:
-                if facts.consts.get(expr.id) is not None:
-                    return self.eval(path, facts.consts[expr.id], depth + 1)
-                if expr.id not in facts.consts and expr.id in facts.from_binding:
-                    module, level, name = facts.from_binding[expr.id]
-                    for g in self._modules(path, module, level):
-                        other = self.facts_of(g)
-                        if other is not None and other.consts.get(name) is not None:
-                            return self.eval(g, other.consts[name], depth + 1)
-        return self._unknown(path, expr)
-
     @staticmethod
     def _unknown(path: str, expr: ast.AST) -> _Str:
         try:
@@ -407,7 +278,7 @@ class _Table:
     # ---- the table
 
     def _build(self) -> None:
-        self._grep(CANDIDATE_PATTERNS)
+        self.search()
         for path in sorted(self.candidates):
             self.facts_of(path)
         # a router is imported under any name by the files that decorate it: the importers of each file that declares
@@ -517,66 +388,43 @@ class _Table:
         return out
 
     def _route(self, h: _Handler, method: str, full: _Str, pairs: tuple[tuple[str, int], ...], app: bool) -> Route | None:
-        evidence: list[Evidence] = []
-        for n, (p, line) in enumerate(pairs):
-            facts = self.facts.get(p)
-            ev = evidence_at(self.adapter.repo, p, self.sha, facts.parsed, line) if facts is not None else None
-            if ev is None:
-                return None
-            if n == 0:  # the decorator: the route's own line (the mounts after it are not claimed)
-                ev = replace(ev, claim=f"route:{method} {normalize_path(full.value)}:{h.path}")
-            evidence.append(ev)
+        path = normalize_path(full.value)
+        # the decorator is the route's own line (the mounts after it are not claimed)
+        evidence = route_evidence(self.adapter.repo, self.sha, pairs, self._parsed_of, f"route:{method} {path}:{h.path}")
+        if evidence is None:
+            return None
         return Route(
-            repo=self.adapter.repo, kind="api_route", method=method, path=normalize_path(full.value), file=h.path, handler=h.name, target=h.path,
-            module=self.adapter.module_of(h.path, self.sha), evidence=tuple(evidence), partial=bool(full.unknown),
+            repo=self.adapter.repo, kind="api_route", method=method, path=path, file=h.path, handler=h.name, target=h.path,
+            module=self.adapter.module_of(h.path, self.sha), evidence=evidence, partial=bool(full.unknown),
         )
+
+    def _parsed_of(self, path: str) -> Any:
+        facts = self.facts.get(path)
+        return facts.parsed if facts is not None else None
 
     def routes(self) -> list[Route]:
         return [c.route for c in self.composed() if c.option.app]
 
 
-class FastApiAdapter:
+class FastApiAdapter(Shared):
     """FastAPI entry points of one repository, built on its Python adapter (which reads the files, parses them and
     resolves modules). Use one adapter per run, as the language adapters are."""
 
     kind = "fastapi"
-
-    def __init__(self, repo: str, language: PyAdapter, *, record_to: Any = None) -> None:
-        self.repo = repo
-        self.language = language
-        self._target = record_to
-        self._tables: dict[str, _Table] = {}
-        self.problems: list[str] = []  # what could not be established (a route table that is not whole, an unreadable file)
-
-    def problem(self, why: str) -> None:
-        if why not in self.problems:
-            self.problems.append(why)
+    TABLE = _Table
+    UNMOUNTED_DETAIL = "no route is claimed for its handlers: no mount carries it up to an app (a mount in a comment is not a mount)"
+    UNMOUNTED_UNSURE = "{subject} may be mounted by a mount that could not be resolved: it is not said to be unmounted"
 
     @classmethod
     def from_config(cls, repo: config.Repo, language: PyAdapter, *, record_to: Any = None) -> "FastApiAdapter":
         return cls(repo.name, language, record_to=record_to)
-
-    @property
-    def target(self) -> Any:
-        return self._target if self._target is not None else self.language.target
-
-    def _table(self, sha: str) -> _Table:
-        if sha not in self._tables:
-            self._tables[sha] = _Table(self, sha)
-        return self._tables[sha]
 
     def module_of(self, path: str, sha: str) -> str:
         """The service the file belongs to: the name of the nearest folder holding the service marker."""
         marker = self.language.service_marker
         if not marker:
             return ""
-        files = self.language.tree(sha)
-        folder = posixpath.dirname(path)
-        while folder:
-            if f"{folder}/{marker}" in files:
-                return posixpath.basename(folder)
-            folder = posixpath.dirname(folder)
-        return ""
+        return nearest_folder(self.language.tree(sha), path, marker) or ""
 
     # ---- what the walk asks
 
@@ -591,38 +439,11 @@ class FastApiAdapter:
     def routing_files(self, sha: str, what: str) -> list[str]:
         return list(self._table(sha).entry_files)
 
-    def is_entry_file(self, path: str, sha: str) -> bool:
-        """A file that declares handlers, routers or mounts."""
-        return path in self._table(sha).entry_files
-
-    def routes(self, repo: str | None, sha: str) -> list[Route]:
-        """Every API route of the repository at `sha`, with its full path and evidence."""
-        if repo is not None and repo != self.repo:
-            raise ValueError(f"this adapter reads {self.repo}, not {repo}")
-        return self._table(sha).routes()
-
     def unmounted(self, sha: str) -> list[tuple[str, str]]:
         """The routers (file, variable) that declare handlers and that nothing mounts up to an app."""
         table = self._table(sha)
         refs = {c.router for c in table.composed()}
         return sorted(ref for ref in refs if table.router(ref).kind == "APIRouter" and not any(o.app for o in table.up(ref)))
-
-    def routes_changed(self, before: str | None, after: str) -> tuple[list[Route], list[Route]]:
-        """(removed, added) routes between two commits by method and full path, each with the evidence of its own
-        version. Without a pre-change version nothing is computed: removals cannot be (the change set recorded it)."""
-        if before is None:
-            return [], []
-        old, new = self._table(before), self._table(after)
-        removed, added = diff_routes(old.routes(), new.routes())
-        # a route of a file that did not parse was not read, it was not deleted; one the base could not show is not new (guard_route_changes)
-        return guard_route_changes(self.target, self.repo, removed, added, base_ok=old.complete, head_ok=new.complete, why="; ".join((old.reasons if not old.complete else []) + (new.reasons if not new.complete else []))[:300])
-
-    withholds_unread = True  # `routes_changed` guards itself: the http edge does not guard it again
-
-    def routes_complete(self, sha: str) -> tuple[bool, list[str]]:
-        """Whether the route table at `sha` was read completely, and why not."""
-        table = self._table(sha)
-        return table.complete, list(table.reasons)
 
     def structural_names(self, path: str, sha: str) -> frozenset[str]:
         """The routers and apps a file declares: whoever imports one of them mounts it (or decorates its handlers), which
@@ -636,49 +457,26 @@ class FastApiAdapter:
         """The API routes the chains reach: one `Area` per route, with the chain of Evidence from the change to the
         handler (the imports on the way, or the changed line) followed by the route's own evidence, and whether it was
         established completely. What could not be established at all (a route table that is not whole) is in `problems`."""
-        found: dict[tuple[Any, ...], dict[str, Any]] = {}
-        order: list[tuple[Any, ...]] = []
-        unmounted: dict[str, None] = {}
         chains_seen = list(chains)
+        gathered = Gathered()
         for chain in chains_seen:
             table = self._table(chain.sha)
             for comp in self._reached(table, chain):
                 if not comp.option.app:
-                    top = comp.option.top
-                    unmounted.setdefault(f"{top[0]}:{top[1]}")
+                    gathered.unmounted_at(comp.option.top)
                     continue
                 route = comp.route
-                key = (route.method, route.path, route.file, route.handler, route.evidence)
                 hops = chain.hops
                 if chain.direct:
                     hops = self._direct_hop(chain, comp)
-                evidence = tuple(dedupe(list(hops) + list(route.evidence)))
-                entry = found.setdefault(key, {"route": route, "chains": [], "sources": [], "complete": True, "reasons": [], "unknown": comp.path.unknown})
-                if evidence not in entry["chains"]:
-                    entry["chains"].append(evidence)
-                    entry["sources"].append(chain)
-                if not (chain.complete and table.complete):
-                    entry["complete"] = False
-                    entry["reasons"] += [r for r in tuple(chain.reasons) + tuple(table.reasons) if r not in entry["reasons"]]
-                if key not in order:
-                    order.append(key)
-        for subject in unmounted:
-            if any(self._table(chain.sha).unresolved for chain in chains_seen):
-                self.problem(f"{subject} may be mounted by a mount that could not be resolved: it is not said to be unmounted")
-                continue  # that claim cannot be made while a mount of the repository is unresolved (the blocking record says so)
-            record(self.target, "router_unmounted", subject,
-                   detail="no route is claimed for its handlers: no mount carries it up to an app (a mount in a comment is not a mount)")
-        out: list[Reached] = []
-        for key in order:
-            e = found[key]
-            route: Route = e["route"]
-            for expr, path, line in e["unknown"]:
+                gathered.add(chain, table, route, tuple(dedupe(list(hops) + list(route.evidence))), unknown=comp.path.unknown)
+
+        def partial(entry: dict[str, Any]) -> None:
+            for expr, path, line in entry["unknown"]:
                 record_quoted(self.target, "route_path_partial", f"{path}:{line}",
                               "a prefix of the route is not a string literal or a constant; it is kept with the part marked and nothing is guessed", expr)
-            area = api_area(self.repo, route, e["chains"])
-            out.append(Reached(area, (route,), e["complete"], tuple(e["reasons"]), tuple(e["sources"])))
-        out.sort(key=lambda r: (r.area.label, r.routes[0].file))
-        return out
+
+        return self.settle(gathered, chains_seen, partial)
 
     def _reached(self, table: _Table, chain: Any) -> list[_Composed]:
         facts = table.facts_of(chain.entry)
@@ -697,7 +495,7 @@ class FastApiAdapter:
         changed = list(chain.changed)
         added = {n for s in changed for n in s.added_lines}
         imported, other = self._module_changes(chain, facts, changed)
-        mount_names = {m.line: _names_in(m.parent, m.child, m.prefix) for m in facts.mounts}
+        mount_names = {m.line: names_in(m.parent, m.child, m.prefix) for m in facts.mounts}
         out = []
         for c in comps:
             here = c.handler.path == chain.entry
